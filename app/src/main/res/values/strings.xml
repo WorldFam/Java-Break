@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Java Break;</string>
+    <string name="app_name">Break;</string>
+    <string name="start">Start</string>
+    <string name="pause">PAUSE</string>
 </resources>
