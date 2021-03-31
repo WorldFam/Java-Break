@@ -13,4 +13,7 @@
     <color name="notAsLightGrey">#A89E9E</color>
     <color name="orangeBackground">#ff7f27</color>
     <color name="transparent">#99000000</color>
+    <color name="newBackground">#31394c</color>
+    <color name="tabBackground">#212735</color>
+
 </resources>

@@ -2,10 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/notAsLightGrey"/>
+            <solid android:color="@color/tabBackground"/>
             <size android:width="500dp" android:height="500dp"/>
-            <stroke android:color="@color/notAsLightGrey"
-                android:width="8dp"/>
         </shape>
     </item>
 </selector>

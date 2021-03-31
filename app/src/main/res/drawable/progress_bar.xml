@@ -8,10 +8,9 @@
         <shape
             android:shape="ring"
             android:useLevel="true"
-            android:thicknessRatio="15">
+            android:thickness="20dp">
             <solid android:color="@color/orange" />
         </shape>
     </rotate>
     </item>
-
 </layer-list>
