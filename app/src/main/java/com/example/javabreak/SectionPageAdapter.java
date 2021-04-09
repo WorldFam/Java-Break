@@ -7,8 +7,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class SectionPageAdapter extends FragmentPagerAdapter {
 
-
-
     public SectionPageAdapter(
             FragmentManager fm)
     {
@@ -19,12 +17,15 @@ public class SectionPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position)
     {
         if (position == 0) {
-           return new FirstFragment();
+
+            return new FirstFragment();
         }
         else if(position == 1){
+
             return new SecondFragment();
         }
-        else return new ThirdFragment();
+        else
+        return new ThirdFragment();
     }
 
     @Override

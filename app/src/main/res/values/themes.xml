@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.JavaBreak" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/lightGrey</item>
+        <item name="colorPrimary">@color/tabBackground</item>
         <item name="colorPrimaryVariant">#212735</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <!-- Secondary brand color. -->

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/newBackground">
+    <TextView
+        android:id="@+id/configTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Configuration Panel"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+    <Switch
+        android:id="@+id/autoStartBreak"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Auto start break"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:paddingLeft="25dp"
+        android:paddingRight="10dp"
+        android:switchMinWidth="50dp"
+        android:thumbTint="@color/orange"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/configTextView" />
+
+
+    <Switch
+        android:id="@+id/autoStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Auto start work"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:paddingLeft="25dp"
+        android:paddingRight="10dp"
+        android:switchMinWidth="50dp"
+        android:thumbTint="@color/orange"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/autoStartBreak" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/autoStart"
+        android:layout_alignBottom="@+id/workSessionCountText"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="60dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:srcCompat="@drawable/configurations_rectangle"/>
+
+    <TextView
+        android:id="@+id/breakTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/autoStart"
+        android:layout_marginTop="25dp"
+        android:paddingLeft="25dp"
+        android:text="Break duration"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+
+    <ImageView
+        android:id="@+id/breakIconConfigurations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/autoStart"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="-15dp"
+        android:layout_marginTop="24dp"
+        android:layout_toEndOf="@+id/breakTimeTextView"
+        android:layout_toRightOf="@+id/snoozeTimeTextView"
+        app:srcCompat="@drawable/ic_baseline_free_breakfast_configurations"/>
+
+    <TextView
+        android:id="@+id/breakTimeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="23dp"
+        android:layout_toRightOf="@+id/breakTimeTextView"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textAlignment="textEnd"
+        android:paddingRight="25dp"
+        android:layout_below="@+id/autoStart" />
+
+    <SeekBar
+        android:id="@+id/breakSlider"
+        style="@style/SeekBarWithoutSteps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/breakTimeTextView"
+        android:progressBackgroundTint="@color/grey"
+        android:progressTint="@color/orange"
+        android:thumbTint="@color/orange"
+        android:progressDrawable="@drawable/seek_bar"
+        android:thumb="@drawable/seek_bar_thumb"
+        android:layout_marginTop="10dp"
+        android:layout_margin="10dp"
+        />
+
+    <TextView
+        android:id="@+id/snoozeTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/breakSlider"
+        android:layout_marginTop="25dp"
+        android:text="Snooze duration"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:paddingLeft="25dp"/>
+
+    <ImageView
+        android:id="@+id/SnoozeIconConfigurations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/breakSlider"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="-15dp"
+        android:layout_marginTop="24dp"
+        android:layout_toEndOf="@+id/snoozeTimeTextView"
+        android:layout_toRightOf="@+id/snoozeTimeTextView"
+        app:srcCompat="@drawable/ic_baseline_snooze_configurations" />
+
+    <TextView
+        android:id="@+id/snoozeTimeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/breakSlider"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="23dp"
+        android:layout_marginRight="0dp"
+        android:layout_toRightOf="@+id/snoozeTimeTextView"
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        android:paddingRight="25dp" />
+
+    <SeekBar
+        android:id="@+id/snoozeSlider"
+        style="@style/SeekBarWithoutSteps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/snoozeTimeTextView"
+        android:progressBackgroundTint="@color/grey"
+        android:layout_marginTop="10dp"
+        android:progressTint="@color/orange"
+        android:thumbTint="@color/orange"
+        android:progressDrawable="@drawable/seek_bar"
+        android:thumb="@drawable/seek_bar_thumb"
+        android:layout_margin="10dp"/>
+
+
+    <ImageButton
+        android:id="@+id/configurationExitButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/snoozeSlider"
+        android:layout_marginTop="165dp"
+        android:layout_marginBottom="64dp"
+        android:background="@color/newBackground"
+        android:src="@drawable/ic_baseline_close_24" />
+
+    <TextView
+        android:id="@+id/workSessionCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/snoozeSlider"
+        android:layout_marginTop="42dp"
+        android:text="Work duration control"
+        android:paddingLeft="25dp"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/workSessionCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/snoozeSlider"
+        android:layout_marginLeft="88dp"
+
+        android:layout_marginTop="40dp"
+        android:layout_toRightOf="@+id/workSessionCountText"
+        android:ems="2"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/plusButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/snoozeSlider"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="40dp"
+        android:layout_toRightOf="@+id/workSessionCount"
+        android:text="+" />
+
+    <Button
+        android:id="@+id/minusButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/snoozeSlider"
+        android:layout_marginTop="178dp"
+        android:layout_marginRight="110dp"
+        android:layout_toLeftOf="@+id/workSessionCount"
+        android:text="-" />
+
+</RelativeLayout>
+
+
+
+
+
+
+
+

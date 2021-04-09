@@ -1,9 +1,11 @@
 package com.example.javabreak;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -23,10 +26,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.javabreak.ui.main.ConfigurationPanel;
 import com.example.javabreak.viewmodel.SecondFragmentViewModel;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import es.dmoral.toasty.Toasty;
+import maes.tech.intentanim.CustomIntent;
 
 public class FirstFragment extends Fragment {
 
@@ -35,16 +42,16 @@ public class FirstFragment extends Fragment {
     private TimePicker timePicker;
     private long mSec,breakTime,snoozeTime, continueWorkTime;
     private CountDownTimer countDownTimer;
-    private ImageButton reset, pauseResume;
-    Animation resetAnimation;
+    private ImageButton reset, pauseResume, configuration;
+    Animation resetAnimation, resetBlink;
 
     private Dialog dialog;
     private Button start, continueWork,snooze,takeABreak;
     ProgressBar progressBar;
     TimerState timerState;
     String timeLeftFormatted = "00:00:00";
-
-    ImageView transparentBackgroundZoomIn, transparentBackground ,breakIcon,snoozeIcon ;
+    ImageView  transparentBackground ,breakIcon,snoozeIcon ;
+    Toast toast;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,9 +90,8 @@ public class FirstFragment extends Fragment {
         transparentBackground = view.findViewById(R.id.transparentBackground);
         breakIcon = view.findViewById(R.id.breakIcon);
         snoozeIcon = view.findViewById(R.id.snoozeIcon);
-  /*      transparentBackgroundZoomIn = view.findViewById(R.id.transparentBackgroundZoomIn);
+        configuration = view.findViewById(R.id.configurationButton);
 
-        transparentBackgroundZoomIn.setVisibility(View.INVISIBLE);*/
         breakIcon.setVisibility(View.INVISIBLE);
         snoozeIcon.setVisibility(View.INVISIBLE);
         reset.setVisibility(View.INVISIBLE);
@@ -100,22 +106,56 @@ public class FirstFragment extends Fragment {
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                timeConversion();
-                continueWorkTime = mSec;
-                mSec = 2000;
-                setProgressBarValues();
-                startTimer();
-                updateViews();
+                if(timePicker.getMinute() == 0 && timePicker.getHour() == 0)
+                {
+                    if(toast != null) {
+                        toast.cancel();
+                    }
+                    toast = new Toast(getActivity());
+                    toast = Toasty.error(getActivity(), "Can't be less than 1 minute", Toast.LENGTH_SHORT, true);
+                    toast.setGravity(Gravity.CENTER, 0, 400);
+                    toast.show();
+                }
+                else {
+                    if(toast != null) {
+                        toast.cancel();
+                    }
+                    timeConversion();
+                    continueWorkTime = mSec;
+                        mSec = 2000;
+                    setProgressBarValues(mSec);
+                    startTimer();
+                    updateViews();
+                }
             }
         }
         );
 
-        reset.setOnClickListener(new View.OnClickListener() {
+
+         reset.setOnClickListener(new View.OnClickListener() {
+        @Override
+     public void onClick(View v) {
+                if(toast != null) {
+                 toast.cancel();
+                }
+                toast = new Toast(getActivity());
+                toast = Toasty.warning(getActivity(), "Hold to Reset!", Toast.LENGTH_SHORT, true);
+                toast.setGravity(Gravity.CENTER, 0, 400);
+                toast.show();
+        }
+          });
+
+
+        reset.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
+                if(toast != null) {
+                    toast.cancel();
+                }
                 resetTimer();
+                return true;
             }
-        });
+    });
 
         pauseResume.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +175,16 @@ public class FirstFragment extends Fragment {
                 countDownTime();
             }
         });
+
+        configuration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ConfigurationPanel.class);
+                startActivity(intent);
+                CustomIntent.customType(getActivity(), "fadein-to-fadeout");
+            }
+        });
+
         return view;
     }
 
@@ -166,6 +216,7 @@ public class FirstFragment extends Fragment {
             public void onFinish() {
                 timerState = TimerState.FINISHED;
                 updateViews();
+
                 continueWork = dialog.findViewById(R.id.continueWorking);
                 takeABreak = dialog.findViewById(R.id.takeABreak);
                 snooze = dialog.findViewById(R.id.snooze);
@@ -173,6 +224,7 @@ public class FirstFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         breakTimer();
+                        setProgressBarValues(breakTime);
                         dialog.cancel();
                     }
                 });
@@ -181,6 +233,7 @@ public class FirstFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         snoozeTimer();
+                        setProgressBarValues(snoozeTime);
                         dialog.cancel();
                     }
                 });
@@ -188,7 +241,13 @@ public class FirstFragment extends Fragment {
                 continueWork.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
+                    /*    count++;
+                        if(count == 4)
+                        {
+                            count = 0;
+                        }*/ //MIGHT ADD LONG BRAKE DUNNO YET
                         continueWorkTime();
+                        setProgressBarValues(continueWorkTime);
                         dialog.cancel();
                     }
                 });
@@ -202,6 +261,13 @@ public class FirstFragment extends Fragment {
     private void pauseTimer() {
         timerState = TimerState.PAUSED;
         updateViews();
+    }
+
+    private void resumeTimer()
+    {
+        timerState = TimerState.RESUME;
+        updateViews();
+        startTimer();
     }
 
     private void breakTimer()
@@ -218,9 +284,9 @@ public class FirstFragment extends Fragment {
         startTimer();
     }
 
-    private void resumeTimer()
+    private void continueWorkTime()
     {
-        timerState = TimerState.RESUME;
+        timerState = TimerState.CONTINUE;
         updateViews();
         startTimer();
     }
@@ -228,12 +294,6 @@ public class FirstFragment extends Fragment {
     private void resetTimer() {
         timerState = TimerState.RESET;
         updateViews();
-    }
-
-    private void continueWorkTime()
-    {
-        timerState = TimerState.CONTINUE;
-        startTimer();
     }
 
     private void countDownTime() {
@@ -244,8 +304,8 @@ public class FirstFragment extends Fragment {
         time.setText(text);
     }
 
-    private void setProgressBarValues() {
-        progressBar.setMax((int) mSec / 1000);
+    private void setProgressBarValues(long time) {
+        progressBar.setMax((int) time / 1000);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -270,9 +330,10 @@ public class FirstFragment extends Fragment {
                 start.setVisibility(View.INVISIBLE);
                 timePicker.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.INVISIBLE);
+                resetBlink = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
+                reset.startAnimation(resetBlink);
                 reset.setVisibility(View.VISIBLE);
-               /* transparentBackgroundZoomIn.clearAnimation();
-                transparentBackgroundZoomIn.setVisibility(View.INVISIBLE);*/
+                pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
                 break;
             case PAUSED:
                 countDownTimer.cancel();
@@ -287,6 +348,9 @@ public class FirstFragment extends Fragment {
             case BREAK:
                 breakIcon.setVisibility(View.VISIBLE);
                 break;
+            case CONTINUE:
+                pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
+                break;
             case FINISHED:
                 dialog = new Dialog(getActivity());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -294,19 +358,13 @@ public class FirstFragment extends Fragment {
                 dialog.setCancelable(false);
                 dialog.show();
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                pauseResume.setVisibility(View.INVISIBLE);
 
                 time.setText(timeLeftFormatted);
-                start.setEnabled(true);
-                pauseResume.setEnabled(false);
-                reset.setEnabled(false);
                 break;
             case RESET:
-                Animation animationZoomIn = AnimationUtils.loadAnimation(getContext(),R.anim.zoom_in);
                 timePicker.setEnabled(true);
-               /* transparentBackgroundZoomIn.setVisibility(View.VISIBLE);
-                transparentBackgroundZoomIn.startAnimation(animationZoomIn);*/
                 progressBar.setVisibility(View.INVISIBLE);
+                pauseResume.setVisibility(View.INVISIBLE);
                 pauseResume.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.VISIBLE );
                 reset.setVisibility(View.INVISIBLE);
@@ -319,6 +377,8 @@ public class FirstFragment extends Fragment {
                 pauseResume.setEnabled(false);
                 start.setEnabled(true);
                 pauseResume.setImageResource(R.drawable.ic_play_arrow_white_48dp);
+                snoozeIcon.setVisibility(View.INVISIBLE);
+                breakIcon.setVisibility(View.INVISIBLE);
                 time.setText(timeLeftFormatted);
                 break;
         }

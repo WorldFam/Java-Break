@@ -19,6 +19,7 @@
             android:id="@+id/takeABreak"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:backgroundTint="@color/orangeBackground"
             android:drawableLeft="@drawable/baseline_free_breakfast_white_18dp"
             android:text="Take a break"
             android:textSize="20dp"

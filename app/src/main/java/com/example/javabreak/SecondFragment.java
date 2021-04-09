@@ -1,71 +1,81 @@
 package com.example.javabreak;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.javabreak.viewmodel.SecondFragmentViewModel;
-import com.google.android.material.slider.Slider;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
+import java.util.ArrayList;
 
 public class SecondFragment extends Fragment {
 
-    int breakTime,
-            snoozeTime;
-     SecondFragmentViewModel secondFragmentViewModel;
-     Slider breakSlider, snoozeSlider;
-
+    private RecyclerView recyclerView;
+    private ArrayList<ScheduledBreak> scheduledBreakList;
+    private ScheduledBreakAdapter scheduledBreakAdapter;
+    private ExtendedFloatingActionButton fab;
+    private CheckBox checkBox;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
      View view = inflater.inflate(R.layout.fragment_second, container, false);
-        breakSlider = view.findViewById(R.id.breakSlider);
-        snoozeSlider = view.findViewById(R.id.snoozeSlider);
-        breakSlider.setValue(15);
-        snoozeSlider.setValue(5);
+        scheduledBreakList = new ArrayList<>();
+        recyclerView = view.findViewById(R.id.recyclerView);
+        fab = view.findViewById(R.id.floatingActionButton);
+        checkBox = view.findViewById(R.id.Monday);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        scheduledBreakAdapter = new ScheduledBreakAdapter(scheduledBreakList);
+        recyclerView.setAdapter(scheduledBreakAdapter);
 
-        breakSlider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onStartTrackingTouch(@NonNull Slider slider) {
-
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    fab.extend();
+                }
+                super.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
-            public void onStopTrackingTouch(@NonNull Slider slider) {
-                breakTime = (int) slider.getValue();
-                secondFragmentViewModel.setBreakTime(breakTime);
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0 && fab.isExtended()) {
+                    fab.shrink();
+                }
             }
         });
 
-        snoozeSlider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStartTrackingTouch(@NonNull Slider slider) {
-
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NewScheduledReminder.class);
+                startActivity(intent);
+                scheduledBreakList.add(new ScheduledBreak("My first scheduled time!", "09:00 - 16:00", "15 minutes" ));
+                scheduledBreakAdapter.notifyItemInserted(scheduledBreakList.size()-1);
             }
-
-            @Override
-            public void onStopTrackingTouch(@NonNull Slider slider) {
-                snoozeTime = (int) slider.getValue();
-                secondFragmentViewModel.setSnoozeTime(snoozeTime);
-            }
-
         });
+
+
+
 
         return view;
     }
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-         secondFragmentViewModel = new ViewModelProvider(requireActivity()).get(SecondFragmentViewModel.class);
+/*    public void insertItem(ScheduledBreak scheduledBreak) {
+        scheduledBreakList.add(scheduledBreak);
+        scheduledBreakAdapter.notifyItemInserted(scheduledBreakList.size() );
     }
-
-
+    public void removeItem(int position) {
+        scheduledBreakList.remove(position);
+        scheduledBreakAdapter.notifyItemRemoved(position);
+    }*/
 
 }

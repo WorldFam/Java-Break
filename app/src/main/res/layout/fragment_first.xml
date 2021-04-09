@@ -33,11 +33,22 @@
         android:id="@+id/button2"
         android:layout_width="88dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="24dp"
         android:background="@color/newBackground"
         android:rotationY="180"
         android:src="@drawable/ic_restart_alt_white_48dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/configurationButton"
+        android:layout_width="88dp"
+        android:layout_height="80dp"
+        android:background="@color/newBackground"
+        android:src="@drawable/ic_baseline_tune_24"
+        app:layout_constraintBottom_toTopOf="@+id/timeBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
@@ -120,9 +131,9 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/transparentBackground"
-        app:layout_constraintVertical_bias="0.484" />
+        app:layout_constraintVertical_bias="0.839" />
 
-        <TextView
+    <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -152,19 +163,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.112" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TILL BREAK!"
-        android:textColor="@color/white"
-        android:textSize="25dp"
-        android:textStyle="italic|bold"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeBar"
-        app:layout_constraintVertical_bias="0.0" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
