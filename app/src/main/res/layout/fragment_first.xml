@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/newBackground"
-    tools:context=".FirstFragment">
-
+    tools:context=".fragments.FirstFragment">
 
      <!--   <ImageView
         android:id="@+id/transparentBackgroundZoomIn"
@@ -134,19 +133,19 @@
         app:layout_constraintVertical_bias="0.839" />
 
     <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:15:00"
-            android:textColor="@color/white"
-            android:textSize="50dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/timeBar"
-            app:layout_constraintEnd_toEndOf="@+id/timeBar"
-            app:layout_constraintHorizontal_bias="0.509"
-            app:layout_constraintStart_toStartOf="@+id/timeBar"
-            app:layout_constraintTop_toTopOf="@+id/timeBar"
-            app:layout_constraintVertical_bias="0.0" />
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:15:00"
+        android:textColor="@color/white"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/timeBar"
+        app:layout_constraintEnd_toEndOf="@+id/timeBar"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="@+id/timeBar"
+        app:layout_constraintTop_toTopOf="@+id/timeBar"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -164,6 +163,37 @@
         app:layout_constraintVertical_bias="0.112" />
 
 
+    <TextView
+        android:id="@+id/messageText"
+        android:layout_width="289dp"
+        android:layout_height="80dp"
+        android:drawableTop="@drawable/line_shape"
+        android:shadowColor="@color/lightGrey"
+        android:shadowDx="2.5"
+        android:shadowDy="2.3"
+        android:shadowRadius="1.6"
+        android:text="Pick Work Time and Press Start!"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeBar"
+        app:layout_constraintVertical_bias="0.7" />
+
+<!--    <fragment
+        android:id="@+id/fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/my_nav"
+        tools:layout_editor_absoluteX="229dp"
+        tools:layout_editor_absoluteY="455dp" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

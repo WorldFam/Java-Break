@@ -1,4 +1,4 @@
-package com.example.javabreak.ui.main;
+package com.example.javabreak;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,14 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.javabreak.R;
 import com.example.javabreak.viewmodel.ConfigurationPanelViewModel;
 
 import java.util.Locale;
 
 import maes.tech.intentanim.CustomIntent;
 
-public class ConfigurationPanel extends AppCompatActivity {
+public class ConfigurationActivity extends AppCompatActivity {
 
     ImageButton configurationExitButton;
 
@@ -41,8 +40,8 @@ public class ConfigurationPanel extends AppCompatActivity {
         snoozeTimeText = findViewById(R.id.snoozeTimeText);
 
         snoozeSlider.setMin(1);
-        snoozeSlider.setMax(15);
-        snoozeSlider.setProgress(5);
+        snoozeSlider.setMax(5);
+        snoozeSlider.setProgress(1);
 
 
         breakSlider.setMin(1);

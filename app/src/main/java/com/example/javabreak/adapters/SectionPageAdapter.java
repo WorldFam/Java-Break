@@ -1,12 +1,15 @@
-package com.example.javabreak;
+package com.example.javabreak.adapters;
 
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class SectionPageAdapter extends FragmentPagerAdapter {
+import com.example.javabreak.fragments.FirstFragment;
+import com.example.javabreak.fragments.SecondFragment;
+import com.example.javabreak.fragments.ThirdFragment;
 
+public class SectionPageAdapter extends FragmentPagerAdapter {
     public SectionPageAdapter(
             FragmentManager fm)
     {
@@ -38,4 +41,5 @@ public class SectionPageAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return null;
     }
+
 }

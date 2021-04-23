@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1047402815196",
+    "project_id": "java-break",
+    "storage_bucket": "java-break.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047402815196:android:8f6bb6ab28b36c7f4b9e19",
+        "android_client_info": {
+          "package_name": "com.example.javabreak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1047402815196-h568bcgtcidsb14g79setbii2iu65len.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwFXsnDDho6gquyw5oGgrczFYLJ9LHJ1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1047402815196-h568bcgtcidsb14g79setbii2iu65len.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -36,4 +36,9 @@
 
     </style>
 
+    <style name="ColoredHandleTheme">
+        <item name="colorAccent">@color/orange</item>
+    </style>
+
+
 </resources>

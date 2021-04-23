@@ -4,6 +4,7 @@
         <shape
             android:shape="line">
             <solid android:color="@color/orange"/>
+            <size android:width="300dp" android:height="10dp"/>
             <stroke
                 android:width="2dp" android:color="@color/orange"/>
         </shape>

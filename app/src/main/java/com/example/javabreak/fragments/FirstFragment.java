@@ -1,10 +1,12 @@
-package com.example.javabreak;
+package com.example.javabreak.fragments;
 
+import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +28,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.javabreak.ui.main.ConfigurationPanel;
+import com.example.javabreak.ConfigurationActivity;
+import com.example.javabreak.R;
+import com.example.javabreak.activities.TimerState;
 import com.example.javabreak.viewmodel.SecondFragmentViewModel;
 
 import java.util.Locale;
@@ -38,12 +42,12 @@ import maes.tech.intentanim.CustomIntent;
 public class FirstFragment extends Fragment {
 
     SecondFragmentViewModel secondFragmentViewModel;
-    private TextView time;
+    private TextView time, messageText;
     private TimePicker timePicker;
     private long mSec,breakTime,snoozeTime, continueWorkTime;
     private CountDownTimer countDownTimer;
     private ImageButton reset, pauseResume, configuration;
-    Animation resetAnimation, resetBlink;
+    Animation resetRotate, resetBlink, slideDownText;
 
     private Dialog dialog;
     private Button start, continueWork,snooze,takeABreak;
@@ -53,6 +57,7 @@ public class FirstFragment extends Fragment {
     ImageView  transparentBackground ,breakIcon,snoozeIcon ;
     Toast toast;
 
+    Handler handler = new Handler();
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,29 +85,7 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_first, container, false);
-
-        time = view.findViewById(R.id.time);
-        start = view.findViewById(R.id.button);
-        progressBar = view.findViewById(R.id.progressBar);
-        reset = view.findViewById(R.id.button2);
-        pauseResume = view.findViewById(R.id.button3);
-        timePicker = view.findViewById(R.id.simpleTimePicker);
-        transparentBackground = view.findViewById(R.id.transparentBackground);
-        breakIcon = view.findViewById(R.id.breakIcon);
-        snoozeIcon = view.findViewById(R.id.snoozeIcon);
-        configuration = view.findViewById(R.id.configurationButton);
-
-        breakIcon.setVisibility(View.INVISIBLE);
-        snoozeIcon.setVisibility(View.INVISIBLE);
-        reset.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.INVISIBLE);
-        pauseResume.setVisibility(View.INVISIBLE);
-        pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
-        timePicker.setIs24HourView(true);
-        pauseResume.setEnabled(false);
-        reset.setEnabled(false);
-        timePicker.setHour(0);
-        timePicker.setMinute(15);
+        defineWidgets(view);
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -122,7 +105,9 @@ public class FirstFragment extends Fragment {
                     }
                     timeConversion();
                     continueWorkTime = mSec;
+/*
                         mSec = 2000;
+*/
                     setProgressBarValues(mSec);
                     startTimer();
                     updateViews();
@@ -179,14 +164,42 @@ public class FirstFragment extends Fragment {
         configuration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ConfigurationPanel.class);
+                Intent intent = new Intent(getActivity(), ConfigurationActivity.class);
                 startActivity(intent);
                 CustomIntent.customType(getActivity(), "fadein-to-fadeout");
             }
         });
 
+
         return view;
     }
+
+    private void defineWidgets(View view) {
+        time = view.findViewById(R.id.time);
+        start = view.findViewById(R.id.button);
+        progressBar = view.findViewById(R.id.progressBar);
+        reset = view.findViewById(R.id.button2);
+        pauseResume = view.findViewById(R.id.button3);
+        timePicker = view.findViewById(R.id.simpleTimePicker);
+        transparentBackground = view.findViewById(R.id.transparentBackground);
+        breakIcon = view.findViewById(R.id.breakIcon);
+        snoozeIcon = view.findViewById(R.id.snoozeIcon);
+        configuration = view.findViewById(R.id.configurationButton);
+        messageText = view.findViewById(R.id.messageText);
+
+        breakIcon.setVisibility(View.INVISIBLE);
+        snoozeIcon.setVisibility(View.INVISIBLE);
+        reset.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        pauseResume.setVisibility(View.INVISIBLE);
+        pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
+        timePicker.setIs24HourView(true);
+        pauseResume.setEnabled(false);
+        reset.setEnabled(false);
+        timePicker.setHour(0);
+        timePicker.setMinute(15);
+    }
+
 
     public void startTimer() {
         if (timerState == TimerState.BREAK) {
@@ -330,9 +343,17 @@ public class FirstFragment extends Fragment {
                 start.setVisibility(View.INVISIBLE);
                 timePicker.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.INVISIBLE);
-                resetBlink = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
-                reset.startAnimation(resetBlink);
-                reset.setVisibility(View.VISIBLE);
+                slideDownText = AnimationUtils.loadAnimation(getContext(),R.anim.slide_down_text);
+                messageText.startAnimation(slideDownText);
+                messageText.setVisibility(View.INVISIBLE);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        resetBlink = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
+                        reset.startAnimation(resetBlink);
+                        reset.setVisibility(View.VISIBLE);
+                    }
+                }, 700);
                 pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
                 break;
             case PAUSED:
@@ -371,8 +392,16 @@ public class FirstFragment extends Fragment {
                 start.setVisibility(View.VISIBLE);
                 timePicker.setVisibility(View.VISIBLE);
                 countDownTimer.cancel();
-                resetAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
-                reset.startAnimation(resetAnimation);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(messageText, View.ALPHA, 0f, 1f);
+                        fadeIn.start();
+                        messageText.setVisibility(View.VISIBLE);
+                    }
+                }, 700);
+                resetRotate = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
+                reset.startAnimation(resetRotate);
                 reset.setEnabled(false);
                 pauseResume.setEnabled(false);
                 start.setEnabled(true);
