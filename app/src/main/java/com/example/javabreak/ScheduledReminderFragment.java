@@ -29,7 +29,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javabreak.activities.MainActivity;
@@ -188,7 +187,7 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
                 CheckedTextView v = (CheckedTextView) view;
                 boolean currentCheck = v.isChecked();
                 DayOfTheWeek user = (DayOfTheWeek) listView.getItemAtPosition(position);
-                user.setChecked(!currentCheck);
+                user.setChecked(currentCheck);
             }
         });
 
@@ -230,11 +229,7 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
                     scheduledSecondSharedViewModel.setBreakFrequency(removeFrequency);
                     scheduledSecondSharedViewModel.setBreakDuration(removeBreak);
 
-                    FragmentManager fragmentManager = getActivity( ).getSupportFragmentManager( );
-                    fragmentManager.popBackStack( );
-
                     ((MainActivity) getActivity( )).openViewPager( );
-                    ((MainActivity) getActivity( )).visible( );
 
                     SparseBooleanArray sp = listView.getCheckedItemPositions( );
                     List<DayOfTheWeek> list = new ArrayList<>( );

@@ -4,6 +4,7 @@
         <shape android:shape="oval">
             <solid android:color="@color/tabBackground"/>
             <size android:width="500dp" android:height="500dp"/>
+            <stroke android:width="2dp" android:color="@color/orange"/>
         </shape>
     </item>
 </selector>

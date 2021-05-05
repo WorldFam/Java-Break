@@ -1,32 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/firstFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/newBackground"
-    tools:context=".fragments.FirstFragment">
+    android:background="@color/newBackground">
 
-     <!--   <ImageView
-        android:id="@+id/transparentBackgroundZoomIn"
-        android:layout_width="379dp"
-        android:layout_height="395dp"
-        android:background="@drawable/transparent_background"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.108" />-->
-    <ImageView
-        android:id="@+id/transparentBackground"
-        android:layout_width="330dp"
-        android:layout_height="330dp"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/big_circle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include android:id="@+id/first_fragment_time_picker" layout="@layout/first_fragment_timer_picker"/>
+
+    <include layout="@layout/first_fragment_icon"/>
 
     <ImageButton
         android:id="@+id/button2"
@@ -51,74 +33,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TimePicker
-            android:id="@+id/simpleTimePicker"
-            android:layout_width="167dp"
-            android:layout_height="133dp"
-            android:numbersSelectorColor="@color/white"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            android:theme="@style/timePicker"
-            android:timePickerMode="spinner"
-            app:layout_constraintBottom_toBottomOf="@+id/transparentBackground"
-            app:layout_constraintEnd_toEndOf="@+id/transparentBackground"
-            app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintStart_toStartOf="@+id/transparentBackground"
-            app:layout_constraintTop_toTopOf="@+id/transparentBackground"
-            app:layout_constraintVertical_bias="0.456" />
-
-        <Button
-            android:id="@+id/button"
-            android:textColor="@color/newBackground"
-            app:backgroundTint="@color/orange"
-            android:layout_width="135dp"
-            android:layout_height="59dp"
-            android:text="@string/start"
-            android:textSize="25dp"
-            app:layout_constraintBottom_toBottomOf="@+id/transparentBackground"
-            app:layout_constraintEnd_toEndOf="@+id/simpleTimePicker"
-            app:layout_constraintStart_toStartOf="@+id/simpleTimePicker"
-            app:layout_constraintTop_toTopOf="@+id/simpleTimePicker"
-            app:layout_constraintVertical_bias="0.825"
-            tools:ignore="MissingConstraints" />
-
-
-        <ImageButton
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/newBackground"
-            android:src="@drawable/ic_play_arrow_white_48dp"
-            app:layout_constraintBottom_toBottomOf="@+id/progressBar"
-            app:layout_constraintEnd_toEndOf="@+id/progressBar"
-            app:layout_constraintStart_toStartOf="@+id/progressBar"
-            app:layout_constraintTop_toTopOf="@+id/progressBar"
-            app:layout_constraintVertical_bias="0.515" />
-
-        <ImageView
-            android:id="@+id/breakIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/newBackground"
-            android:src="@drawable/ic_baseline_free_breakfast_24"
-            app:layout_constraintBottom_toBottomOf="@+id/progressBar"
-            app:layout_constraintEnd_toEndOf="@+id/progressBar"
-            app:layout_constraintStart_toStartOf="@+id/progressBar"
-            app:layout_constraintTop_toTopOf="@+id/progressBar"
-            app:layout_constraintVertical_bias="0.515"/>
-
-        <ImageView
-            android:id="@+id/snoozeIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/newBackground"
-            android:src="@drawable/ic_baseline_snooze_24"
-            app:layout_constraintBottom_toBottomOf="@+id/progressBar"
-            app:layout_constraintEnd_toEndOf="@+id/progressBar"
-            app:layout_constraintStart_toStartOf="@+id/progressBar"
-            app:layout_constraintTop_toTopOf="@+id/progressBar"
-            app:layout_constraintVertical_bias="0.515"/>
 
     <ImageView
         android:id="@+id/timeBar"
@@ -147,22 +61,6 @@
         app:layout_constraintTop_toTopOf="@+id/timeBar"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="380dp"
-        android:layout_height="380dp"
-        android:layout_centerInParent="true"
-        android:background="@drawable/circle_shape"
-        android:progressDrawable="@drawable/progress_bar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.112" />
-
-
     <TextView
         android:id="@+id/messageText"
         android:layout_width="289dp"
@@ -172,7 +70,7 @@
         android:shadowDx="2.5"
         android:shadowDy="2.3"
         android:shadowRadius="1.6"
-        android:text="Pick Work Time and Press Start!"
+        android:text="Select Work Time and Press Start!"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/white"
@@ -185,15 +83,6 @@
         app:layout_constraintTop_toBottomOf="@+id/timeBar"
         app:layout_constraintVertical_bias="0.7" />
 
-<!--    <fragment
-        android:id="@+id/fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/my_nav"
-        tools:layout_editor_absoluteX="229dp"
-        tools:layout_editor_absoluteY="455dp" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

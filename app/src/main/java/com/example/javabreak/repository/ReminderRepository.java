@@ -1,6 +1,7 @@
 package com.example.javabreak.repository;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -37,13 +38,18 @@ public class ReminderRepository {
     }
 
     public void insert(ScheduledBreak scheduledBreak) {
+/*
+        new InsertAsyncTask(reminderDao).execute(scheduledBreak);
+*/
         executorService.execute(() -> reminderDao.insert(scheduledBreak));
     }
 
     public void delete(ScheduledBreak scheduledBreak) {
+/*
+        new InsertAsyncTask(reminderDao).execute(scheduledBreak);
+*/
         executorService.execute(() -> reminderDao.delete(scheduledBreak));
     }
-/*
     private static class InsertAsyncTask extends AsyncTask<ScheduledBreak, Void, Void> {
         private final ReminderDao reminderDaoAsync;
         private InsertAsyncTask(ReminderDao noteDao) {
@@ -54,5 +60,17 @@ public class ReminderRepository {
             reminderDaoAsync.insert(scheduledBreaks[0]);
             return null;
         }
-    }*/
+    }
+
+    private static class DeleteAsyncTask extends AsyncTask<ScheduledBreak, Void, Void> {
+        private final ReminderDao reminderDaoAsync;
+        private DeleteAsyncTask(ReminderDao noteDao) {
+            this.reminderDaoAsync = noteDao;
+        }
+        @Override
+        protected Void doInBackground(ScheduledBreak... scheduledBreaks) {
+            reminderDaoAsync.delete(scheduledBreaks[0]);
+            return null;
+        }
+    }
 }

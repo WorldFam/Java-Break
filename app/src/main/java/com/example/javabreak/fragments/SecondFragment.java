@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,12 +31,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SecondFragment extends Fragment{
 
-    private ArrayList<ScheduledBreak> scheduledBreakList;
     private ScheduledBreakAdapter scheduledBreakAdapter;
     private ExtendedFloatingActionButton fab;
     ScheduledSecondSharedViewModel scheduledSecondSharedViewModel;
@@ -41,29 +42,42 @@ public class SecondFragment extends Fragment{
     TabLayout tabLayout;
     ScheduledBreak scheduledBreak = new ScheduledBreak();
     ReminderViewModel reminderViewModel;
-
+    Animation slideDown;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
+    RelativeLayout createNewInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
-        scheduledBreakList = new ArrayList<>();
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         fab = view.findViewById(R.id.floatingActionButton);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        scheduledBreakAdapter = new ScheduledBreakAdapter(scheduledBreakList);
+        scheduledBreakAdapter = new ScheduledBreakAdapter();
         recyclerView.setAdapter(scheduledBreakAdapter);
+        createNewInfo = view.findViewById(R.id.createNewInfo);
         tabLayout = getActivity().findViewById(R.id.tabLayout);
-        scheduledBreakAdapter.notifyDataSetChanged();
+
 
         reminderViewModel = new ViewModelProvider(requireActivity()).get(ReminderViewModel.class);
         reminderViewModel.getAllReminders().observe(requireActivity( ), new Observer<List<ScheduledBreak>>( ) {
             @Override
             public void onChanged(List<ScheduledBreak> scheduledBreaks) {
-               scheduledBreakAdapter.submitList(scheduledBreaks);
+                createNewInfoCheck(scheduledBreaks);
+                scheduledBreakAdapter.submitList(scheduledBreaks);
+            }
+
+            private void createNewInfoCheck(List<ScheduledBreak> scheduledBreaks) {
+                if(scheduledBreaks.isEmpty())
+                {
+                    createNewInfo.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    createNewInfo.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -95,22 +109,22 @@ public class SecondFragment extends Fragment{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScheduledReminderFragment fragment2 = new ScheduledReminderFragment();
+                ScheduledReminderFragment fragment = new ScheduledReminderFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.secondFragment, fragment2);
-                fragmentTransaction.addToBackStack("Second");
+                fragmentTransaction.setCustomAnimations(R.anim.slide_up,
+                        R.anim.fade_out);
+                fragmentTransaction.add(R.id.secondFragment, fragment);
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-/*
-                Navigation.findNavController(getActivity(),R.id.secondFragment).navigate(R.id.scheduledReminderFragment);
-*/
-                tabLayout.setVisibility(View.GONE);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        fab.setEnabled(true); //Prevent double clicking
-                    }
-                }, 1000);
+
+
+                slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down_text);
+                recyclerView.startAnimation(slideDown);
+                if(tabLayout != null) {
+                    createNewInfo.setVisibility(View.GONE);
+                    tabLayout.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -132,8 +146,8 @@ public class SecondFragment extends Fragment{
         scheduledSecondSharedViewModel.getWeekDay().observe(getViewLifecycleOwner( ), new Observer<List<DayOfTheWeek>>( ) {
             @Override
             public void onChanged(List<DayOfTheWeek> dayOfTheWeeks) {
-                insertItem(scheduledBreak);
                 scheduledBreak.setDayOfTheWeeks(dayOfTheWeeks);
+                insertItem(scheduledBreak);
             }
         });
         scheduledSecondSharedViewModel.getWorkFrom().observe(getViewLifecycleOwner( ), new Observer<String>( ) {

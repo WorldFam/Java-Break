@@ -20,4 +20,8 @@ public class DayOfTheWeek {
     public String toString() {
         return  weekDay;
     }
+
+    public boolean isChecked() {
+        return checked;
+    }
 }

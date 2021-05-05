@@ -1,5 +1,5 @@
 package com.example.javabreak.activities;
 
 public enum TimerState {
-     RUNNING, PAUSED, RESUME, SNOOZE, BREAK, CONTINUE, FINISHED, RESET
+     WORK, PAUSE, SNOOZE, BREAK, CONTINUE, FINISH, START, RESET
 }

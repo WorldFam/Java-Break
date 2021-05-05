@@ -1,12 +1,11 @@
 package com.example.javabreak.fragments;
 
-import android.animation.ObjectAnimator;
 import android.app.Dialog;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,57 +24,68 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.javabreak.ConfigurationActivity;
+import com.example.javabreak.ConfigurationsFragment;
 import com.example.javabreak.R;
+import com.example.javabreak.activities.MainActivity;
 import com.example.javabreak.activities.TimerState;
-import com.example.javabreak.viewmodel.SecondFragmentViewModel;
+import com.example.javabreak.viewmodel.ConfigurationPanelViewModel;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import es.dmoral.toasty.Toasty;
-import maes.tech.intentanim.CustomIntent;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FirstFragment extends Fragment {
 
-    SecondFragmentViewModel secondFragmentViewModel;
+    ConfigurationPanelViewModel configurationPanelViewModel;
     private TextView time, messageText;
     private TimePicker timePicker;
-    private long mSec,breakTime,snoozeTime, continueWorkTime;
+    private long leftTime,breakTime,snoozeTime, continueWorkTime ,setTime , setBreakTime, setSnoozeTime;
+    private long endTime, endBreakTime, endSnoozeTime, endContinueWorkTime;
     private CountDownTimer countDownTimer;
     private ImageButton reset, pauseResume, configuration;
     Animation resetRotate, resetBlink, slideDownText;
-
+    String timeLeftFormatted = "00:00:00";
+    String resetTimeFormatted = "00:15:00";
     private Dialog dialog;
     private Button start, continueWork,snooze,takeABreak;
     ProgressBar progressBar;
     TimerState timerState;
-    String timeLeftFormatted = "00:00:00";
     ImageView  transparentBackground ,breakIcon,snoozeIcon ;
     Toast toast;
+    TabLayout tabLayout;
 
-    Handler handler = new Handler();
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        secondFragmentViewModel =  new ViewModelProvider(requireActivity()).get(SecondFragmentViewModel.class);
-
-        secondFragmentViewModel.getBreakTime().observe(this, new Observer<Integer>() {
+        configurationPanelViewModel = new ViewModelProvider(requireActivity()).get(ConfigurationPanelViewModel.class);
+        configurationPanelViewModel.getBreakTime().observe(this, new Observer<Integer>() {
 
             @Override
             public void onChanged(Integer integer) {
                 breakTime = TimeUnit.MINUTES.toMillis(integer);
+                setBreakTime = breakTime;
+                Log.d("STATE",String.valueOf(setBreakTime));
+
             }
         });
 
-        secondFragmentViewModel.getSnoozeTime().observe(this, new Observer<Integer>() {
+        configurationPanelViewModel.getSnoozeTime().observe(this, new Observer<Integer>() {
 
             @Override
             public void onChanged(Integer integer) {
                 snoozeTime = TimeUnit.MINUTES.toMillis(integer);
+                setSnoozeTime = snoozeTime;
+                Log.d("STATE",String.valueOf(setSnoozeTime));
+
             }
         });
     }
@@ -85,8 +95,9 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_first, container, false);
+        tabLayout = getActivity().findViewById(R.id.tabLayout);
         defineWidgets(view);
-
+        loadData( );
         start.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if(timePicker.getMinute() == 0 && timePicker.getHour() == 0)
@@ -104,13 +115,15 @@ public class FirstFragment extends Fragment {
                         toast.cancel();
                     }
                     timeConversion();
-                    continueWorkTime = mSec;
-/*
-                        mSec = 2000;
-*/
-                    setProgressBarValues(mSec);
-                    startTimer();
+                    leftTime =
+                            4000;
+                    continueWorkTime = leftTime;
+                    setTime = leftTime;
+                    ((MainActivity)getActivity()).notifyAlarm(leftTime);
+                    setProgressBarValues(leftTime);
+                    timerState = TimerState.START;
                     updateViews();
+                    startTimer();
                 }
             }
         }
@@ -145,10 +158,11 @@ public class FirstFragment extends Fragment {
         pauseResume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (timerState == TimerState.RUNNING) {
+                if (timerState == TimerState.WORK) {
                     pauseTimer();
                 } else {
-                  resumeTimer();
+                    Log.d("STATE","HI FROM RESUME");
+                    resumeTimer();
                 }
             }
         });
@@ -164,15 +178,262 @@ public class FirstFragment extends Fragment {
         configuration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ConfigurationActivity.class);
-                startActivity(intent);
-                CustomIntent.customType(getActivity(), "fadein-to-fadeout");
+                ConfigurationsFragment fragment = new ConfigurationsFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.fade_in,
+                        R.anim.fade_out);
+                fragmentTransaction.add(R.id.firstFragment, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+                if(tabLayout != null) {
+                    tabLayout.setVisibility(View.INVISIBLE);
+                }
             }
         });
-
-
         return view;
     }
+
+    private void loadData() {
+//        SharedPreferences preferences = getActivity().getSharedPreferences("workTime", MODE_PRIVATE);
+//            preferences.edit().remove("timerState").apply();
+//            preferences.edit().remove("endTime").apply();
+//            preferences.edit().remove("endBreakTime").apply();
+//            preferences.edit().remove("endSnoozeTime").apply();
+//            preferences.edit().remove("endContinueWorkTime").apply();
+//            preferences.edit().remove("leftTime").apply();
+//            preferences.edit().remove("setTime").apply();
+//            preferences.edit().remove("setBreakTime").apply();
+//            preferences.edit().remove("breakTime").apply();
+//            preferences.edit().remove("snoozeTime").apply();
+//            preferences.edit().remove("setSnoozeTime").apply();
+//            preferences.edit().remove("continueWorkTime").apply();
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("workTime", MODE_PRIVATE);
+        String timerStateCheck = sharedPreferences.getString("timerState","");
+
+        Log.d("STATE",String.valueOf(timerStateCheck) + " Timer State");
+
+        setTime = sharedPreferences.getLong("setTime", 900000);
+        leftTime = sharedPreferences.getLong("leftTime", setTime);
+        continueWorkTime = sharedPreferences.getLong("continueWorkTime", setTime);
+
+        setBreakTime = sharedPreferences.getLong("setBreakTime", 0);
+        breakTime = sharedPreferences.getLong("breakTime", setBreakTime);
+
+        setSnoozeTime = sharedPreferences.getLong("setSnoozeTime", 0);
+        snoozeTime = sharedPreferences.getLong("snoozeTime", setSnoozeTime);
+
+        countDownTime();
+
+        if(timerStateCheck.equals("PAUSE")) {
+            timerState = TimerState.PAUSE;
+            setProgressBarValues(setTime);
+            progressBar.setProgress((int) (leftTime/ 1000));
+            updateViews();
+        }
+
+        if(timerStateCheck.equals("RESET"))
+        {
+            timerState = TimerState.RESET;
+
+        }
+
+        if(timerStateCheck.equals("WORK")) {
+            timerState = TimerState.WORK;
+            endTime = sharedPreferences.getLong("endTime", 0);
+            setProgressBarValues(setTime);
+            leftTime = endTime - System.currentTimeMillis();
+            progressBar.setProgress((int) (setTime/ 1000) - (int) (leftTime/ 1000));
+            reset.setVisibility(View.VISIBLE); //Shouldn't belong here
+            updateViews();
+            Log.d("STATE",String.valueOf(leftTime) + "  left time before");
+
+            if (leftTime < 0) {
+                leftTime = 0; //Does allow Timer to be negative
+            }
+            Log.d("STATE",String.valueOf(leftTime) + "  left time after");
+
+            if(leftTime != 0) {
+                startTimer();
+            }
+
+
+            else
+                {
+                if(dialog != null) {
+                    dialog.cancel();
+                }
+                onFinished();
+            }
+
+//            if (leftTime != 0) {
+//                startTimer();
+//            }
+//            else {
+//               //Check for negative time
+//                if(dialog != null)
+//                {
+//                    dialog.cancel();
+//                }
+//                onFinished();
+//            }
+
+        }
+
+        if(timerStateCheck.equals("BREAK"))
+        {
+            timerState = TimerState.BREAK;
+            endBreakTime = sharedPreferences.getLong("endBreakTime", 0);
+            breakTime = endBreakTime - System.currentTimeMillis();
+            progressBar.setProgress((int) (setBreakTime/ 1000) - (int) (breakTime/ 1000));
+            setProgressBarValues(setBreakTime);
+            updateViews();
+            if (breakTime < 0) {
+                breakTime = 0; //Does allow Timer to be negative
+            }
+            if(breakTime != 0) {
+                startTimer();
+            }
+            else {
+                if(dialog != null) {
+                    dialog.cancel();
+                }
+                onFinished();
+            }
+/*            if (breakTime != 0) {
+                startTimer();
+            }
+            else {
+                //Check for negative time
+                onFinished();
+            }*/
+        }
+        if(timerStateCheck.equals("SNOOZE"))
+        {
+            timerState = TimerState.SNOOZE;
+            endSnoozeTime = sharedPreferences.getLong("endSnoozeTime", 0);
+            snoozeTime = endSnoozeTime - System.currentTimeMillis();
+            progressBar.setProgress((int) (setSnoozeTime/ 1000) - (int) (snoozeTime/ 1000));
+            setProgressBarValues(setSnoozeTime);
+            updateViews();
+//            if (snoozeTime != 0) {
+//                    startTimer();
+//            }
+//            else {
+//                //Check for negative time
+//                onFinished( );
+//            }
+            if (snoozeTime < 0) {
+                snoozeTime = 0; //Does allow Timer to be negative
+            }
+            if(snoozeTime != 0) {
+                startTimer();
+            }
+            else {
+                if(dialog != null) {
+                    dialog.cancel();
+                }
+                onFinished();
+            }
+
+        }
+        if(timerStateCheck.equals("CONTINUE"))
+        {
+            timerState = TimerState.CONTINUE;
+            endContinueWorkTime = sharedPreferences.getLong("endContinueWorkTime", 0);
+            setProgressBarValues(endContinueWorkTime);
+            continueWorkTime = endContinueWorkTime - System.currentTimeMillis();
+            progressBar.setProgress((int) (endContinueWorkTime/ 1000) - (int) (continueWorkTime/ 1000));
+            updateViews();
+//            if (continueWorkTime != 0) {
+////                startTimer();
+////            }
+////            else {
+////                //Check for negative time
+////                onFinished( );
+////            }
+
+            Log.d("STATE",String.valueOf(continueWorkTime) + "  continue time ");
+
+            if (continueWorkTime < 0) {
+                continueWorkTime = 0; //Does allow Timer to be negative
+            }
+            Log.d("STATE",String.valueOf(continueWorkTime) + "  continue time  after");
+
+            if(continueWorkTime != 0) {
+                startTimer();
+            }
+
+            else {
+//                continueWorkTime = sharedPreferences.getLong("setTime", setTime);
+                if(dialog != null) {
+                    dialog.cancel();
+                }
+                onFinished();
+            }
+        }
+    }
+
+    @Override
+    public  void onStop() {
+        super.onStop();
+        saveData( );
+    }
+
+    private void saveData() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("workTime", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putLong("setTime",setTime);
+        editor.putLong("setBreakTime",setBreakTime);
+        editor.putLong("setSnoozeTime",setSnoozeTime);
+
+
+        editor.putLong("leftTime", leftTime);
+        editor.putLong("continueWorkTime",continueWorkTime);
+        editor.putLong("breakTime",breakTime);
+        editor.putLong("snoozeTime",snoozeTime);
+
+
+        editor.putLong("endTime",endTime);
+        editor.putLong("endBreakTime",endBreakTime);
+        editor.putLong("endSnoozeTime",endSnoozeTime);
+        editor.putLong("endContinueWorkTime",endContinueWorkTime);
+
+        if(timerState == TimerState.WORK)
+        {
+            editor.putString("timerState","WORK");
+        }
+        if(timerState == TimerState.PAUSE)
+        {
+            editor.putString("timerState","PAUSE");
+        }
+        if(timerState == TimerState.BREAK)
+        {
+            editor.putString("timerState","BREAK");
+        }
+        if(timerState == TimerState.SNOOZE)
+        {
+            editor.putString("timerState","SNOOZE");
+        }
+        if(timerState == TimerState.CONTINUE)
+        {
+            editor.putString("timerState","CONTINUE");
+        }
+        if(timerState == TimerState.RESET)
+        {
+            editor.putString("timerState","RESET");
+            editor.putLong("leftTime", 900000);
+        }
+        editor.apply();
+
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
+
 
     private void defineWidgets(View view) {
         time = view.findViewById(R.id.time);
@@ -198,87 +459,80 @@ public class FirstFragment extends Fragment {
         reset.setEnabled(false);
         timePicker.setHour(0);
         timePicker.setMinute(15);
+
+//        firstFragment  = view.findViewById(R.id.firstFragment);
+
     }
 
-
     public void startTimer() {
-        if (timerState == TimerState.BREAK) {
-            mSec = breakTime;
-            timerState = TimerState.RUNNING;
-            startTimer();
-        } else if (timerState == TimerState.SNOOZE) {
-            mSec = snoozeTime;
-            timerState = TimerState.RUNNING;
-            startTimer();
-        }
-        else if (timerState == TimerState.CONTINUE) {
-            mSec = continueWorkTime;
-            timerState = TimerState.RUNNING;
-            startTimer();
-        }
-        else {
-            timerState = TimerState.RUNNING;
-            countDownTimer = new CountDownTimer(mSec, 1000) {
+        endTime = System.currentTimeMillis() + leftTime;
+        endBreakTime = System.currentTimeMillis() + breakTime;
+        endSnoozeTime = System.currentTimeMillis() + snoozeTime;
+        endContinueWorkTime = System.currentTimeMillis() + continueWorkTime;
+        countDownTimer = new CountDownTimer(leftTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 progressBar.setProgress((int) (millisUntilFinished / 1000));
-                mSec = millisUntilFinished;
+                leftTime = millisUntilFinished;
                 countDownTime();
             }
-            @Override
+                @Override
             public void onFinish() {
-                timerState = TimerState.FINISHED;
-                updateViews();
+                    onFinished();
+                }
+            }.start();
+        }
 
-                continueWork = dialog.findViewById(R.id.continueWorking);
-                takeABreak = dialog.findViewById(R.id.takeABreak);
-                snooze = dialog.findViewById(R.id.snooze);
-                takeABreak.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        breakTimer();
-                        setProgressBarValues(breakTime);
-                        dialog.cancel();
-                    }
-                });
 
-                snooze.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        snoozeTimer();
-                        setProgressBarValues(snoozeTime);
-                        dialog.cancel();
-                    }
-                });
-
-                continueWork.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                    /*    count++;
-                        if(count == 4)
-                        {
-                            count = 0;
-                        }*/ //MIGHT ADD LONG BRAKE DUNNO YET
-                        continueWorkTime();
-                        setProgressBarValues(continueWorkTime);
-                        dialog.cancel();
-                    }
-                });
+    private void onFinished() {
+        timerState = TimerState.FINISH;
+        updateViews();
+//        timerState = TimerState.WORK;
+        continueWork = dialog.findViewById(R.id.continueWorking);
+        takeABreak = dialog.findViewById(R.id.takeABreak);
+        snooze = dialog.findViewById(R.id.snooze);
+        takeABreak.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                breakTimer();
+                setProgressBarValues(breakTime);
+                dialog.cancel();
             }
-        }.start();
-        }
+        });
 
-        }
+        snooze.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                snoozeTimer();
+                setProgressBarValues(snoozeTime);
+                dialog.cancel();
+            }
+        });
 
+        continueWork.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                        /*    count++;
+                            if(count == 4)
+                            {
+                                count = 0;
+                            }*/ //MIGHT ADD LONG BRAKE DUNNO YET
+                continueWorkTime();
+                setProgressBarValues(continueWorkTime);
+                dialog.cancel();
+            }
+        });
+    }
 
     private void pauseTimer() {
-        timerState = TimerState.PAUSED;
+        timerState = TimerState.PAUSE;
+        countDownTimer.cancel();
         updateViews();
     }
 
     private void resumeTimer()
     {
-        timerState = TimerState.RESUME;
+        timerState = TimerState.WORK;
         updateViews();
         startTimer();
     }
@@ -287,6 +541,7 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.BREAK;
         updateViews();
+        leftTime = breakTime;
         startTimer();
     }
 
@@ -294,6 +549,7 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.SNOOZE;
         updateViews();
+        leftTime = snoozeTime;
         startTimer();
     }
 
@@ -301,19 +557,23 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.CONTINUE;
         updateViews();
+        leftTime = setTime;
         startTimer();
     }
 
     private void resetTimer() {
         timerState = TimerState.RESET;
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
         updateViews();
     }
 
     private void countDownTime() {
         String text = String.format(Locale.getDefault(), "%02d:%02d:%02d",
-                TimeUnit.MILLISECONDS.toHours(mSec) % 60,
-                TimeUnit.MILLISECONDS.toMinutes(mSec) % 60,
-                TimeUnit.MILLISECONDS.toSeconds(mSec) % 60);
+                TimeUnit.MILLISECONDS.toHours(leftTime) % 60,
+                TimeUnit.MILLISECONDS.toMinutes(leftTime) % 60,
+                TimeUnit.MILLISECONDS.toSeconds(leftTime) % 60);
         time.setText(text);
     }
 
@@ -326,14 +586,50 @@ public class FirstFragment extends Fragment {
     {
         int hour = timePicker.getHour();
         long min = timePicker.getMinute() + TimeUnit.HOURS.toMinutes(hour);
-        mSec = TimeUnit.MINUTES.toMillis(min);   //int mSec = min * 60000;  Old
+        leftTime = TimeUnit.MINUTES.toMillis(min);   //int mSec = min * 60000;  Old
     }
 
 
     private void updateViews()
     {
         switch (timerState) {
-            case RUNNING:
+            case START:
+                slideDownText = AnimationUtils.loadAnimation(getContext(),R.anim.slide_down_text);
+                resetBlink = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
+                messageText.startAnimation(slideDownText);
+                slideDownText.setAnimationListener(new Animation.AnimationListener( ) {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        reset.setVisibility(View.VISIBLE);
+                        reset.startAnimation(resetBlink);
+                        messageText.setVisibility(View.INVISIBLE);
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                timerState = TimerState.WORK;
+            case WORK:
+                progressBar.setVisibility(View.VISIBLE);
+                pauseResume.setVisibility(View.VISIBLE);
+                reset.setEnabled(true);
+                pauseResume.setEnabled(true);
+                start.setEnabled(false);
+                timePicker.setEnabled(false);
+                start.setVisibility(View.INVISIBLE);
+                messageText.setVisibility(View.INVISIBLE);
+                timePicker.setVisibility(View.INVISIBLE);
+                transparentBackground.setVisibility(View.INVISIBLE);
+                pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
+                break;
+            case PAUSE:
                 progressBar.setVisibility(View.VISIBLE);
                 pauseResume.setVisibility(View.VISIBLE);
                 reset.setEnabled(true);
@@ -343,43 +639,58 @@ public class FirstFragment extends Fragment {
                 start.setVisibility(View.INVISIBLE);
                 timePicker.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.INVISIBLE);
-                slideDownText = AnimationUtils.loadAnimation(getContext(),R.anim.slide_down_text);
-                messageText.startAnimation(slideDownText);
                 messageText.setVisibility(View.INVISIBLE);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        resetBlink = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
-                        reset.startAnimation(resetBlink);
-                        reset.setVisibility(View.VISIBLE);
-                    }
-                }, 700);
-                pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
-                break;
-            case PAUSED:
-                countDownTimer.cancel();
+                reset.setVisibility(View.VISIBLE);
                 pauseResume.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 break;
-            case RESUME:
-                pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
-                break;
             case SNOOZE:
+                progressBar.setVisibility(View.VISIBLE);
+                reset.setEnabled(true);
+                start.setEnabled(false);
+                timePicker.setEnabled(false);
+                reset.setVisibility(View.VISIBLE);
+                start.setVisibility(View.INVISIBLE);
+                timePicker.setVisibility(View.INVISIBLE);
+                messageText.setVisibility(View.INVISIBLE);
+                transparentBackground.setVisibility(View.INVISIBLE);
                 snoozeIcon.setVisibility(View.VISIBLE);
+                pauseResume.setEnabled(false);
                 break;
             case BREAK:
+                progressBar.setVisibility(View.VISIBLE);
+                reset.setEnabled(true);
+                start.setEnabled(false);
+                timePicker.setEnabled(false);
+                reset.setVisibility(View.VISIBLE);
+                start.setVisibility(View.INVISIBLE);
+                timePicker.setVisibility(View.INVISIBLE);
+                messageText.setVisibility(View.INVISIBLE);
+                transparentBackground.setVisibility(View.INVISIBLE);
                 breakIcon.setVisibility(View.VISIBLE);
+                pauseResume.setEnabled(false);
                 break;
             case CONTINUE:
+                progressBar.setVisibility(View.VISIBLE);
+                pauseResume.setVisibility(View.VISIBLE);
+                reset.setEnabled(true);
+                pauseResume.setEnabled(true);
+                start.setEnabled(false);
+                timePicker.setEnabled(false);
+                start.setVisibility(View.INVISIBLE);
+                messageText.setVisibility(View.INVISIBLE);
+                timePicker.setVisibility(View.INVISIBLE);
+                transparentBackground.setVisibility(View.INVISIBLE);
                 pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
+                reset.setVisibility(View.VISIBLE);
                 break;
-            case FINISHED:
+            case FINISH:
                 dialog = new Dialog(getActivity());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.alert_dialog);
                 dialog.setCancelable(false);
                 dialog.show();
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
+                messageText.setVisibility(View.INVISIBLE);
                 time.setText(timeLeftFormatted);
                 break;
             case RESET:
@@ -391,26 +702,38 @@ public class FirstFragment extends Fragment {
                 reset.setVisibility(View.INVISIBLE);
                 start.setVisibility(View.VISIBLE);
                 timePicker.setVisibility(View.VISIBLE);
-                countDownTimer.cancel();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(messageText, View.ALPHA, 0f, 1f);
-                        fadeIn.start();
-                        messageText.setVisibility(View.VISIBLE);
-                    }
-                }, 700);
+                if(dialog != null) {
+                    dialog.cancel( );
+                }
                 resetRotate = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
                 reset.startAnimation(resetRotate);
+                resetRotate.setAnimationListener(new Animation.AnimationListener( ) {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        messageText.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
                 reset.setEnabled(false);
                 pauseResume.setEnabled(false);
                 start.setEnabled(true);
                 pauseResume.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 snoozeIcon.setVisibility(View.INVISIBLE);
                 breakIcon.setVisibility(View.INVISIBLE);
-                time.setText(timeLeftFormatted);
+                time.setText(resetTimeFormatted);
                 break;
         }
 
     }
+
+
 }

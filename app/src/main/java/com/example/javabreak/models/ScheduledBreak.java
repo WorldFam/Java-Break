@@ -117,4 +117,11 @@ public class ScheduledBreak {
     }
 
 
+    @Override
+    public String toString() {
+        return "ScheduledBreak{" +
+                "name='" + name + '\'' +
+                ", dayOfTheWeeks=" + dayOfTheWeeks +
+                '}';
+    }
 }

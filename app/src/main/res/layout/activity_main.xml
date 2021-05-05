@@ -11,21 +11,19 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/tabBackground"
-            app:tabMode="fixed"
-            app:tabTextColor="@color/grey"
             app:tabIndicatorColor="@color/orange"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="@color/orange"
-            app:tabTextAppearance="@style/MyCustomTabText"/>
+            app:tabTextAppearance="@style/MyCustomTabText"
+            app:tabTextColor="@color/grey" />
 
     </com.example.javabreak.adapters.NonSwipeableViewPager>
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

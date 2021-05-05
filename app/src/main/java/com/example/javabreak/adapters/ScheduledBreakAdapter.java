@@ -18,14 +18,13 @@ import com.example.javabreak.R;
 import com.example.javabreak.models.DayOfTheWeek;
 import com.example.javabreak.models.ScheduledBreak;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledBreakAdapter.ViewHolder> {
 
     private OnItemClickListener mListener;
 
-    public ScheduledBreakAdapter(ArrayList<ScheduledBreak> scheduledBreakList)
+    public ScheduledBreakAdapter()
     {
         super(DIFF_CALLBACK);
     }
@@ -37,7 +36,10 @@ public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledB
         }
         @Override
         public boolean areContentsTheSame(ScheduledBreak oldItem, ScheduledBreak newItem) {
-            return oldItem.getName().equals(newItem.getName());
+            return oldItem.getName().equals(newItem.getName()) /*&& !oldItem.getDayOfTheWeeks().equals(newItem.getDayOfTheWeeks())*/;
+                  /*  && oldItem.getWorkFromText().equals(newItem.getWorkFromText()) && oldItem.getWorkToText().equals(newItem.getWorkToText())
+                    && oldItem.getBreakFrequencyText().equals(newItem.getBreakFrequencyText()) && oldItem.getBreakDurationText().equals(newItem.getBreakDurationText());
+*/
         }
     };
 
@@ -79,12 +81,28 @@ public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledB
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null) {
                         int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
+                        if (listener != null && position != RecyclerView.NO_POSITION) {
                             listener.onDelete(position);
+                            resetWeekDay( );
                         }
-                    }
+                }
+
+                private void resetWeekDay() {
+                    monday.setTextColor(Color.parseColor("#80BFB3B3"));
+                    monday.setTypeface(null, Typeface.NORMAL);
+                    tuesday.setTextColor(Color.parseColor("#80BFB3B3"));
+                    tuesday.setTypeface(null, Typeface.NORMAL);
+                    wednesday.setTextColor(Color.parseColor("#80BFB3B3"));
+                    wednesday.setTypeface(null, Typeface.NORMAL);
+                    thursday.setTextColor(Color.parseColor("#80BFB3B3"));
+                    thursday.setTypeface(null, Typeface.NORMAL);
+                    friday.setTextColor(Color.parseColor("#80BFB3B3"));
+                    friday.setTypeface(null, Typeface.NORMAL);
+                    saturday.setTextColor(Color.parseColor("#80BFB3B3"));
+                    saturday.setTypeface(null, Typeface.NORMAL);
+                    sunday.setTextColor(Color.parseColor("#80BFB3B3"));
+                    sunday.setTypeface(null, Typeface.NORMAL);
                 }
             });
         }
@@ -100,48 +118,48 @@ public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledB
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
-        return new ViewHolder(view,mListener);
+        return new ViewHolder(view, mListener);
     }
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ScheduledBreak scheduledBreak = getItem(position);
         List<DayOfTheWeek> dayOfTheWeeks = scheduledBreak.getDayOfTheWeeks();
-        System.out.println(dayOfTheWeeks );
         holder.name.setText(scheduledBreak.getName());
         for (DayOfTheWeek dayOfTheWeek : dayOfTheWeeks ) {
             setWeekDay(holder,dayOfTheWeek);
         }
+
         holder.workDuration.setText(scheduledBreak.getWorkFromText() + "-" + scheduledBreak.getWorkToText());
         holder.breakDuration.setText(scheduledBreak.getBreakFrequencyText() + " / " + scheduledBreak.getBreakDurationText());
     }
 
     private void setWeekDay(@NonNull ViewHolder holder, DayOfTheWeek dayOfTheWeek) {
-        if (dayOfTheWeek.getWeekDay().equals("Monday") ) {
+        if (dayOfTheWeek.getWeekDay().equals("Monday")  && dayOfTheWeek.isChecked()) {
             holder.monday.setTextColor(Color.parseColor("#FF9800"));
             holder.monday.setTypeface(null, Typeface.BOLD);
         }
-        if (dayOfTheWeek.getWeekDay().equals("Tuesday")) {
+        if (dayOfTheWeek.getWeekDay().equals("Tuesday") && dayOfTheWeek.isChecked()) {
             holder.tuesday.setTextColor(Color.parseColor("#FF9800"));
             holder.tuesday.setTypeface(null, Typeface.BOLD);
         }
-        if (dayOfTheWeek.getWeekDay().equals("Wednesday")) {
+        if (dayOfTheWeek.getWeekDay().equals("Wednesday") && dayOfTheWeek.isChecked()) {
             holder.wednesday.setTextColor(Color.parseColor("#FF9800"));
             holder.wednesday.setTypeface(null, Typeface.BOLD);
         }
-        if (dayOfTheWeek.getWeekDay().equals("Thursday")) {
+        if (dayOfTheWeek.getWeekDay().equals("Thursday") && dayOfTheWeek.isChecked()) {
             holder.thursday.setTextColor(Color.parseColor("#FF9800"));
             holder.thursday.setTypeface(null, Typeface.BOLD);
         }
-        if (dayOfTheWeek.getWeekDay().equals("Friday")) {
+        if (dayOfTheWeek.getWeekDay().equals("Friday") && dayOfTheWeek.isChecked()) {
             holder.friday.setTextColor(Color.parseColor("#FF9800"));
             holder.friday.setTypeface(null, Typeface.BOLD);
         }
-        if (dayOfTheWeek.getWeekDay().equals("Saturday")) {
+        if (dayOfTheWeek.getWeekDay().equals("Saturday") && dayOfTheWeek.isChecked()) {
             holder.saturday.setTextColor(Color.parseColor("#FF9800"));
             holder.saturday.setTypeface(null, Typeface.BOLD);
         }
-        if (dayOfTheWeek.getWeekDay().equals("Sunday")) {
+        if (dayOfTheWeek.getWeekDay().equals("Sunday") && dayOfTheWeek.isChecked()) {
             holder.sunday.setTextColor(Color.parseColor("#FF9800"));
             holder.sunday.setTypeface(null, Typeface.BOLD);
         }
