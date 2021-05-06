@@ -72,7 +72,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onChanged(Integer integer) {
-                setBreakTime = TimeUnit.MINUTES.toMillis(integer);
+                setBreakTime = TimeUnit.SECONDS.toMillis(integer);
                 breakTime = setBreakTime;
             }
         });
@@ -81,7 +81,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onChanged(Integer integer) {
-                setSnoozeTime = TimeUnit.MINUTES.toMillis(integer);
+                setSnoozeTime = TimeUnit.SECONDS.toMillis(integer);
                 snoozeTime = setSnoozeTime;
                 Log.d("STATE",String.valueOf(setSnoozeTime + " setSnooze " + snoozeTime + " snoozeTime"));
 
@@ -283,20 +283,14 @@ public class FirstFragment extends Fragment {
             if (breakTime < 0) {
                 breakTime = 0; //Does allow Timer to be negative
             }
-//            if(breakTime != 0) {
-//                breakTimer();
-//            }
-//            else {
-//                if(dialog != null) {
-//                    dialog.cancel();
-//                }
-//                onFinished();
-//            }
-            if(finished) {
-                onFinished();
+            if(breakTime != 0) {
+                breakTimer();
             }
             else {
-                breakTimer();
+                if(dialog != null) {
+                    dialog.cancel();
+                }
+                onFinished();
             }
         }
         if(timerStateCheck.equals("SNOOZE"))
@@ -310,22 +304,14 @@ public class FirstFragment extends Fragment {
             if (snoozeTime < 0) {
                 snoozeTime = 0; //Does allow Timer to be negative
             }
-
-//            if(snoozeTime != 0) {
-//                snoozeTimer();
-//            }
-//            else {
-//                if(dialog != null) {
-//                    dialog.cancel();
-//                }
-//                onFinished();
-//            }
-
-            if(finished) {
-                onFinished();
+            if(snoozeTime != 0) {
+                snoozeTimer();
             }
             else {
-                snoozeTimer();
+                if(dialog != null) {
+                    dialog.cancel();
+                }
+                onFinished();
             }
         }
         if(timerStateCheck.equals("CONTINUE"))
@@ -341,22 +327,15 @@ public class FirstFragment extends Fragment {
                 continueWorkTime = 0; //Does allow Timer to be negative
             }
 
-//            if(continueWorkTime != 0) {
-//                continueWorkTime();
-//            }
-//
-//            else {
-//                if(dialog != null) {
-//                    dialog.cancel();
-//                }
-//                onFinished();
-//            }
-            if(finished) {
-                onFinished();
-            }
-            else {
+            if(continueWorkTime != 0) {
                 continueWorkTime();
+            }
 
+            else {
+                if(dialog != null) {
+                    dialog.cancel();
+                }
+                onFinished();
             }
         }
     }
