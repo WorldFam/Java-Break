@@ -62,6 +62,7 @@ public class FirstFragment extends Fragment {
     ImageView  transparentBackground ,breakIcon,snoozeIcon ;
     Toast toast;
     TabLayout tabLayout;
+    boolean finished = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,10 +72,8 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onChanged(Integer integer) {
-                breakTime = TimeUnit.MINUTES.toMillis(integer);
-                setBreakTime = breakTime;
-                Log.d("STATE",String.valueOf(setBreakTime));
-
+                setBreakTime = TimeUnit.MINUTES.toMillis(integer);
+                breakTime = setBreakTime;
             }
         });
 
@@ -82,9 +81,9 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onChanged(Integer integer) {
-                snoozeTime = TimeUnit.MINUTES.toMillis(integer);
-                setSnoozeTime = snoozeTime;
-                Log.d("STATE",String.valueOf(setSnoozeTime));
+                setSnoozeTime = TimeUnit.MINUTES.toMillis(integer);
+                snoozeTime = setSnoozeTime;
+                Log.d("STATE",String.valueOf(setSnoozeTime + " setSnooze " + snoozeTime + " snoozeTime"));
 
             }
         });
@@ -97,7 +96,7 @@ public class FirstFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_first, container, false);
         tabLayout = getActivity().findViewById(R.id.tabLayout);
         defineWidgets(view);
-        loadData( );
+
         start.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if(timePicker.getMinute() == 0 && timePicker.getHour() == 0)
@@ -116,9 +115,9 @@ public class FirstFragment extends Fragment {
                     }
                     timeConversion();
                     leftTime =
-                            4000;
-                    continueWorkTime = leftTime;
+                            10000;
                     setTime = leftTime;
+                    continueWorkTime = setTime ;
                     ((MainActivity)getActivity()).notifyAlarm(leftTime);
                     setProgressBarValues(leftTime);
                     timerState = TimerState.START;
@@ -161,7 +160,6 @@ public class FirstFragment extends Fragment {
                 if (timerState == TimerState.WORK) {
                     pauseTimer();
                 } else {
-                    Log.d("STATE","HI FROM RESUME");
                     resumeTimer();
                 }
             }
@@ -195,6 +193,13 @@ public class FirstFragment extends Fragment {
         return view;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart( );
+        loadData();
+    }
+
     private void loadData() {
 //        SharedPreferences preferences = getActivity().getSharedPreferences("workTime", MODE_PRIVATE);
 //            preferences.edit().remove("timerState").apply();
@@ -217,13 +222,17 @@ public class FirstFragment extends Fragment {
 
         setTime = sharedPreferences.getLong("setTime", 900000);
         leftTime = sharedPreferences.getLong("leftTime", setTime);
+        Log.d("STATE",String.valueOf(leftTime) + " left Time");
+
         continueWorkTime = sharedPreferences.getLong("continueWorkTime", setTime);
 
-        setBreakTime = sharedPreferences.getLong("setBreakTime", 0);
+        setBreakTime = sharedPreferences.getLong("setBreakTime", 900000);
         breakTime = sharedPreferences.getLong("breakTime", setBreakTime);
 
-        setSnoozeTime = sharedPreferences.getLong("setSnoozeTime", 0);
+        setSnoozeTime = sharedPreferences.getLong("setSnoozeTime", 60000);
+//        Log.d("STATE",String.valueOf(setSnoozeTime) + " snooze Time");
         snoozeTime = sharedPreferences.getLong("snoozeTime", setSnoozeTime);
+//        Log.d("STATE",String.valueOf(snoozeTime) + " not set snooze Time");
 
         countDownTime();
 
@@ -245,133 +254,109 @@ public class FirstFragment extends Fragment {
             endTime = sharedPreferences.getLong("endTime", 0);
             setProgressBarValues(setTime);
             leftTime = endTime - System.currentTimeMillis();
+            Log.d("STATE",String.valueOf(leftTime) + " left Time after");
+
             progressBar.setProgress((int) (setTime/ 1000) - (int) (leftTime/ 1000));
             reset.setVisibility(View.VISIBLE); //Shouldn't belong here
             updateViews();
-            Log.d("STATE",String.valueOf(leftTime) + "  left time before");
-
             if (leftTime < 0) {
                 leftTime = 0; //Does allow Timer to be negative
             }
-            Log.d("STATE",String.valueOf(leftTime) + "  left time after");
-
             if(leftTime != 0) {
                 startTimer();
-            }
-
-
-            else
-                {
+            } else {
                 if(dialog != null) {
                     dialog.cancel();
                 }
                 onFinished();
             }
-
-//            if (leftTime != 0) {
-//                startTimer();
-//            }
-//            else {
-//               //Check for negative time
-//                if(dialog != null)
-//                {
-//                    dialog.cancel();
-//                }
-//                onFinished();
-//            }
-
         }
 
         if(timerStateCheck.equals("BREAK"))
         {
             timerState = TimerState.BREAK;
             endBreakTime = sharedPreferences.getLong("endBreakTime", 0);
+            setProgressBarValues(setBreakTime);
             breakTime = endBreakTime - System.currentTimeMillis();
             progressBar.setProgress((int) (setBreakTime/ 1000) - (int) (breakTime/ 1000));
-            setProgressBarValues(setBreakTime);
             updateViews();
             if (breakTime < 0) {
                 breakTime = 0; //Does allow Timer to be negative
             }
-            if(breakTime != 0) {
-                startTimer();
-            }
-            else {
-                if(dialog != null) {
-                    dialog.cancel();
-                }
+//            if(breakTime != 0) {
+//                breakTimer();
+//            }
+//            else {
+//                if(dialog != null) {
+//                    dialog.cancel();
+//                }
+//                onFinished();
+//            }
+            if(finished) {
                 onFinished();
             }
-/*            if (breakTime != 0) {
-                startTimer();
-            }
             else {
-                //Check for negative time
-                onFinished();
-            }*/
+                breakTimer();
+            }
         }
         if(timerStateCheck.equals("SNOOZE"))
         {
             timerState = TimerState.SNOOZE;
             endSnoozeTime = sharedPreferences.getLong("endSnoozeTime", 0);
+            setProgressBarValues(setSnoozeTime);
             snoozeTime = endSnoozeTime - System.currentTimeMillis();
             progressBar.setProgress((int) (setSnoozeTime/ 1000) - (int) (snoozeTime/ 1000));
-            setProgressBarValues(setSnoozeTime);
             updateViews();
-//            if (snoozeTime != 0) {
-//                    startTimer();
-//            }
-//            else {
-//                //Check for negative time
-//                onFinished( );
-//            }
             if (snoozeTime < 0) {
                 snoozeTime = 0; //Does allow Timer to be negative
             }
-            if(snoozeTime != 0) {
-                startTimer();
-            }
-            else {
-                if(dialog != null) {
-                    dialog.cancel();
-                }
+
+//            if(snoozeTime != 0) {
+//                snoozeTimer();
+//            }
+//            else {
+//                if(dialog != null) {
+//                    dialog.cancel();
+//                }
+//                onFinished();
+//            }
+
+            if(finished) {
                 onFinished();
             }
-
+            else {
+                snoozeTimer();
+            }
         }
         if(timerStateCheck.equals("CONTINUE"))
         {
             timerState = TimerState.CONTINUE;
             endContinueWorkTime = sharedPreferences.getLong("endContinueWorkTime", 0);
-            setProgressBarValues(endContinueWorkTime);
+            setProgressBarValues(setTime);
             continueWorkTime = endContinueWorkTime - System.currentTimeMillis();
-            progressBar.setProgress((int) (endContinueWorkTime/ 1000) - (int) (continueWorkTime/ 1000));
+            progressBar.setProgress((int) (setTime/ 1000) - (int) (continueWorkTime/ 1000));
             updateViews();
-//            if (continueWorkTime != 0) {
-////                startTimer();
-////            }
-////            else {
-////                //Check for negative time
-////                onFinished( );
-////            }
-
-            Log.d("STATE",String.valueOf(continueWorkTime) + "  continue time ");
 
             if (continueWorkTime < 0) {
                 continueWorkTime = 0; //Does allow Timer to be negative
             }
-            Log.d("STATE",String.valueOf(continueWorkTime) + "  continue time  after");
 
-            if(continueWorkTime != 0) {
-                startTimer();
-            }
-
-            else {
-//                continueWorkTime = sharedPreferences.getLong("setTime", setTime);
-                if(dialog != null) {
-                    dialog.cancel();
-                }
+//            if(continueWorkTime != 0) {
+//                continueWorkTime();
+//            }
+//
+//            else {
+//                if(dialog != null) {
+//                    dialog.cancel();
+//                }
+//                onFinished();
+//            }
+            if(finished) {
                 onFinished();
+            }
+            else {
+                continueWorkTime();
+
             }
         }
     }
@@ -460,8 +445,6 @@ public class FirstFragment extends Fragment {
         timePicker.setHour(0);
         timePicker.setMinute(15);
 
-//        firstFragment  = view.findViewById(R.id.firstFragment);
-
     }
 
     public void startTimer() {
@@ -487,7 +470,7 @@ public class FirstFragment extends Fragment {
     private void onFinished() {
         timerState = TimerState.FINISH;
         updateViews();
-//        timerState = TimerState.WORK;
+        finished = true;
         continueWork = dialog.findViewById(R.id.continueWorking);
         takeABreak = dialog.findViewById(R.id.takeABreak);
         snooze = dialog.findViewById(R.id.snooze);
@@ -512,11 +495,6 @@ public class FirstFragment extends Fragment {
         continueWork.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                        /*    count++;
-                            if(count == 4)
-                            {
-                                count = 0;
-                            }*/ //MIGHT ADD LONG BRAKE DUNNO YET
                 continueWorkTime();
                 setProgressBarValues(continueWorkTime);
                 dialog.cancel();
@@ -541,7 +519,13 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.BREAK;
         updateViews();
-        leftTime = breakTime;
+        if(finished) {
+            breakTime = setBreakTime; //setProgressBar
+            leftTime = setBreakTime; //setRealTime
+            finished = false;
+        } else {
+            leftTime = breakTime;
+        }
         startTimer();
     }
 
@@ -549,7 +533,13 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.SNOOZE;
         updateViews();
-        leftTime = snoozeTime;
+        if(finished) {
+            snoozeTime = setSnoozeTime; //setProgressBar
+            leftTime = setSnoozeTime; //setRealTime
+            finished = false;
+        } else {
+            leftTime = snoozeTime;
+        }
         startTimer();
     }
 
@@ -557,12 +547,20 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.CONTINUE;
         updateViews();
-        leftTime = setTime;
+        if(finished) {
+            continueWorkTime = setTime; //setProgressBar
+            leftTime = setTime; //setRealTime
+            finished = false;
+        } else {
+            leftTime = continueWorkTime;
+        }
         startTimer();
     }
 
     private void resetTimer() {
         timerState = TimerState.RESET;
+        snoozeTime = setSnoozeTime;
+        breakTime = setBreakTime;
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }

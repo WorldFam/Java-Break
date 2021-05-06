@@ -11,22 +11,23 @@ public class ConfigurationPanelViewModel extends ViewModel {
     MutableLiveData<String> breakTimeText;
     MutableLiveData<String> snoozeTimeText;
     SavedStateHandle state;
-//    public ConfigurationPanelViewModel(){
-//        breakTime = new MutableLiveData<Integer>();
-//        snoozeTime = new MutableLiveData<Integer>();
-//        breakTimeText = new MutableLiveData<String>();
-//        snoozeTimeText = new MutableLiveData<String >();
-//    }
-
-    public ConfigurationPanelViewModel(SavedStateHandle state) {
-        this.state = state;
-
-        breakTime = state.getLiveData("breakTime");
-        snoozeTime = state.getLiveData("snoozeTime");
-
+    public ConfigurationPanelViewModel(){
+        breakTime = new MutableLiveData<Integer>();
+        snoozeTime = new MutableLiveData<Integer>();
         breakTimeText = new MutableLiveData<String>();
         snoozeTimeText = new MutableLiveData<String >();
     }
+
+//    ConfigurationsFragment configurationsFragment = new ConfigurationsFragment();
+//    public ConfigurationPanelViewModel(SavedStateHandle state) {
+//        this.state = state;
+//
+//        breakTime = state.getLiveData("breakTime",configurationsFragment.getBreakTime());
+//        snoozeTime = state.getLiveData("snoozeTime",configurationsFragment.getSnoozeTime());
+//
+//        breakTimeText = new MutableLiveData<String>();
+//        snoozeTimeText = new MutableLiveData<String >();
+//    }
 
 
     public LiveData<Integer> getBreakTime() {
