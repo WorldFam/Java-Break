@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
-    android:layout_height="230dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:background="@color/newBackground">
 
 
     <LinearLayout
@@ -20,44 +21,70 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:backgroundTint="@color/orangeBackground"
-            android:drawableLeft="@drawable/baseline_free_breakfast_white_18dp"
+            android:drawableLeft="@drawable/ic_baseline_free_breakfast_dialog"
             android:text="Take a break"
-            android:textSize="20dp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.581" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
         <Button
             android:id="@+id/snooze"
-            android:layout_width="match_parent"
+            android:layout_alignBottom="@+id/continueWorking"
+            android:layout_width="wrap_content"
             android:layout_height="70dp"
-            android:drawableLeft="@drawable/baseline_snooze_white_18dp"
+            android:drawableLeft="@drawable/ic_baseline_snooze_dialog"
             android:text="Snooze"
-            android:textSize="20dp"
+
+            android:textSize="15sp"
             android:textStyle="bold"
+            android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.432" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.legacy.widget.Space
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"/>
 
         <Button
+
+            android:layout_toEndOf="@+id/snooze"
             android:id="@+id/continueWorking"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="70dp"
-            android:drawableLeft="@drawable/baseline_work_white_18dp"
+            android:drawableLeft="@drawable/ic_baseline_work_dialog"
             android:text="Continue Working"
-            android:textSize="18dp"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.285" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </RelativeLayout>
+
+        <Button
+            android:id="@+id/cancelTimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel Timer"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

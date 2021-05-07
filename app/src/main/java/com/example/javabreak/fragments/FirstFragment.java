@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -56,13 +55,13 @@ public class FirstFragment extends Fragment {
     String timeLeftFormatted = "00:00:00";
     String resetTimeFormatted = "00:15:00";
     private Dialog dialog;
-    private Button start, continueWork,snooze,takeABreak;
+    private Button startButton, continueWorkButton, snoozeButton, takeABreakButton, startWorkButton, cancelTimerButton;
     ProgressBar progressBar;
     TimerState timerState;
     ImageView  transparentBackground ,breakIcon,snoozeIcon ;
     Toast toast;
     TabLayout tabLayout;
-    boolean finished = false;
+    boolean finished, startWork = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,50 +96,50 @@ public class FirstFragment extends Fragment {
         tabLayout = getActivity().findViewById(R.id.tabLayout);
         defineWidgets(view);
 
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if(timePicker.getMinute() == 0 && timePicker.getHour() == 0)
-                {
-                    if(toast != null) {
-                        toast.cancel();
-                    }
-                    toast = new Toast(getActivity());
-                    toast = Toasty.error(getActivity(), "Can't be less than 1 minute", Toast.LENGTH_SHORT, true);
-                    toast.setGravity(Gravity.CENTER, 0, 400);
-                    toast.show();
-                }
-                else {
-                    if(toast != null) {
-                        toast.cancel();
-                    }
-                    timeConversion();
-                    leftTime =
-                            10000;
-                    setTime = leftTime;
-                    continueWorkTime = setTime ;
-                    ((MainActivity)getActivity()).notifyAlarm(leftTime);
-                    setProgressBarValues(leftTime);
-                    timerState = TimerState.START;
-                    updateViews();
-                    startTimer();
-                }
-            }
-        }
+        startButton.setOnClickListener(new View.OnClickListener() {
+                                           @Override public void onClick(View v) {
+                                               if(timePicker.getMinute() == 0 && timePicker.getHour() == 0)
+                                               {
+                                                   if(toast != null) {
+                                                       toast.cancel();
+                                                   }
+                                                   toast = new Toast(getActivity());
+                                                   toast = Toasty.error(getActivity(), "Can't be less than 1 minute", Toast.LENGTH_SHORT, true);
+                                                   toast.setGravity(Gravity.CENTER, 0, 400);
+                                                   toast.show();
+                                               }
+                                               else {
+                                                   if(toast != null) {
+                                                       toast.cancel();
+                                                   }
+                                                   timeConversion();
+                                                   leftTime =
+                                                           3000;
+                                                   setTime = leftTime;
+                                                   continueWorkTime = setTime ;
+                                                   ((MainActivity)getActivity()).notifyAlarm(leftTime);
+                                                   setProgressBarValues(leftTime);
+                                                   timerState = TimerState.START;
+                                                   updateViews();
+                                                   startTimer();
+                                               }
+                                           }
+                                       }
         );
 
 
-         reset.setOnClickListener(new View.OnClickListener() {
-        @Override
-     public void onClick(View v) {
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if(toast != null) {
-                 toast.cancel();
+                    toast.cancel();
                 }
                 toast = new Toast(getActivity());
                 toast = Toasty.warning(getActivity(), "Hold to Reset!", Toast.LENGTH_SHORT, true);
                 toast.setGravity(Gravity.CENTER, 0, 400);
                 toast.show();
-        }
-          });
+            }
+        });
 
 
         reset.setOnLongClickListener(new View.OnLongClickListener() {
@@ -152,12 +151,12 @@ public class FirstFragment extends Fragment {
                 resetTimer();
                 return true;
             }
-    });
+        });
 
         pauseResume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (timerState == TimerState.WORK) {
+                if (timerState == TimerState.WORK || timerState == TimerState.CONTINUE ) {
                     pauseTimer();
                 } else {
                     resumeTimer();
@@ -217,8 +216,9 @@ public class FirstFragment extends Fragment {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("workTime", MODE_PRIVATE);
         String timerStateCheck = sharedPreferences.getString("timerState","");
-
         Log.d("STATE",String.valueOf(timerStateCheck) + " Timer State");
+
+        startWork = sharedPreferences.getBoolean("startWork", false);
 
         setTime = sharedPreferences.getLong("setTime", 900000);
         leftTime = sharedPreferences.getLong("leftTime", setTime);
@@ -227,6 +227,9 @@ public class FirstFragment extends Fragment {
         continueWorkTime = sharedPreferences.getLong("continueWorkTime", setTime);
 
         setBreakTime = sharedPreferences.getLong("setBreakTime", 900000);
+
+        Log.d("STATE",String.valueOf(setBreakTime) + " setBreakTime");
+
         breakTime = sharedPreferences.getLong("breakTime", setBreakTime);
 
         setSnoozeTime = sharedPreferences.getLong("setSnoozeTime", 60000);
@@ -246,7 +249,6 @@ public class FirstFragment extends Fragment {
         if(timerStateCheck.equals("RESET"))
         {
             timerState = TimerState.RESET;
-
         }
 
         if(timerStateCheck.equals("WORK")) {
@@ -268,7 +270,7 @@ public class FirstFragment extends Fragment {
                 if(dialog != null) {
                     dialog.cancel();
                 }
-                onFinished();
+                onFinished( );
             }
         }
 
@@ -290,7 +292,13 @@ public class FirstFragment extends Fragment {
                 if(dialog != null) {
                     dialog.cancel();
                 }
-                onFinished();
+                if(startWork)
+                {
+                    startWork();
+                }
+                else {
+                    onFinished( );
+                }
             }
         }
         if(timerStateCheck.equals("SNOOZE"))
@@ -366,6 +374,8 @@ public class FirstFragment extends Fragment {
         editor.putLong("endSnoozeTime",endSnoozeTime);
         editor.putLong("endContinueWorkTime",endContinueWorkTime);
 
+        editor.putBoolean("startWork",startWork);
+
         if(timerState == TimerState.WORK)
         {
             editor.putString("timerState","WORK");
@@ -401,7 +411,7 @@ public class FirstFragment extends Fragment {
 
     private void defineWidgets(View view) {
         time = view.findViewById(R.id.time);
-        start = view.findViewById(R.id.button);
+        startButton = view.findViewById(R.id.button);
         progressBar = view.findViewById(R.id.progressBar);
         reset = view.findViewById(R.id.button2);
         pauseResume = view.findViewById(R.id.button3);
@@ -438,22 +448,49 @@ public class FirstFragment extends Fragment {
                 leftTime = millisUntilFinished;
                 countDownTime();
             }
-                @Override
+            @Override
             public void onFinish() {
-                    onFinished();
+                if(startWork) {
+                    startWork();
                 }
-            }.start();
-        }
+                else  {
+                    onFinished( ); }
+            }
+        }.start();
+    }
 
+    private void startWork(){
+        timerState = TimerState.START_WORK;
+        updateViews();
+        startWork = true;
+        startWorkButton = dialog.findViewById(R.id.startWork);
+        cancelTimerButton = dialog.findViewById(R.id.cancelTimer);
+        startWorkButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                workTimer();
+                setProgressBarValues(leftTime);
+                dialog.cancel();
+            }
+        });
+        cancelTimerButton.setOnClickListener(new View.OnClickListener( ) {
+            @Override
+            public void onClick(View v) {
+                resetTimer();
+                dialog.cancel();
+            }
+        });
+    }
 
     private void onFinished() {
-        timerState = TimerState.FINISH;
+        timerState = TimerState.FINISH_WORK;
         updateViews();
         finished = true;
-        continueWork = dialog.findViewById(R.id.continueWorking);
-        takeABreak = dialog.findViewById(R.id.takeABreak);
-        snooze = dialog.findViewById(R.id.snooze);
-        takeABreak.setOnClickListener(new View.OnClickListener(){
+        continueWorkButton = dialog.findViewById(R.id.continueWorking);
+        takeABreakButton = dialog.findViewById(R.id.takeABreak);
+        snoozeButton = dialog.findViewById(R.id.snooze);
+        cancelTimerButton = dialog.findViewById(R.id.cancelTimer);
+        takeABreakButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 breakTimer();
@@ -462,7 +499,7 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        snooze.setOnClickListener(new View.OnClickListener(){
+        snoozeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 snoozeTimer();
@@ -471,11 +508,19 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        continueWork.setOnClickListener(new View.OnClickListener(){
+        continueWorkButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 continueWorkTime();
                 setProgressBarValues(continueWorkTime);
+                dialog.cancel();
+            }
+        });
+
+        cancelTimerButton.setOnClickListener(new View.OnClickListener( ) {
+            @Override
+            public void onClick(View v) {
+                resetTimer();
                 dialog.cancel();
             }
         });
@@ -494,6 +539,17 @@ public class FirstFragment extends Fragment {
         startTimer();
     }
 
+    private void workTimer()
+    {
+        timerState = TimerState.WORK;
+        updateViews();
+        if(startWork) {
+            leftTime = setTime;
+            startWork = false;
+        }
+        startTimer();
+    }
+
     private void breakTimer()
     {
         timerState = TimerState.BREAK;
@@ -502,10 +558,12 @@ public class FirstFragment extends Fragment {
             breakTime = setBreakTime; //setProgressBar
             leftTime = setBreakTime; //setRealTime
             finished = false;
+            startWork = true;
         } else {
             leftTime = breakTime;
         }
-        startTimer();
+        startTimer( );
+
     }
 
     private void snoozeTimer()
@@ -540,6 +598,7 @@ public class FirstFragment extends Fragment {
         timerState = TimerState.RESET;
         snoozeTime = setSnoozeTime;
         breakTime = setBreakTime;
+        startWork = false;
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
@@ -598,12 +657,14 @@ public class FirstFragment extends Fragment {
                 pauseResume.setVisibility(View.VISIBLE);
                 reset.setEnabled(true);
                 pauseResume.setEnabled(true);
-                start.setEnabled(false);
+                startButton.setEnabled(false);
                 timePicker.setEnabled(false);
-                start.setVisibility(View.INVISIBLE);
+                startButton.setVisibility(View.INVISIBLE);
                 messageText.setVisibility(View.INVISIBLE);
                 timePicker.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.INVISIBLE);
+                breakIcon.setVisibility(View.INVISIBLE);
+                snoozeIcon.setVisibility(View.INVISIBLE);
                 pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
                 break;
             case PAUSE:
@@ -611,9 +672,9 @@ public class FirstFragment extends Fragment {
                 pauseResume.setVisibility(View.VISIBLE);
                 reset.setEnabled(true);
                 pauseResume.setEnabled(true);
-                start.setEnabled(false);
+                startButton.setEnabled(false);
                 timePicker.setEnabled(false);
-                start.setVisibility(View.INVISIBLE);
+                startButton.setVisibility(View.INVISIBLE);
                 timePicker.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.INVISIBLE);
                 messageText.setVisibility(View.INVISIBLE);
@@ -623,50 +684,62 @@ public class FirstFragment extends Fragment {
             case SNOOZE:
                 progressBar.setVisibility(View.VISIBLE);
                 reset.setEnabled(true);
-                start.setEnabled(false);
+                startButton.setEnabled(false);
                 timePicker.setEnabled(false);
                 reset.setVisibility(View.VISIBLE);
-                start.setVisibility(View.INVISIBLE);
+                startButton.setVisibility(View.INVISIBLE);
                 timePicker.setVisibility(View.INVISIBLE);
                 messageText.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.INVISIBLE);
                 snoozeIcon.setVisibility(View.VISIBLE);
                 pauseResume.setEnabled(false);
+                breakIcon.setVisibility(View.INVISIBLE);
                 break;
             case BREAK:
                 progressBar.setVisibility(View.VISIBLE);
                 reset.setEnabled(true);
-                start.setEnabled(false);
+                startButton.setEnabled(false);
                 timePicker.setEnabled(false);
                 reset.setVisibility(View.VISIBLE);
-                start.setVisibility(View.INVISIBLE);
+                startButton.setVisibility(View.INVISIBLE);
                 timePicker.setVisibility(View.INVISIBLE);
                 messageText.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.INVISIBLE);
                 breakIcon.setVisibility(View.VISIBLE);
+                snoozeIcon.setVisibility(View.INVISIBLE);
                 pauseResume.setEnabled(false);
                 break;
             case CONTINUE:
                 progressBar.setVisibility(View.VISIBLE);
                 pauseResume.setVisibility(View.VISIBLE);
+                reset.setVisibility(View.VISIBLE);
                 reset.setEnabled(true);
                 pauseResume.setEnabled(true);
-                start.setEnabled(false);
+                startButton.setEnabled(false);
                 timePicker.setEnabled(false);
-                start.setVisibility(View.INVISIBLE);
+                startButton.setVisibility(View.INVISIBLE);
                 messageText.setVisibility(View.INVISIBLE);
                 timePicker.setVisibility(View.INVISIBLE);
+                breakIcon.setVisibility(View.INVISIBLE);
+                snoozeIcon.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.INVISIBLE);
                 pauseResume.setImageResource(R.drawable.ic_pause_white_48dp);
-                reset.setVisibility(View.VISIBLE);
                 break;
-            case FINISH:
-                dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            case FINISH_WORK:
+                dialog=new Dialog(getActivity(),android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnim;
                 dialog.setContentView(R.layout.alert_dialog);
                 dialog.setCancelable(false);
                 dialog.show();
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                messageText.setVisibility(View.INVISIBLE);
+                time.setText(timeLeftFormatted);
+                break;
+            case START_WORK:
+                dialog=new Dialog(getActivity(),android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnim;
+                dialog.setContentView(R.layout.alert_dialog_2);
+                dialog.setCancelable(false);
+                dialog.show();
                 messageText.setVisibility(View.INVISIBLE);
                 time.setText(timeLeftFormatted);
                 break;
@@ -677,7 +750,7 @@ public class FirstFragment extends Fragment {
                 pauseResume.setVisibility(View.INVISIBLE);
                 transparentBackground.setVisibility(View.VISIBLE );
                 reset.setVisibility(View.INVISIBLE);
-                start.setVisibility(View.VISIBLE);
+                startButton.setVisibility(View.VISIBLE);
                 timePicker.setVisibility(View.VISIBLE);
                 if(dialog != null) {
                     dialog.cancel( );
@@ -702,7 +775,7 @@ public class FirstFragment extends Fragment {
                 });
                 reset.setEnabled(false);
                 pauseResume.setEnabled(false);
-                start.setEnabled(true);
+                startButton.setEnabled(true);
                 pauseResume.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 snoozeIcon.setVisibility(View.INVISIBLE);
                 breakIcon.setVisibility(View.INVISIBLE);

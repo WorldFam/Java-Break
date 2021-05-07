@@ -2,7 +2,6 @@ package com.example.javabreak.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
 public class ConfigurationPanelViewModel extends ViewModel {
@@ -10,25 +9,13 @@ public class ConfigurationPanelViewModel extends ViewModel {
     MutableLiveData<Integer> snoozeTime;
     MutableLiveData<String> breakTimeText;
     MutableLiveData<String> snoozeTimeText;
-    SavedStateHandle state;
+
     public ConfigurationPanelViewModel(){
         breakTime = new MutableLiveData<Integer>();
         snoozeTime = new MutableLiveData<Integer>();
         breakTimeText = new MutableLiveData<String>();
         snoozeTimeText = new MutableLiveData<String >();
     }
-
-//    ConfigurationsFragment configurationsFragment = new ConfigurationsFragment();
-//    public ConfigurationPanelViewModel(SavedStateHandle state) {
-//        this.state = state;
-//
-//        breakTime = state.getLiveData("breakTime",configurationsFragment.getBreakTime());
-//        snoozeTime = state.getLiveData("snoozeTime",configurationsFragment.getSnoozeTime());
-//
-//        breakTimeText = new MutableLiveData<String>();
-//        snoozeTimeText = new MutableLiveData<String >();
-//    }
-
 
     public LiveData<Integer> getBreakTime() {
         return breakTime;

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -30,8 +31,9 @@ public class ConfigurationsFragment extends Fragment {
     ConfigurationPanelViewModel configurationPanelViewModel;
     SeekBar breakSlider, snoozeSlider;
     TextView breakTimeText, snoozeTimeText;
+    SwitchCompat autoStartWork, autoStartBreak;
     private static final int INTERVAL = 5;
-
+    boolean autoStartBreakValue,autoStartWorkValue;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class ConfigurationsFragment extends Fragment {
         snoozeSlider = view.findViewById(R.id.snoozeSlider);
         breakTimeText = view.findViewById(R.id.breakTimeText);
         snoozeTimeText = view.findViewById(R.id.snoozeTimeText);
+        autoStartWork = view.findViewById(R.id.autoStart);
+        autoStartBreak = view.findViewById(R.id.autoStartBreak);
 
         snoozeSlider.setMin(1);
         snoozeSlider.setMax(5);
@@ -60,7 +64,10 @@ public class ConfigurationsFragment extends Fragment {
         breakSlider.setMax(12);
         breakSlider.setProgress(breakTime);
 
-        breakTimeText.setText(String.format(Locale.getDefault(),"%2d minutes",breakSlider.getProgress()*5));
+        autoStartWork.setChecked(autoStartWorkValue);
+        autoStartBreak.setChecked(autoStartBreakValue);
+
+        breakTimeText.setText(String.format(Locale.getDefault(),"%2d minutes",breakSlider.getProgress()*INTERVAL));
         if(snoozeTime == 1)
         {
             snoozeTimeText.setText(String.format(Locale.getDefault(),"%2d minute",snoozeSlider.getProgress( )));
@@ -121,10 +128,20 @@ public class ConfigurationsFragment extends Fragment {
         return view;
     }
 
+//    @Override
+//    public void onStart() {
+//        super.onStart( );
+//        loadData();
+//    }
+
     private void loadData() {
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("configurations", MODE_PRIVATE);
-            breakTime = sharedPreferences.getInt("breakTime", 0);
-            snoozeTime = sharedPreferences.getInt("snoozeTime", 0);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("configurations", MODE_PRIVATE);
+
+        autoStartBreakValue = sharedPreferences.getBoolean("autoStartBreakValue", false);
+        autoStartWorkValue = sharedPreferences.getBoolean("autoStartWorkValue", false);
+
+        breakTime = sharedPreferences.getInt("breakTime", 3);
+        snoozeTime = sharedPreferences.getInt("snoozeTime", 0);
     }
 
 
@@ -138,12 +155,16 @@ public class ConfigurationsFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("configurations", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putInt("breakTime", breakTime);
+         autoStartBreakValue = autoStartBreak.isChecked();
+         autoStartWorkValue = autoStartWork.isChecked();
 
+        editor.putInt("breakTime", breakTime);
         editor.putInt("snoozeTime",snoozeTime);
 
-        editor.apply();
+        editor.putBoolean("autoStartBreakValue", autoStartBreakValue);
+        editor.putBoolean("autoStartWorkValue",autoStartWorkValue);
 
+        editor.apply();
     }
 
 

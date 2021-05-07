@@ -8,33 +8,33 @@
     android:animateLayoutChanges="true"
     android:layout_margin="10dp">
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/autoStartBreak"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Auto start break"
+        android:theme="@style/Switch"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
         android:paddingStart="25dp"
         android:paddingEnd="10dp"
         android:switchMinWidth="50dp"
-        android:thumbTint="@color/orange"
         android:layout_marginTop="20dp"
         tools:ignore="UnknownIdInLayout,UseSwitchCompatOrMaterialXml" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/autoStart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Auto start work"
+        android:theme="@style/Switch"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
         android:paddingStart="25dp"
         android:paddingEnd="10dp"
         android:switchMinWidth="50dp"
-        android:thumbTint="@color/orange"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/autoStartBreak"
         tools:ignore="UseSwitchCompatOrMaterialXml" />

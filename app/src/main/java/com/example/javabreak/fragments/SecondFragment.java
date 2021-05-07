@@ -47,11 +47,13 @@ public class SecondFragment extends Fragment{
     DatabaseReference myRef = database.getReference();
     RelativeLayout createNewInfo;
 
+
+    RecyclerView recyclerView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView);
         fab = view.findViewById(R.id.floatingActionButton);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -59,7 +61,6 @@ public class SecondFragment extends Fragment{
         recyclerView.setAdapter(scheduledBreakAdapter);
         createNewInfo = view.findViewById(R.id.createNewInfo);
         tabLayout = getActivity().findViewById(R.id.tabLayout);
-
 
         reminderViewModel = new ViewModelProvider(requireActivity()).get(ReminderViewModel.class);
         reminderViewModel.getAllReminders().observe(requireActivity( ), new Observer<List<ScheduledBreak>>( ) {
@@ -109,17 +110,15 @@ public class SecondFragment extends Fragment{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScheduledReminderFragment fragment = new ScheduledReminderFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.slide_up,
-                        R.anim.fade_out);
-                fragmentTransaction.add(R.id.secondFragment, fragment);
+                        R.anim.slide_down);
+                fragmentTransaction.replace(R.id.secondFragment, new ScheduledReminderFragment());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 
-
-                slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down_text);
+                slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down_fragment);
                 recyclerView.startAnimation(slideDown);
                 if(tabLayout != null) {
                     createNewInfo.setVisibility(View.GONE);
@@ -127,10 +126,8 @@ public class SecondFragment extends Fragment{
                 }
             }
         });
-
         return view;
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

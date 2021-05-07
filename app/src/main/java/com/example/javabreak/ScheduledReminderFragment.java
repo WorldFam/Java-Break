@@ -215,9 +215,7 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
                         tabState = TabState.REPEAT;
                         tabManager( );
                     }
-
                 }
-
                 else {
                     scheduledSecondSharedViewModel.setName(nameEditText.getText( ).toString( ));
                     scheduledSecondSharedViewModel.setWorkFom(workFromText.getText( ).toString( ));

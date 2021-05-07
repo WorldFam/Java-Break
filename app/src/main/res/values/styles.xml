@@ -40,5 +40,21 @@
         <item name="colorAccent">@color/orange</item>
     </style>
 
+    <style name="Switch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/orange</item>
+        <item name="colorSwitchThumbNormal">@color/grey
+        </item>
+        <item name="android:colorForeground">@color/grey
+        </item>
+    </style>
+
+    <style name="Dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/DialogAnim</item>
+    </style>
+
+    <style name="DialogAnim">
+        <item name="android:windowEnterAnimation">@anim/fade_in_dialog</item>
+        <item name="android:windowExitAnimation">@anim/fade_out_dialog</item>
+    </style>
 
 </resources>
