@@ -47,8 +47,8 @@ public class FirstFragment extends Fragment {
     ConfigurationPanelViewModel configurationPanelViewModel;
     private TextView time, messageText;
     private TimePicker timePicker;
-    private long leftTime,breakTime,snoozeTime, continueWorkTime ,setTime , setBreakTime, setSnoozeTime;
-    private long endTime, endBreakTime, endSnoozeTime, endContinueWorkTime;
+    private long leftTime,breakTime,snoozeTime, continueWorkTime ,setTime , setBreakTime, setSnoozeTime, startTime;
+    private long endTime, endBreakTime, endSnoozeTime, endContinueWorkTime,endStartTime;
     private CountDownTimer countDownTimer;
     private ImageButton reset, pauseResume, configuration;
     Animation resetRotate, resetBlink, slideDownText;
@@ -61,7 +61,8 @@ public class FirstFragment extends Fragment {
     ImageView  transparentBackground ,breakIcon,snoozeIcon ;
     Toast toast;
     TabLayout tabLayout;
-    boolean finished, startWork = false;
+    boolean finishedWork, finishedBreak = false;
+    boolean autoStartBreakValue,autoStartWorkValue;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onChanged(Integer integer) {
-                setBreakTime = TimeUnit.SECONDS.toMillis(integer);
+                setBreakTime = TimeUnit.MINUTES.toMillis(integer);
                 breakTime = setBreakTime;
             }
         });
@@ -80,10 +81,25 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onChanged(Integer integer) {
-                setSnoozeTime = TimeUnit.SECONDS.toMillis(integer);
-                snoozeTime = setSnoozeTime;
-                Log.d("STATE",String.valueOf(setSnoozeTime + " setSnooze " + snoozeTime + " snoozeTime"));
 
+                setSnoozeTime = TimeUnit.MINUTES.toMillis(integer);
+                snoozeTime = setSnoozeTime;
+
+            }
+        });
+        configurationPanelViewModel.getAutoStartBreakValue ().observe(this, new Observer<Boolean>() {
+
+            @Override
+            public void onChanged(Boolean value) {
+                autoStartBreakValue = value;
+            }
+        });
+
+        configurationPanelViewModel.getAutoStartWorkValue ().observe(this, new Observer<Boolean>() {
+
+            @Override
+            public void onChanged(Boolean value) {
+                autoStartWorkValue = value;
             }
         });
     }
@@ -113,10 +129,11 @@ public class FirstFragment extends Fragment {
                                                        toast.cancel();
                                                    }
                                                    timeConversion();
-                                                   leftTime =
-                                                           3000;
+//                                                   leftTime =
+//                                                           3000;
                                                    setTime = leftTime;
                                                    continueWorkTime = setTime ;
+                                                   startTime = setTime ;
                                                    ((MainActivity)getActivity()).notifyAlarm(leftTime);
                                                    setProgressBarValues(leftTime);
                                                    timerState = TimerState.START;
@@ -218,17 +235,16 @@ public class FirstFragment extends Fragment {
         String timerStateCheck = sharedPreferences.getString("timerState","");
         Log.d("STATE",String.valueOf(timerStateCheck) + " Timer State");
 
-        startWork = sharedPreferences.getBoolean("startWork", false);
+        finishedBreak = sharedPreferences.getBoolean("startWork", false);
 
         setTime = sharedPreferences.getLong("setTime", 900000);
         leftTime = sharedPreferences.getLong("leftTime", setTime);
-        Log.d("STATE",String.valueOf(leftTime) + " left Time");
+
+        startTime = sharedPreferences.getLong("startTime", setTime);
 
         continueWorkTime = sharedPreferences.getLong("continueWorkTime", setTime);
 
         setBreakTime = sharedPreferences.getLong("setBreakTime", 900000);
-
-        Log.d("STATE",String.valueOf(setBreakTime) + " setBreakTime");
 
         breakTime = sharedPreferences.getLong("breakTime", setBreakTime);
 
@@ -236,6 +252,10 @@ public class FirstFragment extends Fragment {
 //        Log.d("STATE",String.valueOf(setSnoozeTime) + " snooze Time");
         snoozeTime = sharedPreferences.getLong("snoozeTime", setSnoozeTime);
 //        Log.d("STATE",String.valueOf(snoozeTime) + " not set snooze Time");
+
+        SharedPreferences configurations = getActivity().getSharedPreferences("configurations", MODE_PRIVATE);
+        autoStartBreakValue = configurations.getBoolean("autoStartBreakValue", false);
+        autoStartWorkValue = configurations.getBoolean("autoStartWorkValue", false);
 
         countDownTime();
 
@@ -254,10 +274,12 @@ public class FirstFragment extends Fragment {
         if(timerStateCheck.equals("WORK")) {
             timerState = TimerState.WORK;
             endTime = sharedPreferences.getLong("endTime", 0);
+
+            endStartTime  = sharedPreferences.getLong("endStartTime", 0);
+            startTime = endStartTime - System.currentTimeMillis ();
+
             setProgressBarValues(setTime);
             leftTime = endTime - System.currentTimeMillis();
-            Log.d("STATE",String.valueOf(leftTime) + " left Time after");
-
             progressBar.setProgress((int) (setTime/ 1000) - (int) (leftTime/ 1000));
             reset.setVisibility(View.VISIBLE); //Shouldn't belong here
             updateViews();
@@ -270,7 +292,11 @@ public class FirstFragment extends Fragment {
                 if(dialog != null) {
                     dialog.cancel();
                 }
-                onFinished( );
+                    if (autoStartBreakValue) {
+                    breakTimer ( );
+                } else {
+                        onFinishedWork ( ); }
+
             }
         }
 
@@ -282,6 +308,7 @@ public class FirstFragment extends Fragment {
             breakTime = endBreakTime - System.currentTimeMillis();
             progressBar.setProgress((int) (setBreakTime/ 1000) - (int) (breakTime/ 1000));
             updateViews();
+
             if (breakTime < 0) {
                 breakTime = 0; //Does allow Timer to be negative
             }
@@ -292,15 +319,15 @@ public class FirstFragment extends Fragment {
                 if(dialog != null) {
                     dialog.cancel();
                 }
-                if(startWork)
-                {
-                    startWork();
-                }
-                else {
-                    onFinished( );
+                    if (autoStartWorkValue) {
+                            workTimer ( );
+                    } else {
+                        onFinishedBreak( );
+
                 }
             }
         }
+
         if(timerStateCheck.equals("SNOOZE"))
         {
             timerState = TimerState.SNOOZE;
@@ -319,7 +346,7 @@ public class FirstFragment extends Fragment {
                 if(dialog != null) {
                     dialog.cancel();
                 }
-                onFinished();
+                onFinishedWork ();
             }
         }
         if(timerStateCheck.equals("CONTINUE"))
@@ -343,7 +370,7 @@ public class FirstFragment extends Fragment {
                 if(dialog != null) {
                     dialog.cancel();
                 }
-                onFinished();
+                onFinishedWork ();
             }
         }
     }
@@ -373,8 +400,10 @@ public class FirstFragment extends Fragment {
         editor.putLong("endBreakTime",endBreakTime);
         editor.putLong("endSnoozeTime",endSnoozeTime);
         editor.putLong("endContinueWorkTime",endContinueWorkTime);
+        editor.putLong("endStartTime",endStartTime);
 
-        editor.putBoolean("startWork",startWork);
+        editor.putBoolean("startWork", finishedBreak);
+        editor.putLong ("startTime",startTime);
 
         if(timerState == TimerState.WORK)
         {
@@ -441,6 +470,7 @@ public class FirstFragment extends Fragment {
         endBreakTime = System.currentTimeMillis() + breakTime;
         endSnoozeTime = System.currentTimeMillis() + snoozeTime;
         endContinueWorkTime = System.currentTimeMillis() + continueWorkTime;
+        endStartTime = System.currentTimeMillis() + startTime;
         countDownTimer = new CountDownTimer(leftTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -450,25 +480,38 @@ public class FirstFragment extends Fragment {
             }
             @Override
             public void onFinish() {
-                if(startWork) {
-                    startWork();
+                if (finishedBreak) {
+                    if (autoStartWorkValue) {
+                        workTimer ();
+                        setProgressBarValues(leftTime);
+                        finishedWork = true;
+                    } else {
+                        onFinishedBreak ( );
+                    }
                 }
-                else  {
-                    onFinished( ); }
+                else {
+                    if (autoStartBreakValue) {
+                        breakTimer ( );
+                        setProgressBarValues(breakTime);
+                        finishedBreak = true;
+                    } else {
+                        onFinishedWork ( );
+                    }
+                }
             }
         }.start();
     }
 
-    private void startWork(){
+    private void onFinishedBreak(){
         timerState = TimerState.START_WORK;
         updateViews();
-        startWork = true;
+        finishedBreak = true;
         startWorkButton = dialog.findViewById(R.id.startWork);
         cancelTimerButton = dialog.findViewById(R.id.cancelTimer);
         startWorkButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                workTimer();
+                workTimer ();
                 setProgressBarValues(leftTime);
                 dialog.cancel();
             }
@@ -482,10 +525,10 @@ public class FirstFragment extends Fragment {
         });
     }
 
-    private void onFinished() {
+    private void onFinishedWork() {
         timerState = TimerState.FINISH_WORK;
         updateViews();
-        finished = true;
+        finishedWork = true;
         continueWorkButton = dialog.findViewById(R.id.continueWorking);
         takeABreakButton = dialog.findViewById(R.id.takeABreak);
         snoozeButton = dialog.findViewById(R.id.snooze);
@@ -543,9 +586,16 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.WORK;
         updateViews();
-        if(startWork) {
-            leftTime = setTime;
-            startWork = false;
+        if(startTime == 0) {
+            finishedBreak = true;
+        }
+        if(finishedBreak) {
+            startTime = setTime; //setProgressBar
+            leftTime = setTime; //setRealTime
+            finishedBreak = false;
+        }
+        else {
+            leftTime = startTime;
         }
         startTimer();
     }
@@ -554,12 +604,18 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.BREAK;
         updateViews();
-        if(finished) {
+        if(breakTime == 0) {
+            finishedWork = true;
+        }
+        if(finishedWork) {
+            Log.d("STATE","ZDSADSdddddddddddddddddddddddde");
+
             breakTime = setBreakTime; //setProgressBar
             leftTime = setBreakTime; //setRealTime
-            finished = false;
-            startWork = true;
-        } else {
+            finishedWork = false;
+            finishedBreak = true;
+        }
+        else {
             leftTime = breakTime;
         }
         startTimer( );
@@ -570,24 +626,23 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.SNOOZE;
         updateViews();
-        if(finished) {
+        if(finishedWork) {
             snoozeTime = setSnoozeTime; //setProgressBar
             leftTime = setSnoozeTime; //setRealTime
-            finished = false;
+            finishedWork = false;
         } else {
             leftTime = snoozeTime;
         }
         startTimer();
     }
-
     private void continueWorkTime()
     {
         timerState = TimerState.CONTINUE;
         updateViews();
-        if(finished) {
+        if(finishedWork) {
             continueWorkTime = setTime; //setProgressBar
             leftTime = setTime; //setRealTime
-            finished = false;
+            finishedWork = false;
         } else {
             leftTime = continueWorkTime;
         }
@@ -598,7 +653,8 @@ public class FirstFragment extends Fragment {
         timerState = TimerState.RESET;
         snoozeTime = setSnoozeTime;
         breakTime = setBreakTime;
-        startWork = false;
+        finishedBreak = false;
+        finishedWork = false;
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }

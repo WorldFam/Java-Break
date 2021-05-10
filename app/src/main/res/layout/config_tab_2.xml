@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="110dp"
+    android:orientation="vertical"
     android:background="@drawable/configurations_rectangle"
     android:animateLayoutChanges="true"
     android:layout_margin="10dp">
@@ -23,6 +24,12 @@
         android:layout_marginTop="20dp"
         tools:ignore="UnknownIdInLayout,UseSwitchCompatOrMaterialXml" />
 
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"/>
+
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/autoStart"
         android:layout_width="match_parent"
@@ -35,7 +42,10 @@
         android:paddingStart="25dp"
         android:paddingEnd="10dp"
         android:switchMinWidth="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/autoStartBreak"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
-</RelativeLayout>
+
+
+
+</LinearLayout>
