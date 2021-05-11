@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javabreak.activities.MainActivity;
@@ -31,11 +32,11 @@ public class ConfigurationsFragment extends Fragment {
             snoozeTime;
     ConfigurationPanelViewModel configurationPanelViewModel;
     SeekBar breakSlider, snoozeSlider;
-    TextView breakTimeText, snoozeTimeText;
+    TextView breakTimeText, snoozeTimeText, sessionCounterWork,sessionCounterBreak;
     SwitchCompat autoStartWork, autoStartBreak;
     private static final int INTERVAL = 5;
     boolean autoStartBreakValue,autoStartWorkValue;
-
+    String sessionCountWork, sessionCountBreak;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,6 @@ public class ConfigurationsFragment extends Fragment {
         View view = inflater.inflate(R.layout.configuration_panel, container, false);
         configurationPanelViewModel = new ViewModelProvider(requireActivity() ).get(ConfigurationPanelViewModel.class);
         loadData();
-
         configurationExitButton = view.findViewById(R.id.configurationExitButton);
         breakSlider = view.findViewById(R.id.breakSlider);
         snoozeSlider = view.findViewById(R.id.snoozeSlider);
@@ -56,6 +56,8 @@ public class ConfigurationsFragment extends Fragment {
         snoozeTimeText = view.findViewById(R.id.snoozeTimeText);
         autoStartWork = view.findViewById(R.id.autoStart);
         autoStartBreak = view.findViewById(R.id.autoStartBreak);
+        sessionCounterWork = view.findViewById(R.id.sessionCounter);
+        sessionCounterBreak = view.findViewById(R.id.sessionCounterBreak);
 
         snoozeSlider.setMin(1);
         snoozeSlider.setMax(5);
@@ -67,6 +69,23 @@ public class ConfigurationsFragment extends Fragment {
 
         autoStartWork.setChecked(autoStartWorkValue);
         autoStartBreak.setChecked(autoStartBreakValue);
+
+        sessionCounterWork.setText(sessionCountWork);
+        sessionCounterBreak.setText(sessionCountBreak);
+
+        configurationPanelViewModel.getSessionCounterWork ().observe (getActivity ( ), new Observer<Integer> ( ) {
+            @Override
+            public void onChanged(Integer integer) {
+                sessionCounterWork.setText (String.valueOf (integer));
+            }
+        });
+
+        configurationPanelViewModel.getSessionCounterBreak ().observe (getActivity ( ), new Observer<Integer> ( ) {
+            @Override
+            public void onChanged(Integer integer) {
+                sessionCounterBreak.setText (String.valueOf (integer));
+            }
+        });
 
         breakTimeText.setText(String.format(Locale.getDefault(),"%2d minutes",breakSlider.getProgress()*INTERVAL));
         if(snoozeTime == 1)
@@ -143,11 +162,6 @@ public class ConfigurationsFragment extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart( );
-//        loadData();
-//    }
 
     private void loadData() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("configurations", MODE_PRIVATE);
@@ -157,6 +171,9 @@ public class ConfigurationsFragment extends Fragment {
 
         breakTime = sharedPreferences.getInt("breakTime", 3);
         snoozeTime = sharedPreferences.getInt("snoozeTime", 0);
+
+        sessionCountWork = sharedPreferences.getString ("sessionCounter", "0");
+        sessionCountBreak = sharedPreferences.getString ("sessionCounterBreak", "0");
     }
 
 
@@ -179,8 +196,15 @@ public class ConfigurationsFragment extends Fragment {
         editor.putBoolean("autoStartBreakValue", autoStartBreakValue);
         editor.putBoolean("autoStartWorkValue",autoStartWorkValue);
 
+        String sessionCount = sessionCounterWork.getText ().toString ();
+        editor.putString ("sessionCounter",sessionCount);
+
+        String sessionCountBreak = sessionCounterBreak.getText ().toString ();
+        editor.putString ("sessionCounterBreak",sessionCountBreak);
+
         editor.apply();
     }
+
 
 
     //    @Override

@@ -11,4 +11,7 @@
         <item value="Monday">Monday</item>
         <item value="Tuesday">Tuesday</item>
     </string-array>
+
+    <string name="configText"><font color="#FFFFFFFF">Session Counter</font> <font
+        color="#ff7f27" size="11">(updated every 24 hours)</font></string>
 </resources>

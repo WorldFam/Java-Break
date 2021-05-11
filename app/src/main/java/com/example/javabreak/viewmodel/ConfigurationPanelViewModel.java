@@ -9,17 +9,16 @@ public class ConfigurationPanelViewModel extends ViewModel {
     MutableLiveData<Integer> snoozeTime;
     MutableLiveData<Boolean> autoStartBreakValue;
     MutableLiveData<Boolean> autoStartWorkValue;
-    MutableLiveData<String> breakTimeText;
-    MutableLiveData<String> snoozeTimeText;
-
+    MutableLiveData<Integer> sessionCounterWork;
+    MutableLiveData<Integer> sessionCounterBreak;
 
     public ConfigurationPanelViewModel(){
         breakTime = new MutableLiveData<Integer>();
         snoozeTime = new MutableLiveData<Integer>();
-        breakTimeText = new MutableLiveData<String>();
-        snoozeTimeText = new MutableLiveData<String >();
         autoStartBreakValue = new MutableLiveData<Boolean>();
         autoStartWorkValue = new MutableLiveData<Boolean>();
+        sessionCounterWork = new MutableLiveData<Integer>();
+        sessionCounterBreak = new MutableLiveData<Integer>();
     }
 
     public LiveData<Integer> getBreakTime() {
@@ -53,4 +52,20 @@ public class ConfigurationPanelViewModel extends ViewModel {
     public void setAutoStartWorkValue(Boolean autoStartWorkValueData) {
         autoStartWorkValue.postValue (autoStartWorkValueData);
     }
+
+    public LiveData<Integer> getSessionCounterWork() {
+        return sessionCounterWork;
+    }
+
+    public void setSessionCounterWork(Integer sessionCounterData) {
+        sessionCounterWork.postValue(sessionCounterData);
+    }
+    public LiveData<Integer> getSessionCounterBreak() {
+        return sessionCounterBreak;
+    }
+
+    public void setSessionCounterBreak(Integer sessionCounterData) {
+        sessionCounterBreak.postValue(sessionCounterData);
+    }
+
 }

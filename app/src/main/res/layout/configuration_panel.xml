@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/configurations"
     android:layout_height="match_parent"
@@ -17,7 +18,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.262">
+        app:layout_constraintVertical_bias="0.367">
 
         <TextView
             android:layout_width="match_parent"
@@ -28,6 +29,7 @@
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,6 +38,7 @@
             android:textAlignment="textStart"
             android:textColor="#80FFFFFF"
             android:textSize="12sp" />
+
         <include layout="@layout/config_tab_1" />
 
         <TextView
@@ -58,35 +61,49 @@
             android:textSize="12sp" />
 
         <include layout="@layout/config_tab_2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:text="@string/configText"
+            android:textAlignment="textStart"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:text="Total amount of completed work/break sessions"
+            android:textAlignment="textStart"
+            android:textColor="#80FFFFFF"
+            android:textSize="12sp" />
+
+        <include layout="@layout/config_tab_3" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/configText"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Configuration Panel"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:textStyle="bold"
+    <include
+        layout="@layout/config_tag"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageButton
         android:id="@+id/configurationExitButton"
         android:layout_width="88dp"
         android:layout_height="80dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/newBackground"
         android:scaleX="1.2"
         android:scaleY="1.2"
-        android:layout_marginBottom="24dp"
-        android:background="@color/newBackground"
         android:src="@drawable/ic_baseline_close_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <!--    <TextView-->

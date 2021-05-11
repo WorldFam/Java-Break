@@ -35,6 +35,7 @@ import com.example.javabreak.activities.TimerState;
 import com.example.javabreak.viewmodel.ConfigurationPanelViewModel;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -63,6 +64,7 @@ public class FirstFragment extends Fragment {
     TabLayout tabLayout;
     boolean finishedWork, finishedBreak = false;
     boolean autoStartBreakValue,autoStartWorkValue;
+    int sessionCounterWork,sessionCounterBreak, dayOfMonth, sessionCounterDay;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,6 +104,7 @@ public class FirstFragment extends Fragment {
                 autoStartWorkValue = value;
             }
         });
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -129,8 +132,8 @@ public class FirstFragment extends Fragment {
                                                        toast.cancel();
                                                    }
                                                    timeConversion();
-//                                                   leftTime =
-//                                                           3000;
+                                                   leftTime =
+                                                           3000;
                                                    setTime = leftTime;
                                                    continueWorkTime = setTime ;
                                                    startTime = setTime ;
@@ -209,13 +212,25 @@ public class FirstFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onStart() {
         super.onStart( );
         loadData();
+        sessionCountReset ();
     }
-
+    private void sessionCountReset()
+    {
+        Calendar cal = Calendar.getInstance();
+        sessionCounterDay = dayOfMonth;
+        dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+        if(dayOfMonth != sessionCounterDay) {
+            sessionCounterDay = dayOfMonth;
+            Log.d("STATE",String.valueOf(dayOfMonth) + " dayOfMonth dayOfMonth");
+            Log.d("STATE",String.valueOf(sessionCounterDay) + " sessionCounterDay sessionCounterDay");
+            sessionCounterWork = 0;
+            sessionCounterBreak = 0;
+        }
+    }
     private void loadData() {
 //        SharedPreferences preferences = getActivity().getSharedPreferences("workTime", MODE_PRIVATE);
 //            preferences.edit().remove("timerState").apply();
@@ -235,7 +250,13 @@ public class FirstFragment extends Fragment {
         String timerStateCheck = sharedPreferences.getString("timerState","");
         Log.d("STATE",String.valueOf(timerStateCheck) + " Timer State");
 
+        sessionCounterWork = sharedPreferences.getInt ("sessionCounter", 0);
+        sessionCounterBreak = sharedPreferences.getInt ("sessionCounterBreak", 0);
+        sessionCounterDay = sharedPreferences.getInt ("sessionCounterDay", 0);
+        dayOfMonth = sharedPreferences.getInt ("dayOfMonth", 0);
+
         finishedBreak = sharedPreferences.getBoolean("startWork", false);
+        Log.d("STATE",String.valueOf(sessionCounterWork) + " sessionCounter");
 
         setTime = sharedPreferences.getLong("setTime", 900000);
         leftTime = sharedPreferences.getLong("leftTime", setTime);
@@ -405,6 +426,11 @@ public class FirstFragment extends Fragment {
         editor.putBoolean("startWork", finishedBreak);
         editor.putLong ("startTime",startTime);
 
+        editor.putInt ("sessionCounter", sessionCounterWork);
+        editor.putInt ("sessionCounterBreak", sessionCounterBreak);
+        editor.putInt("sessionCounterDay",sessionCounterDay);
+        editor.putInt("dayOfMonth",dayOfMonth);
+
         if(timerState == TimerState.WORK)
         {
             editor.putString("timerState","WORK");
@@ -484,6 +510,7 @@ public class FirstFragment extends Fragment {
                     if (autoStartWorkValue) {
                         workTimer ();
                         setProgressBarValues(leftTime);
+                        updateSessionCounterBreak();
                         finishedWork = true;
                     } else {
                         onFinishedBreak ( );
@@ -491,8 +518,9 @@ public class FirstFragment extends Fragment {
                 }
                 else {
                     if (autoStartBreakValue) {
-                        breakTimer ( );
+                        breakTimer ();
                         setProgressBarValues(breakTime);
+                        updateSessionCounterWork ();
                         finishedBreak = true;
                     } else {
                         onFinishedWork ( );
@@ -505,6 +533,7 @@ public class FirstFragment extends Fragment {
     private void onFinishedBreak(){
         timerState = TimerState.START_WORK;
         updateViews();
+        updateSessionCounterBreak();
         finishedBreak = true;
         startWorkButton = dialog.findViewById(R.id.startWork);
         cancelTimerButton = dialog.findViewById(R.id.cancelTimer);
@@ -528,6 +557,7 @@ public class FirstFragment extends Fragment {
     private void onFinishedWork() {
         timerState = TimerState.FINISH_WORK;
         updateViews();
+        updateSessionCounterWork ();
         finishedWork = true;
         continueWorkButton = dialog.findViewById(R.id.continueWorking);
         takeABreakButton = dialog.findViewById(R.id.takeABreak);
@@ -569,6 +599,19 @@ public class FirstFragment extends Fragment {
         });
     }
 
+    private void updateSessionCounterWork() {
+//        Log.d ("STATE",String.valueOf (sessionCounter));
+        int sessionCount = sessionCounterWork++;
+//        Log.d ("STATE",String.valueOf (sessionCounter) + " after");
+        configurationPanelViewModel.setSessionCounterWork (sessionCount);
+    }
+
+    private void updateSessionCounterBreak() {
+        int sessionCount = sessionCounterBreak++;
+        configurationPanelViewModel.setSessionCounterBreak (sessionCount);
+    }
+
+
     private void pauseTimer() {
         timerState = TimerState.PAUSE;
         countDownTimer.cancel();
@@ -608,8 +651,6 @@ public class FirstFragment extends Fragment {
             finishedWork = true;
         }
         if(finishedWork) {
-            Log.d("STATE","ZDSADSdddddddddddddddddddddddde");
-
             breakTime = setBreakTime; //setProgressBar
             leftTime = setBreakTime; //setRealTime
             finishedWork = false;
