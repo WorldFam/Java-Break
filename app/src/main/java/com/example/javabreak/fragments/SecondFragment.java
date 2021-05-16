@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javabreak.R;
 import com.example.javabreak.ScheduledReminderFragment;
+import com.example.javabreak.activities.MainActivity;
 import com.example.javabreak.adapters.ScheduledBreakAdapter;
 import com.example.javabreak.models.DayOfTheWeek;
 import com.example.javabreak.models.ScheduledBreak;
@@ -103,6 +104,8 @@ public class SecondFragment extends Fragment{
             @Override
             public void onDelete(int position) {
                 removeItem(position);
+                ((MainActivity)getActivity()).cancelAlarm (position);
+
             }
         });
 
@@ -134,6 +137,7 @@ public class SecondFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
 
         scheduledSecondSharedViewModel =  new ViewModelProvider(requireActivity()).get(ScheduledSecondSharedViewModel.class);
+
         scheduledSecondSharedViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String name) {
@@ -185,6 +189,10 @@ public class SecondFragment extends Fragment{
 
     public void insertItem(ScheduledBreak scheduledBreak) {
         reminderViewModel.insert(scheduledBreak);
+    }
+
+    public void getReminder(int  position) {
+        reminderViewModel.getReminder (position);
     }
 
 }

@@ -88,7 +88,7 @@ public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledB
                         }
                 }
 
-                private void resetWeekDay() {
+             private void resetWeekDay() {
                     monday.setTextColor(Color.parseColor("#80BFB3B3"));
                     monday.setTypeface(null, Typeface.NORMAL);
                     tuesday.setTextColor(Color.parseColor("#80BFB3B3"));
@@ -126,6 +126,7 @@ public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledB
         ScheduledBreak scheduledBreak = getItem(position);
         List<DayOfTheWeek> dayOfTheWeeks = scheduledBreak.getDayOfTheWeeks();
         holder.name.setText(scheduledBreak.getName());
+
         for (DayOfTheWeek dayOfTheWeek : dayOfTheWeeks ) {
             setWeekDay(holder,dayOfTheWeek);
         }

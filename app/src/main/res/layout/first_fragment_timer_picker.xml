@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
+
         android:id="@+id/transparentBackground"
         android:layout_width="330dp"
         android:layout_height="330dp"
@@ -17,11 +19,11 @@
 
     <TimePicker
         android:id="@+id/simpleTimePicker"
-        android:layout_width="164dp"
-        android:layout_height="130dp"
+        android:layout_width="172dp"
+        android:layout_height="142dp"
         android:numbersSelectorColor="@color/white"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
+        android:scaleX="1.4"
+        android:scaleY="1.4"
         android:theme="@style/timePicker"
         android:timePickerMode="spinner"
         app:layout_constraintBottom_toBottomOf="@+id/transparentBackground"
@@ -30,17 +32,19 @@
         app:layout_constraintStart_toStartOf="@+id/transparentBackground"
         app:layout_constraintTop_toTopOf="@+id/transparentBackground"
         app:layout_constraintVertical_bias="0.456" />
+
     <Button
         android:id="@+id/button"
-        android:textColor="@color/newBackground"
-        app:backgroundTint="@color/orange"
         android:layout_width="135dp"
         android:layout_height="59dp"
         android:text="@string/start"
+        android:textColor="@color/newBackground"
         android:textSize="25dp"
+        app:backgroundTint="@color/orange"
         app:layout_constraintBottom_toBottomOf="@+id/transparentBackground"
         app:layout_constraintEnd_toEndOf="@+id/simpleTimePicker"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="@+id/simpleTimePicker"
         app:layout_constraintTop_toTopOf="@+id/simpleTimePicker"
-        app:layout_constraintVertical_bias="0.825" />
+        app:layout_constraintVertical_bias="0.845" />
 </androidx.constraintlayout.widget.ConstraintLayout>

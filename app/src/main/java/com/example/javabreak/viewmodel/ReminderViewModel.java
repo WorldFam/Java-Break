@@ -23,6 +23,10 @@ public class ReminderViewModel extends AndroidViewModel {
         return allNotes;
     }
 
+    public void getReminder(int scheduledBreak) {
+        repository.getReminder (scheduledBreak);
+    }
+
     public void insert(ScheduledBreak scheduledBreak) {
         repository.insert(scheduledBreak);
     }

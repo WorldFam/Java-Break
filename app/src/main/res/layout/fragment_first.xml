@@ -66,7 +66,6 @@
         android:layout_width="289dp"
         android:layout_height="80dp"
         android:drawableTop="@drawable/line_shape"
-        android:shadowColor="@color/lightGrey"
         android:shadowDx="2.5"
         android:shadowDy="2.3"
         android:shadowRadius="1.6"
@@ -75,8 +74,7 @@
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="20sp"
-
-        android:textStyle="bold|italic"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

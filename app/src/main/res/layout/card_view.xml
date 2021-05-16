@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="125dp"
-    android:layout_gravity="center"
     android:layout_margin="8dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="5dp"
+    android:layout_gravity="center"
     android:backgroundTint="@color/tabBackground">
 
     <RelativeLayout
+        android:layout_marginStart="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tagLayout">
         <TextView
             android:id="@+id/tag"
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:text="WWWWWWWWWW"
+            android:layout_marginLeft="15dp"
+            android:text="Daily reminder"
             android:textColor="@color/white"
-            android:textSize="32sp"
-            android:textStyle="bold"
-          />
-
-
+            android:textSize="35sp"
+            android:textStyle="bold" />
+        </LinearLayout>
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
@@ -38,14 +46,13 @@
             android:textAlignment="center"
             android:textColor="@color/lightGrey"
             android:textSize="15sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/workDurationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tag"
+            android:layout_below="@+id/tagLayout"
             android:layout_marginLeft="15dp"
             android:text="Work Duration"
             android:textAlignment="center"
@@ -71,101 +78,106 @@
             android:id="@+id/breakDurationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tag"
+            android:layout_below="@+id/tagLayout"
             android:layout_marginStart="35dp"
             android:layout_toEndOf="@+id/textView2"
             android:layout_toRightOf="@+id/textView2"
             android:text="Break Frequency/Duration"
             android:textAlignment="center"
             android:textColor="@color/lightGrey"
-            android:textSize="10sp"
-          />
+            android:textSize="10sp" />
 
         <ImageButton
             android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="40dp"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="25dp"
-            android:layout_toRightOf="@+id/breakDurationText"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@+id/breakDurationText"
             android:background="@null"
             app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="15dp"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
 
 
-        <TextView
-            android:id="@+id/Monday"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:text="MON"
-            android:textColor="#80BFB3B3"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/Tuesday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:text="TUE"
-            android:textColor="#80BFB3B3"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/Wednesday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:text="WED"
-            android:textColor="#80BFB3B3"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/Thursday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:text="THU"
-            android:textColor="#80BFB3B3"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/Friday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:text="FRI"
-            android:textColor="#80BFB3B3"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/Saturday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:text="SAT"
-            android:textColor="#80BFB3B3"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/Sunday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:text="SUN"
-            android:textColor="#80BFB3B3"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
 
+            <TextView
+                android:id="@+id/Monday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="MON"
+                android:layout_marginEnd="5dp"
+                android:textColor="#80BFB3B3"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/Tuesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TUE"
+                android:textColor="#80BFB3B3"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/Wednesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="WED"
+                android:textColor="#80BFB3B3"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/Thursday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="THU"
+                android:textColor="#80BFB3B3"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/Friday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="-10dp"
+                android:text="FRI"
+                android:textColor="#80BFB3B3"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/Saturday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SAT"
+                android:layout_marginEnd="-5dp"
+                android:textColor="#80BFB3B3"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/Sunday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SUN"
+                android:textColor="#80BFB3B3"
+                android:textSize="18sp" />
+
+        </LinearLayout>
 
 </androidx.cardview.widget.CardView>

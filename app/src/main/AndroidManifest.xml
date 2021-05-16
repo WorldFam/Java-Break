@@ -2,10 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.javabreak">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:name=".notifications.App"
         android:allowBackup="true"
-        android:icon="@drawable/ic_baseline_timer_24"
+        android:icon="@drawable/ic_baseline_free_breakfast_dialog"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.JavaBreak">
@@ -19,16 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <service-->
-<!--            android:name=""-->
-<!--            android:label="@string/app_name">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="your.app.domain.NotificationService" />-->
-
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <receiver android:enabled="true" android:name=".notifications.AlertReceiver" />
+        <receiver android:name=".notifications.ScheduledNotificationReceiver" />
         <receiver android:exported="false" android:name=".notifications.NotificationReceiver" />
     </application>
-
 </manifest>

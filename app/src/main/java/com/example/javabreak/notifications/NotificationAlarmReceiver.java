@@ -15,8 +15,7 @@ import com.example.javabreak.activities.MainActivity;
 
 import static com.example.javabreak.notifications.App.CHANNEL_1_ID;
 
-public class NotificationReceiver extends BroadcastReceiver {
-
+public class NotificationAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -27,11 +26,12 @@ public class NotificationReceiver extends BroadcastReceiver {
         PendingIntent contentIntent = PendingIntent.getActivity(context ,
                 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        long time = intent.getLongExtra ("time",0);
         String key = intent.getStringExtra ("timerState");
         Log.d("STATE",String.valueOf (key) + " Timer State Notification");
 
 
-       NotificationCompat.Builder notification1 = new NotificationCompat.Builder(context, CHANNEL_1_ID)
+        NotificationCompat.Builder notification1 = new NotificationCompat.Builder(context, CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_baseline_add_alarm_24)
                 .setContentTitle("Work session is done!")
                 .setContentText("Time to take a break!")
@@ -75,8 +75,5 @@ public class NotificationReceiver extends BroadcastReceiver {
         if(key.equals ("SNOOZE")){
             manager .notify(1, notification3.build());
         }
-
-        manager.notify (1, notification1.build ( ));
-
     }
 }

@@ -74,7 +74,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onChanged(Integer integer) {
-                setBreakTime = TimeUnit.MINUTES.toMillis(integer);
+                setBreakTime = TimeUnit.MILLISECONDS.toMillis(3000);
                 breakTime = setBreakTime;
             }
         });
@@ -84,7 +84,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
 
-                setSnoozeTime = TimeUnit.MINUTES.toMillis(integer);
+                setSnoozeTime = TimeUnit.MILLISECONDS.toMillis(3000);
                 snoozeTime = setSnoozeTime;
 
             }
@@ -137,7 +137,7 @@ public class FirstFragment extends Fragment {
                                                    setTime = leftTime;
                                                    continueWorkTime = setTime ;
                                                    startTime = setTime ;
-                                                   ((MainActivity)getActivity()).notifyAlarm(leftTime);
+//                                                   ((MainActivity)getActivity()).notifyAlarm(leftTime,String.valueOf (TimerState.WORK));
                                                    setProgressBarValues(leftTime);
                                                    timerState = TimerState.START;
                                                    updateViews();
@@ -507,6 +507,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onFinish() {
                 if (finishedBreak) {
+                    ((MainActivity)getActivity()).notify (leftTime,String.valueOf (timerState));
                     if (autoStartWorkValue) {
                         workTimer ();
                         setProgressBarValues(leftTime);
@@ -517,6 +518,7 @@ public class FirstFragment extends Fragment {
                     }
                 }
                 else {
+                    ((MainActivity) getActivity ( )).notify (leftTime,String.valueOf (timerState));
                     if (autoStartBreakValue) {
                         breakTimer ();
                         setProgressBarValues(breakTime);
@@ -629,6 +631,7 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.WORK;
         updateViews();
+//        ((MainActivity)getActivity()).notifyAlarm(leftTime,String.valueOf (TimerState.WORK));
         if(startTime == 0) {
             finishedBreak = true;
         }
@@ -647,6 +650,7 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.BREAK;
         updateViews();
+//        ((MainActivity)getActivity()).notifyAlarm(leftTime,String.valueOf (TimerState.BREAK));
         if(breakTime == 0) {
             finishedWork = true;
         }
@@ -696,6 +700,7 @@ public class FirstFragment extends Fragment {
         breakTime = setBreakTime;
         finishedBreak = false;
         finishedWork = false;
+//        ((MainActivity)getActivity()).cancelAlarm ();
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }

@@ -75,6 +75,13 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
     private static final int INTERVAL_FREQUENCY = 15;
     //CREATE REMINDER
     Button createReminderButton;
+    //NOTIFICATION STUFF
+    Calendar calendar = Calendar.getInstance();
+    int hourOfDayFrom = 9;
+    int hourOfDayTo = 15;
+    int minuteFrom,minuteTo = 0;
+    int breakFrequency = 60;
+    int breakDuration = 30;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -135,6 +142,7 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
              /*   breakTime =  breakSlider.getProgress();
                 configurationPanelViewModel.setBreakTime(breakTime*INTERVAL);*/
                         breakTimeText.setText(String.format(Locale.getDefault(),"%2d minutes",progress*INTERVAL));
+                        breakDuration = progress * INTERVAL;
                     }
 
                     @Override
@@ -161,6 +169,7 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         breakFrequencyTimeText.setText(String.format(Locale.getDefault(),"%2d minutes",progress*INTERVAL_FREQUENCY));
+                        breakFrequency = progress * INTERVAL_FREQUENCY;
 
                     }
 
@@ -217,7 +226,7 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
                     }
                 }
                 else {
-                    scheduledSecondSharedViewModel.setName(nameEditText.getText( ).toString( ));
+                    scheduledSecondSharedViewModel.setName(nameEditText.getText( ).toString( ).trim ());
                     scheduledSecondSharedViewModel.setWorkFom(workFromText.getText( ).toString( ));
                     scheduledSecondSharedViewModel.setWorkTo(workToText.getText( ).toString( ));
                     String removeFrequency = breakFrequencyTimeText.getText( ).toString( );
@@ -238,11 +247,48 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
                         }
                     }
                     scheduledSecondSharedViewModel.setWeekDay(list);
+
+                    for(DayOfTheWeek weekDay : list) {
+                        getWeekDay (weekDay);
+                    }
+
                 }
             }
 
         });
         return view;
+    }
+
+    private void getWeekDay(DayOfTheWeek dayOfTheWeek) {
+        if (dayOfTheWeek.getWeekDay().equals("Monday")) {
+            ((MainActivity) getActivity( )).startAlarm (Calendar.MONDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+        }
+
+        if (dayOfTheWeek.getWeekDay().equals("Tuesday")) {
+            ((MainActivity) getActivity( )).startAlarm (Calendar.TUESDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+
+        }
+        if (dayOfTheWeek.getWeekDay().equals("Wednesday")) {
+            ((MainActivity) getActivity( )).startAlarm (Calendar.WEDNESDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+
+        }
+        if (dayOfTheWeek.getWeekDay().equals("Thursday")) {
+            ((MainActivity) getActivity( )).startAlarm (Calendar.THURSDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+
+        }
+        if (dayOfTheWeek.getWeekDay().equals("Friday")) {
+            ((MainActivity) getActivity( )).startAlarm (Calendar.FRIDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+
+        }
+        if (dayOfTheWeek.getWeekDay().equals("Saturday")) {
+            ((MainActivity) getActivity( )).startAlarm (Calendar.SATURDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+
+        }
+        if (dayOfTheWeek.getWeekDay().equals("Sunday")) {
+            ((MainActivity) getActivity( )).startAlarm (Calendar.SUNDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+
+        }
+//        Log.d ("Dayzzz",String.valueOf (calendar.get (Calendar.DAY_OF_WEEK)));
     }
 
     @Override
@@ -286,6 +332,7 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
                 now.get(Calendar.MINUTE),
                 true
         );
+        System.out.println (String.valueOf (now.get(Calendar.HOUR_OF_DAY))+ " Calendar now = Calendar.getInstance();" );
         timePickerDialog.setThemeDark(true);
         timePickerDialog.setTimeInterval(1, 5, 60);
         timePickerDialog.setAccentColor(Color.parseColor("#808080"));
@@ -300,11 +347,15 @@ public class ScheduledReminderFragment extends Fragment implements com.wdullaer.
             String from = pad(hourOfDay) + ':' +
                     pad(minute);
             workFromText.setText(from);
+            hourOfDayFrom = hourOfDay;
+            minuteFrom = minute;
         }
         else {
             String to = pad(hourOfDay) + ':' +
                     pad(minute);
             workToText.setText(to);
+            hourOfDayTo = hourOfDay;
+            minuteTo = minute;
         }
     }
 
