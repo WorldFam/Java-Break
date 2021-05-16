@@ -39,6 +39,6 @@ Java Break; application includes all useful features with a user-friendly interf
   <tr>
     <td><img src="https://user-images.githubusercontent.com/55923499/118409453-ce6e2880-b68a-11eb-9e89-a5c7429d1044.png" /></td>
     <td><img src="https://user-images.githubusercontent.com/55923499/118409459-d8902700-b68a-11eb-91a0-5475e6b9ccdc.png" /></td>
-    <td></td>
+    <td><img src="https://user-images.githubusercontent.com/55923499/118409934-31f95580-b68d-11eb-98d9-e0516ed2332f.png" /></td>
   </tr>
 </table>
