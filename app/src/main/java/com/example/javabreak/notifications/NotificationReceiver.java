@@ -11,7 +11,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.example.javabreak.R;
-import com.example.javabreak.activities.MainActivity;
+import com.example.javabreak.MainActivity;
 
 import static com.example.javabreak.notifications.App.CHANNEL_1_ID;
 

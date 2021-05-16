@@ -11,7 +11,7 @@ import android.graphics.Color;
 import androidx.core.app.NotificationCompat;
 
 import com.example.javabreak.R;
-import com.example.javabreak.activities.MainActivity;
+import com.example.javabreak.MainActivity;
 
 public class NotificationHelper extends ContextWrapper {
     public static final String channelID = "channelID";

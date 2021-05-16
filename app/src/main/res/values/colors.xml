@@ -16,4 +16,9 @@
     <color name="newBackground">#31394c</color>
     <color name="tabBackground">#212735</color>
 
+    <color name="selected">#FF9800</color>
+    <color name="unselected">#a8a8a8</color>
+
+    <color name="unmarked">#80BFB3B3</color>
+
 </resources>

@@ -55,8 +55,8 @@
     </style>
 
     <style name="DialogAnim">
-        <item name="android:windowEnterAnimation">@anim/fade_in_dialog</item>
-        <item name="android:windowExitAnimation">@anim/fade_out_dialog</item>
+        <item name="android:windowEnterAnimation">@anim/slide_up_accelerate_interpolator</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_accelerate_interpolator</item>
     </style>
 
 </resources>

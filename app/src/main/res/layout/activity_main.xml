@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/newBackground"
-    tools:context=".activities.MainActivity">
+    tools:context=".MainActivity">
 
-    <com.example.javabreak.adapters.NonSwipeableViewPager
+    <com.example.javabreak.other.NonSwappableViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +24,7 @@
             app:tabTextAppearance="@style/MyCustomTabText"
             app:tabTextColor="@color/grey" />
 
-    </com.example.javabreak.adapters.NonSwipeableViewPager>
+    </com.example.javabreak.other.NonSwappableViewPager>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

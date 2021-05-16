@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.javabreak.dao.ReminderDao;
 import com.example.javabreak.database.ReminderDatabase;
-import com.example.javabreak.models.ScheduledBreak;
+import com.example.javabreak.models.ScheduledReminder;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 public class ReminderRepository {
     private static ReminderRepository instance;
     private final ReminderDao reminderDao;
-    private final LiveData<List<ScheduledBreak>> reminderList;
+    private final LiveData<List<ScheduledReminder>> reminderList;
     private final ExecutorService executorService;
 
     private ReminderRepository(Application application) {
@@ -32,7 +32,7 @@ public class ReminderRepository {
         return instance;
     }
 
-    public LiveData<List<ScheduledBreak>> getAllReminders() {
+    public LiveData<List<ScheduledReminder>> getAllReminders() {
         return reminderList;
     }
 
@@ -44,17 +44,17 @@ public class ReminderRepository {
     }
 
 
-    public void insert(ScheduledBreak scheduledBreak) {
+    public void insert(ScheduledReminder scheduledReminder) {
 /*
         new InsertAsyncTask(reminderDao).execute(scheduledBreak);
 */
-        executorService.execute(() -> reminderDao.insert(scheduledBreak));
+        executorService.execute(() -> reminderDao.insert(scheduledReminder));
     }
 
-    public void delete(ScheduledBreak scheduledBreak) {
+    public void delete(ScheduledReminder scheduledReminder) {
 /*
         new InsertAsyncTask(reminderDao).execute(scheduledBreak);
 */
-        executorService.execute(() -> reminderDao.delete(scheduledBreak));
+        executorService.execute(() -> reminderDao.delete(scheduledReminder));
     }
 }
