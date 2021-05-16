@@ -10,7 +10,7 @@ Java Break; application includes all useful features with a user-friendly interf
 
 
 
-## MoSCoW requirements for the "Java Break;" application:
+# MoSCoW requirements for the "Java Break;" application:
 
 ### Must have
 - [x] As a user, I must be able to get a notification to take a break.
@@ -27,3 +27,18 @@ Java Break; application includes all useful features with a user-friendly interf
 - [ ] As a user, I could customize notifications and select preferred sound.
 ### Will not have
 - [ ] As a user, I will be able to receive notifications on my smartwatch. 
+
+# Screenshots
+
+<table>
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/55923499/118409421-99fa6c80-b68a-11eb-9003-2949b570eed0.png" /></td>
+    <td><img src="https://user-images.githubusercontent.com/55923499/118409434-aed70000-b68a-11eb-92ee-7e8bc8ad0a00.png" /></td>
+    <td><img src="https://user-images.githubusercontent.com/55923499/118409443-c2826680-b68a-11eb-8301-89be378ed827.png" /></td>
+  </tr>  
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/55923499/118409453-ce6e2880-b68a-11eb-9e89-a5c7429d1044.png" /></td>
+    <td><img src="https://user-images.githubusercontent.com/55923499/118409459-d8902700-b68a-11eb-91a0-5475e6b9ccdc.png" /></td>
+    <td></td>
+  </tr>
+</table>
