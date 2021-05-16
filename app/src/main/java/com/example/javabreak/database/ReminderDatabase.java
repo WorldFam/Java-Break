@@ -7,9 +7,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.javabreak.dao.ReminderDao;
-import com.example.javabreak.models.ScheduledBreak;
+import com.example.javabreak.models.ScheduledReminder;
 
-@Database(entities = {ScheduledBreak.class}, version = 4)
+@Database(entities = {ScheduledReminder.class}, version = 5)
 public abstract class ReminderDatabase extends RoomDatabase {
     private static ReminderDatabase instance;
 

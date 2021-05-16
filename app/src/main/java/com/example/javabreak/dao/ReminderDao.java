@@ -5,9 +5,8 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
-import com.example.javabreak.models.ScheduledBreak;
+import com.example.javabreak.models.ScheduledReminder;
 
 import java.util.List;
 
@@ -15,14 +14,11 @@ import java.util.List;
 public interface ReminderDao {
 
     @Insert
-    void insert(ScheduledBreak scheduledBreak);
-
-    @Update
-    void update(ScheduledBreak scheduledBreak);
+    void insert(ScheduledReminder scheduledReminder);
 
     @Delete
-    void delete(ScheduledBreak scheduledBreak);
+    void delete(ScheduledReminder scheduledReminder);
 
     @Query("SELECT * FROM reminder_table ORDER BY id DESC")
-    LiveData<List<ScheduledBreak>> getAllReminders();
+    LiveData<List<ScheduledReminder>> getAllReminders();
 }

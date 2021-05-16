@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="380dp"
+    android:layout_height="380dp"
+    android:layout_marginTop="50dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="380dp"
+        android:layout_height="380dp"
+        android:scaleX="1.1"
+        android:scaleY="1.1"
+        android:layout_centerInParent="true"
+        android:background="@drawable/ring_shape"
+        android:progressDrawable="@drawable/progress_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.112" />
+
+
+    <ImageButton
+        android:id="@+id/button3"
+        android:scaleX="1.1"
+        android:scaleY="1.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/newBackground"
+        android:src="@drawable/ic_play_arrow_white_48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+        app:layout_constraintEnd_toEndOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="@+id/progressBar"
+        app:layout_constraintTop_toTopOf="@+id/progressBar"
+        app:layout_constraintVertical_bias="0.515" />
+
+    <ImageView
+        android:id="@+id/breakIcon"
+        android:scaleX="1.1"
+        android:scaleY="1.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/newBackground"
+        android:src="@drawable/ic_baseline_free_breakfast_24"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+        app:layout_constraintEnd_toEndOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="@+id/progressBar"
+        app:layout_constraintTop_toTopOf="@+id/progressBar"
+        app:layout_constraintVertical_bias="0.515"/>
+
+    <ImageView
+        android:id="@+id/snoozeIcon"
+        android:scaleX="1.1"
+        android:scaleY="1.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/newBackground"
+        android:src="@drawable/ic_baseline_snooze_24"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+        app:layout_constraintEnd_toEndOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="@+id/progressBar"
+        app:layout_constraintTop_toTopOf="@+id/progressBar"
+        app:layout_constraintVertical_bias="0.515"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

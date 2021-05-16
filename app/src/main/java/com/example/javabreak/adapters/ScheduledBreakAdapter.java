@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javabreak.R;
 import com.example.javabreak.models.DayOfTheWeek;
-import com.example.javabreak.models.ScheduledBreak;
+import com.example.javabreak.models.ScheduledReminder;
 
 import java.util.List;
 
-public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledBreakAdapter.ViewHolder> {
+public class ScheduledBreakAdapter extends ListAdapter<ScheduledReminder,ScheduledBreakAdapter.ViewHolder> {
 
     private OnItemClickListener mListener;
 
@@ -29,17 +29,14 @@ public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledB
         super(DIFF_CALLBACK);
     }
 
-    private static final DiffUtil.ItemCallback<ScheduledBreak> DIFF_CALLBACK = new DiffUtil.ItemCallback<ScheduledBreak>() {
+    private static final DiffUtil.ItemCallback<ScheduledReminder> DIFF_CALLBACK = new DiffUtil.ItemCallback<ScheduledReminder>() {
         @Override
-        public boolean areItemsTheSame(ScheduledBreak oldItem, ScheduledBreak newItem) {
+        public boolean areItemsTheSame(ScheduledReminder oldItem, ScheduledReminder newItem) {
             return oldItem.getId() == newItem.getId();
         }
         @Override
-        public boolean areContentsTheSame(ScheduledBreak oldItem, ScheduledBreak newItem) {
-            return oldItem.getName().equals(newItem.getName()) /*&& !oldItem.getDayOfTheWeeks().equals(newItem.getDayOfTheWeeks())*/;
-                  /*  && oldItem.getWorkFromText().equals(newItem.getWorkFromText()) && oldItem.getWorkToText().equals(newItem.getWorkToText())
-                    && oldItem.getBreakFrequencyText().equals(newItem.getBreakFrequencyText()) && oldItem.getBreakDurationText().equals(newItem.getBreakDurationText());
-*/
+        public boolean areContentsTheSame(ScheduledReminder oldItem, ScheduledReminder newItem) {
+            return oldItem.getName().equals(newItem.getName());
         }
     };
 
@@ -88,6 +85,7 @@ public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledB
                         }
                 }
 
+                //UnMark week day colors of reminder when deleting entry
              private void resetWeekDay() {
                     monday.setTextColor(Color.parseColor("#80BFB3B3"));
                     monday.setTypeface(null, Typeface.NORMAL);
@@ -123,16 +121,17 @@ public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledB
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ScheduledBreak scheduledBreak = getItem(position);
-        List<DayOfTheWeek> dayOfTheWeeks = scheduledBreak.getDayOfTheWeeks();
-        holder.name.setText(scheduledBreak.getName());
+        ScheduledReminder scheduledReminder = getItem(position);
+        List<DayOfTheWeek> dayOfTheWeeks = scheduledReminder.getDayOfTheWeeks();
+        holder.name.setText(scheduledReminder.getName());
 
+        //Loop through weekdays and mark if selected
         for (DayOfTheWeek dayOfTheWeek : dayOfTheWeeks ) {
             setWeekDay(holder,dayOfTheWeek);
         }
 
-        holder.workDuration.setText(scheduledBreak.getWorkFromText() + "-" + scheduledBreak.getWorkToText());
-        holder.breakDuration.setText(scheduledBreak.getBreakFrequencyText() + " / " + scheduledBreak.getBreakDurationText());
+        holder.workDuration.setText(scheduledReminder.getWorkFromText() + "-" + scheduledReminder.getWorkToText());
+        holder.breakDuration.setText(scheduledReminder.getBreakFrequencyText() + " / " + scheduledReminder.getBreakDurationText());
     }
 
     private void setWeekDay(@NonNull ViewHolder holder, DayOfTheWeek dayOfTheWeek) {
@@ -166,7 +165,7 @@ public class ScheduledBreakAdapter extends ListAdapter<ScheduledBreak,ScheduledB
         }
     }
 
-    public ScheduledBreak getItemAt(int position) {
+    public ScheduledReminder getItemAt(int position) {
         return getItem(position);
     }
 }

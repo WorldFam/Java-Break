@@ -2,15 +2,26 @@
     <string name="app_name">Break;</string>
     <string name="start">Start</string>
     <string name="pause">PAUSE</string>
+
+    <string name="productive">Productive</string>
+    <string name="scheduled">Scheduled</string>
+    <string name="settings">Settings</string>
+
+    <string name="Monday">Monday</string>
+    <string name="Tuesday">Tuesday</string>
+    <string name="Wednesday">Wednesday</string>
+    <string name="Thursday">Thursday</string>
+    <string name="Friday">Friday</string>
+    <string name="Saturday">Saturday</string>
+    <string name="Sunday">Sunday</string>
+
+    <string name="timeLeftFormatted">00:00:00</string>
+    <string name="resetTimeFormatted">00:15:00</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment</string>
     <string name="autoStart">Start the work session after a break without interaction</string>
-
-    <string-array name="test">
-        <item value="Monday">Monday</item>
-        <item value="Tuesday">Tuesday</item>
-    </string-array>
 
     <string name="configText"><font color="#FFFFFFFF">Session Counter</font> <font
         color="#ff7f27" size="11">(updated every 24 hours)</font></string>

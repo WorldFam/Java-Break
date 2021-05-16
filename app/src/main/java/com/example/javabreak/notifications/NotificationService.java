@@ -21,7 +21,7 @@
 //import androidx.core.app.NotificationCompat;
 //
 //import com.example.javabreak.R;
-//import com.example.javabreak.activities.MainActivity;
+//import com.example.javabreak.MainActivity;
 //
 //import java.util.Calendar;
 //

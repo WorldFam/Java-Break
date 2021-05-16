@@ -2,6 +2,7 @@ package com.example.javabreak.fragments;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -28,11 +29,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.javabreak.ConfigurationsFragment;
 import com.example.javabreak.R;
-import com.example.javabreak.activities.MainActivity;
-import com.example.javabreak.activities.TimerState;
-import com.example.javabreak.viewmodel.ConfigurationPanelViewModel;
+import com.example.javabreak.MainActivity;
+import com.example.javabreak.viewmodels.ConfigurationFragmentViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
@@ -45,7 +44,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FirstFragment extends Fragment {
 
-    ConfigurationPanelViewModel configurationPanelViewModel;
+    ConfigurationFragmentViewModel configurationFragmentViewModel;
     private TextView time, messageText;
     private TimePicker timePicker;
     private long leftTime,breakTime,snoozeTime, continueWorkTime ,setTime , setBreakTime, setSnoozeTime, startTime;
@@ -53,10 +52,9 @@ public class FirstFragment extends Fragment {
     private CountDownTimer countDownTimer;
     private ImageButton reset, pauseResume, configuration;
     Animation resetRotate, resetBlink, slideDownText;
-    String timeLeftFormatted = "00:00:00";
-    String resetTimeFormatted = "00:15:00";
     private Dialog dialog;
-    private Button startButton, continueWorkButton, snoozeButton, takeABreakButton, startWorkButton, cancelTimerButton;
+    private Button startButton;
+    private Button cancelTimerButton;
     ProgressBar progressBar;
     TimerState timerState;
     ImageView  transparentBackground ,breakIcon,snoozeIcon ;
@@ -66,30 +64,35 @@ public class FirstFragment extends Fragment {
     boolean autoStartBreakValue,autoStartWorkValue;
     int sessionCounterWork,sessionCounterBreak, dayOfMonth, sessionCounterDay;
 
+    public enum TimerState {
+        WORK, PAUSE, SNOOZE, BREAK, CONTINUE, FINISH_WORK, START_WORK, START, RESET
+    }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        configurationPanelViewModel = new ViewModelProvider(requireActivity()).get(ConfigurationPanelViewModel.class);
-        configurationPanelViewModel.getBreakTime().observe(this, new Observer<Integer>() {
+        configurationFragmentViewModel = new ViewModelProvider(requireActivity()).get(ConfigurationFragmentViewModel.class);
+        configurationFragmentViewModel.getBreakTime().observe(this, new Observer<Integer>() {
 
             @Override
             public void onChanged(Integer integer) {
-                setBreakTime = TimeUnit.MILLISECONDS.toMillis(3000);
+                setBreakTime = TimeUnit.MINUTES.toMillis(integer);
                 breakTime = setBreakTime;
             }
         });
 
-        configurationPanelViewModel.getSnoozeTime().observe(this, new Observer<Integer>() {
+        configurationFragmentViewModel.getSnoozeTime().observe(this, new Observer<Integer>() {
 
             @Override
             public void onChanged(Integer integer) {
 
-                setSnoozeTime = TimeUnit.MILLISECONDS.toMillis(3000);
+                setSnoozeTime = TimeUnit.MINUTES.toMillis(integer);
                 snoozeTime = setSnoozeTime;
 
             }
         });
-        configurationPanelViewModel.getAutoStartBreakValue ().observe(this, new Observer<Boolean>() {
+        configurationFragmentViewModel.getAutoStartBreakValue ().observe(this, new Observer<Boolean>() {
 
             @Override
             public void onChanged(Boolean value) {
@@ -97,7 +100,7 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        configurationPanelViewModel.getAutoStartWorkValue ().observe(this, new Observer<Boolean>() {
+        configurationFragmentViewModel.getAutoStartWorkValue ().observe(this, new Observer<Boolean>() {
 
             @Override
             public void onChanged(Boolean value) {
@@ -111,7 +114,7 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_first, container, false);
+        View view = inflater.inflate(R.layout.first_fragment, container, false);
         tabLayout = getActivity().findViewById(R.id.tabLayout);
         defineWidgets(view);
 
@@ -195,11 +198,11 @@ public class FirstFragment extends Fragment {
         configuration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfigurationsFragment fragment = new ConfigurationsFragment();
+                ConfigurationFragment fragment = new ConfigurationFragment ();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.fade_in,
-                        R.anim.fade_out);
+                        R.anim.slide_out);
                 fragmentTransaction.add(R.id.firstFragment, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -218,6 +221,7 @@ public class FirstFragment extends Fragment {
         loadData();
         sessionCountReset ();
     }
+    //Reset counter if day changed
     private void sessionCountReset()
     {
         Calendar cal = Calendar.getInstance();
@@ -225,10 +229,10 @@ public class FirstFragment extends Fragment {
         dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
         if(dayOfMonth != sessionCounterDay) {
             sessionCounterDay = dayOfMonth;
-            Log.d("STATE",String.valueOf(dayOfMonth) + " dayOfMonth dayOfMonth");
-            Log.d("STATE",String.valueOf(sessionCounterDay) + " sessionCounterDay sessionCounterDay");
             sessionCounterWork = 0;
             sessionCounterBreak = 0;
+            configurationFragmentViewModel.setSessionCounterWork (sessionCounterWork);
+            configurationFragmentViewModel.setSessionCounterBreak (sessionCounterBreak);
         }
     }
     private void loadData() {
@@ -248,32 +252,35 @@ public class FirstFragment extends Fragment {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("workTime", MODE_PRIVATE);
         String timerStateCheck = sharedPreferences.getString("timerState","");
-        Log.d("STATE",String.valueOf(timerStateCheck) + " Timer State");
 
+        Log.d("STATE",timerStateCheck + " Timer State");
+
+        //SharedPreference for Counter
         sessionCounterWork = sharedPreferences.getInt ("sessionCounter", 0);
         sessionCounterBreak = sharedPreferences.getInt ("sessionCounterBreak", 0);
         sessionCounterDay = sharedPreferences.getInt ("sessionCounterDay", 0);
         dayOfMonth = sharedPreferences.getInt ("dayOfMonth", 0);
 
+        //SharedPreference to check if brake is over
         finishedBreak = sharedPreferences.getBoolean("startWork", false);
-        Log.d("STATE",String.valueOf(sessionCounterWork) + " sessionCounter");
 
+        //SharedPreference for total selected time from time picker
         setTime = sharedPreferences.getLong("setTime", 900000);
+        //SharedPreference for main time
         leftTime = sharedPreferences.getLong("leftTime", setTime);
-
+        //SharedPreference for work time
         startTime = sharedPreferences.getLong("startTime", setTime);
-
         continueWorkTime = sharedPreferences.getLong("continueWorkTime", setTime);
 
+        //SharedPreference getting time from view model and set total break time
         setBreakTime = sharedPreferences.getLong("setBreakTime", 900000);
-
         breakTime = sharedPreferences.getLong("breakTime", setBreakTime);
 
+        //SharedPreference getting time from view model and set total snooze time
         setSnoozeTime = sharedPreferences.getLong("setSnoozeTime", 60000);
-//        Log.d("STATE",String.valueOf(setSnoozeTime) + " snooze Time");
         snoozeTime = sharedPreferences.getLong("snoozeTime", setSnoozeTime);
-//        Log.d("STATE",String.valueOf(snoozeTime) + " not set snooze Time");
 
+        //SharedPreference for state from ViewModel to check if auto-start is enabled
         SharedPreferences configurations = getActivity().getSharedPreferences("configurations", MODE_PRIVATE);
         autoStartBreakValue = configurations.getBoolean("autoStartBreakValue", false);
         autoStartWorkValue = configurations.getBoolean("autoStartWorkValue", false);
@@ -329,7 +336,6 @@ public class FirstFragment extends Fragment {
             breakTime = endBreakTime - System.currentTimeMillis();
             progressBar.setProgress((int) (setBreakTime/ 1000) - (int) (breakTime/ 1000));
             updateViews();
-
             if (breakTime < 0) {
                 breakTime = 0; //Does allow Timer to be negative
             }
@@ -378,11 +384,9 @@ public class FirstFragment extends Fragment {
             continueWorkTime = endContinueWorkTime - System.currentTimeMillis();
             progressBar.setProgress((int) (setTime/ 1000) - (int) (continueWorkTime/ 1000));
             updateViews();
-
             if (continueWorkTime < 0) {
                 continueWorkTime = 0; //Does allow Timer to be negative
             }
-
             if(continueWorkTime != 0) {
                 continueWorkTime();
             }
@@ -488,10 +492,12 @@ public class FirstFragment extends Fragment {
         reset.setEnabled(false);
         timePicker.setHour(0);
         timePicker.setMinute(15);
-
+        configuration.setBackgroundColor(Color.TRANSPARENT);
     }
 
     public void startTimer() {
+        //After starting timer END's of Times sums current time with running time which later is used
+        // to display time running, even when application was closed.
         endTime = System.currentTimeMillis() + leftTime;
         endBreakTime = System.currentTimeMillis() + breakTime;
         endSnoozeTime = System.currentTimeMillis() + snoozeTime;
@@ -506,6 +512,7 @@ public class FirstFragment extends Fragment {
             }
             @Override
             public void onFinish() {
+                //Check state to see which dialog should be launched
                 if (finishedBreak) {
                     ((MainActivity)getActivity()).notify (leftTime,String.valueOf (timerState));
                     if (autoStartWorkValue) {
@@ -537,7 +544,7 @@ public class FirstFragment extends Fragment {
         updateViews();
         updateSessionCounterBreak();
         finishedBreak = true;
-        startWorkButton = dialog.findViewById(R.id.startWork);
+        Button startWorkButton = dialog.findViewById (R.id.startWork);
         cancelTimerButton = dialog.findViewById(R.id.cancelTimer);
         startWorkButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -561,9 +568,9 @@ public class FirstFragment extends Fragment {
         updateViews();
         updateSessionCounterWork ();
         finishedWork = true;
-        continueWorkButton = dialog.findViewById(R.id.continueWorking);
-        takeABreakButton = dialog.findViewById(R.id.takeABreak);
-        snoozeButton = dialog.findViewById(R.id.snooze);
+        Button continueWorkButton = dialog.findViewById (R.id.continueWorking);
+        Button takeABreakButton = dialog.findViewById (R.id.takeABreak);
+        Button snoozeButton = dialog.findViewById (R.id.snooze);
         cancelTimerButton = dialog.findViewById(R.id.cancelTimer);
         takeABreakButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -602,15 +609,19 @@ public class FirstFragment extends Fragment {
     }
 
     private void updateSessionCounterWork() {
-//        Log.d ("STATE",String.valueOf (sessionCounter));
+        if(sessionCounterWork == 0){
+            sessionCounterWork = 1;
+        }
         int sessionCount = sessionCounterWork++;
-//        Log.d ("STATE",String.valueOf (sessionCounter) + " after");
-        configurationPanelViewModel.setSessionCounterWork (sessionCount);
+        configurationFragmentViewModel.setSessionCounterWork (sessionCount);
     }
 
     private void updateSessionCounterBreak() {
+        if(sessionCounterBreak == 0){
+            sessionCounterBreak = 1;
+        }
         int sessionCount = sessionCounterBreak++;
-        configurationPanelViewModel.setSessionCounterBreak (sessionCount);
+        configurationFragmentViewModel.setSessionCounterBreak (sessionCount);
     }
 
 
@@ -631,7 +642,6 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.WORK;
         updateViews();
-//        ((MainActivity)getActivity()).notifyAlarm(leftTime,String.valueOf (TimerState.WORK));
         if(startTime == 0) {
             finishedBreak = true;
         }
@@ -650,7 +660,6 @@ public class FirstFragment extends Fragment {
     {
         timerState = TimerState.BREAK;
         updateViews();
-//        ((MainActivity)getActivity()).notifyAlarm(leftTime,String.valueOf (TimerState.BREAK));
         if(breakTime == 0) {
             finishedWork = true;
         }
@@ -664,7 +673,6 @@ public class FirstFragment extends Fragment {
             leftTime = breakTime;
         }
         startTimer( );
-
     }
 
     private void snoozeTimer()
@@ -726,7 +734,6 @@ public class FirstFragment extends Fragment {
         long min = timePicker.getMinute() + TimeUnit.HOURS.toMinutes(hour);
         leftTime = TimeUnit.MINUTES.toMillis(min);   //int mSec = min * 60000;  Old
     }
-
 
     private void updateViews()
     {
@@ -830,23 +837,24 @@ public class FirstFragment extends Fragment {
             case FINISH_WORK:
                 dialog=new Dialog(getActivity(),android.R.style.Theme_Black_NoTitleBar_Fullscreen);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnim;
-                dialog.setContentView(R.layout.alert_dialog);
+                dialog.setContentView(R.layout.alert_dialog_break);
                 dialog.setCancelable(false);
                 dialog.show();
                 messageText.setVisibility(View.INVISIBLE);
-                time.setText(timeLeftFormatted);
+                time.setText(R.string.timeLeftFormatted);
                 break;
             case START_WORK:
                 dialog=new Dialog(getActivity(),android.R.style.Theme_Black_NoTitleBar_Fullscreen);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnim;
-                dialog.setContentView(R.layout.alert_dialog_2);
+                dialog.setContentView(R.layout.alert_dialog_work);
                 dialog.setCancelable(false);
                 dialog.show();
                 messageText.setVisibility(View.INVISIBLE);
-                time.setText(timeLeftFormatted);
+                time.setText(R.string.timeLeftFormatted);
                 break;
             case RESET:
                 timePicker.setEnabled(true);
+                startButton.setEnabled (false);
                 progressBar.setVisibility(View.INVISIBLE);
                 pauseResume.setVisibility(View.INVISIBLE);
                 pauseResume.setVisibility(View.INVISIBLE);
@@ -867,7 +875,25 @@ public class FirstFragment extends Fragment {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        messageText.setVisibility(View.VISIBLE);
+                        Animation slideUpText = AnimationUtils.loadAnimation(getContext(),R.anim.slide_up_text);
+                        messageText.startAnimation (slideUpText);
+                        slideUpText.setAnimationListener (new Animation.AnimationListener ( ) {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                messageText.setVisibility (View.VISIBLE);
+                                startButton.setEnabled (true);
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
                     }
 
                     @Override
@@ -875,13 +901,13 @@ public class FirstFragment extends Fragment {
 
                     }
                 });
+
                 reset.setEnabled(false);
                 pauseResume.setEnabled(false);
-                startButton.setEnabled(true);
                 pauseResume.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 snoozeIcon.setVisibility(View.INVISIBLE);
                 breakIcon.setVisibility(View.INVISIBLE);
-                time.setText(resetTimeFormatted);
+                time.setText(R.string.resetTimeFormatted);
                 break;
         }
 

@@ -1,7 +1,6 @@
 package com.example.javabreak.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javabreak.R;
-import com.example.javabreak.ScheduledReminderFragment;
-import com.example.javabreak.activities.MainActivity;
+import com.example.javabreak.MainActivity;
 import com.example.javabreak.adapters.ScheduledBreakAdapter;
 import com.example.javabreak.models.DayOfTheWeek;
-import com.example.javabreak.models.ScheduledBreak;
-import com.example.javabreak.viewmodel.ReminderViewModel;
-import com.example.javabreak.viewmodel.ScheduledSecondSharedViewModel;
+import com.example.javabreak.models.ScheduledReminder;
+import com.example.javabreak.viewmodels.SecondFragmentViewModel;
+import com.example.javabreak.viewmodels.NewReminderViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -38,22 +34,18 @@ public class SecondFragment extends Fragment{
 
     private ScheduledBreakAdapter scheduledBreakAdapter;
     private ExtendedFloatingActionButton fab;
-    ScheduledSecondSharedViewModel scheduledSecondSharedViewModel;
-    final Handler handler = new Handler();
+    NewReminderViewModel newReminderViewModel;
     TabLayout tabLayout;
-    ScheduledBreak scheduledBreak = new ScheduledBreak();
-    ReminderViewModel reminderViewModel;
+    ScheduledReminder scheduledReminder = new ScheduledReminder ();
+    SecondFragmentViewModel secondFragmentViewModel;
     Animation slideDown;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference();
     RelativeLayout createNewInfo;
-
-
     RecyclerView recyclerView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_second, container, false);
+        View view = inflater.inflate(R.layout.second_fragment, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         fab = view.findViewById(R.id.floatingActionButton);
         recyclerView.setHasFixedSize(true);
@@ -63,26 +55,25 @@ public class SecondFragment extends Fragment{
         createNewInfo = view.findViewById(R.id.createNewInfo);
         tabLayout = getActivity().findViewById(R.id.tabLayout);
 
-        reminderViewModel = new ViewModelProvider(requireActivity()).get(ReminderViewModel.class);
-        reminderViewModel.getAllReminders().observe(requireActivity( ), new Observer<List<ScheduledBreak>>( ) {
+        secondFragmentViewModel = new ViewModelProvider(requireActivity()).get(SecondFragmentViewModel.class);
+        secondFragmentViewModel.getAllReminders().observe(requireActivity( ), new Observer<List<ScheduledReminder>>( ) {
             @Override
-            public void onChanged(List<ScheduledBreak> scheduledBreaks) {
-                createNewInfoCheck(scheduledBreaks);
-                scheduledBreakAdapter.submitList(scheduledBreaks);
+            public void onChanged(List<ScheduledReminder> scheduledReminders) {
+                createNewInfoCheck(scheduledReminders);
+                scheduledBreakAdapter.submitList(scheduledReminders);
             }
 
-            private void createNewInfoCheck(List<ScheduledBreak> scheduledBreaks) {
-                if(scheduledBreaks.isEmpty())
-                {
+            private void createNewInfoCheck(List<ScheduledReminder> scheduledReminders) {
+                if(scheduledReminders.isEmpty()) {
                     createNewInfo.setVisibility(View.VISIBLE);
-                }
-                else
+                } else
                 {
                     createNewInfo.setVisibility(View.GONE);
                 }
             }
         });
 
+        //Shrinks or extends FAB depending if RecyclerView is in scrolling STATE
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -100,6 +91,7 @@ public class SecondFragment extends Fragment{
             }
         });
 
+        //Removes item from RecyclerView
         scheduledBreakAdapter.setOnItemClickListener(new ScheduledBreakAdapter.OnItemClickListener( ) {
             @Override
             public void onDelete(int position) {
@@ -109,7 +101,7 @@ public class SecondFragment extends Fragment{
             }
         });
 
-
+        //Transition between fragments
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +109,7 @@ public class SecondFragment extends Fragment{
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.slide_up,
                         R.anim.slide_down);
-                fragmentTransaction.replace(R.id.secondFragment, new ScheduledReminderFragment());
+                fragmentTransaction.replace(R.id.secondFragment, new NewReminderFragment ());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 
@@ -132,67 +124,62 @@ public class SecondFragment extends Fragment{
         return view;
     }
 
+    //Add new reminder card if was created
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        scheduledSecondSharedViewModel =  new ViewModelProvider(requireActivity()).get(ScheduledSecondSharedViewModel.class);
+        newReminderViewModel =  new ViewModelProvider(requireActivity()).get(NewReminderViewModel.class);
 
-        scheduledSecondSharedViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
+        newReminderViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String name) {
-                scheduledBreak.setName(name);
+                scheduledReminder.setName(name);
             }
         });
-        scheduledSecondSharedViewModel.getWeekDay().observe(getViewLifecycleOwner( ), new Observer<List<DayOfTheWeek>>( ) {
+        newReminderViewModel.getWeekDay().observe(getViewLifecycleOwner( ), new Observer<List<DayOfTheWeek>>( ) {
             @Override
             public void onChanged(List<DayOfTheWeek> dayOfTheWeeks) {
-                scheduledBreak.setDayOfTheWeeks(dayOfTheWeeks);
-                insertItem(scheduledBreak);
+                scheduledReminder.setDayOfTheWeeks(dayOfTheWeeks);
+                insertItem(scheduledReminder);
             }
         });
-        scheduledSecondSharedViewModel.getWorkFrom().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
+        newReminderViewModel.getWorkFrom().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
             @Override
             public void onChanged(String workFrom)
             {
-               scheduledBreak.setWorkFromText(workFrom);
+               scheduledReminder.setWorkFromText(workFrom);
             }
         });
-        scheduledSecondSharedViewModel.getWorkTo().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
+        newReminderViewModel.getWorkTo().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
             @Override
             public void onChanged(String workTo)
             {
-                scheduledBreak.setWorkToText(workTo);
+                scheduledReminder.setWorkToText(workTo);
             }
         });
-        scheduledSecondSharedViewModel.getBreakDuration().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
+        newReminderViewModel.getBreakDuration().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
             @Override
             public void onChanged(String breakDuration)
             {
-                scheduledBreak.setBreakDurationText(breakDuration);
+                scheduledReminder.setBreakDurationText(breakDuration);
             }
         });
-        scheduledSecondSharedViewModel.getBreakFrequency().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
+        newReminderViewModel.getBreakFrequency().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
             @Override
             public void onChanged(String breakFrequency)
             {
-                scheduledBreak.setBreakFrequencyText(breakFrequency);
-
-
+                scheduledReminder.setBreakFrequencyText(breakFrequency);
             }
         });
     }
 
     public void removeItem(int position) {
-        reminderViewModel.delete(scheduledBreakAdapter.getItemAt(position));
+        secondFragmentViewModel.delete(scheduledBreakAdapter.getItemAt(position));
     }
 
-    public void insertItem(ScheduledBreak scheduledBreak) {
-        reminderViewModel.insert(scheduledBreak);
-    }
-
-    public void getReminder(int  position) {
-        reminderViewModel.getReminder (position);
+    public void insertItem(ScheduledReminder scheduledReminder) {
+        secondFragmentViewModel.insert(scheduledReminder);
     }
 
 }

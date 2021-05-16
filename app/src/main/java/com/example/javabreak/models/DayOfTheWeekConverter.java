@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class DayOfTheWeekConverter {
+    //Serialization
     @TypeConverter
     public String toJson(List<DayOfTheWeek> dayOfTheWeeks) {
         if (dayOfTheWeeks == null) {
@@ -18,7 +19,7 @@ public class DayOfTheWeekConverter {
         Type type = new TypeToken<List<DayOfTheWeek>>() {}.getType();
         return gson.toJson(dayOfTheWeeks, type);
     }
-
+    //Deserialization
     @TypeConverter
     public List<DayOfTheWeek> fromJson(String dayOfTheWeeks) {
         if (dayOfTheWeeks == null) {
