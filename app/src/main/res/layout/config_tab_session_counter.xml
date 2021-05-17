@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:background="@drawable/component_rectangle"
@@ -17,7 +16,7 @@
         android:layout_height="match_parent"
         android:textSize="17sp"
         android:textStyle="bold"
-        android:text="Work"
+        android:text="@string/work"
         android:textColor="@color/white"/>
 
     <TextView
@@ -29,8 +28,8 @@
         android:layout_toStartOf="@+id/divider"
         android:visibility="visible"
         android:textStyle="bold"
-        android:text="0"
-        android:layout_marginRight="15dp"
+        android:text="@string/_0"
+        android:layout_marginEnd="15dp"
         android:textColor="@color/orange"/>
 
 
@@ -38,11 +37,11 @@
 
     <TextView
         android:paddingTop="15dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:id="@+id/sessionCounterBreak"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
+        android:text="@string/_0"
         android:visibility="visible"
         android:layout_toEndOf="@+id/divider"
         android:textColor="@color/orange"
@@ -56,8 +55,8 @@
         android:layout_height="match_parent"
         android:textSize="17sp"
         android:textStyle="bold"
-        android:text="Break"
-        android:layout_alignParentRight="true"
+        android:text="@string/_break"
+        android:layout_alignParentEnd="true"
         android:textColor="@color/white"/>
 
     <View

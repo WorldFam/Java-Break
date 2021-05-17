@@ -1,23 +1,23 @@
 <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/emptyView"
-        android:background="@color/newBackground"
-        android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/emptyView"
+    android:background="@color/newBackground"
+    android:layout_width="match_parent"
     android:gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/press"
             android:layout_width="wrap_content"
             android:layout_height="59dp"
             android:layout_marginTop="30dp"
-            android:text="Press"
+            android:text="@string/press"
             android:textColor="#a8a8a8"
             android:textSize="15dp"
             android:textStyle="bold" />
@@ -27,8 +27,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="15dp"
-            android:layout_toRightOf="@+id/press"
-            android:paddingLeft="2dp"
+            android:layout_toEndOf="@+id/press"
+            android:paddingStart="2dp"
             android:src="@drawable/create_fab" />
 
         <TextView
@@ -37,10 +37,10 @@
             android:layout_height="59dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:layout_toRightOf="@+id/createFab"
+            android:layout_toEndOf="@+id/createFab"
             android:singleLine="true"
-            android:text="to add Reminder!"
+            android:text="@string/to_add_reminder"
             android:textColor="#a8a8a8"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
     </RelativeLayout>

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,10 +48,8 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
     Button workDurationButton, weekDaysButton, breakDurationButton, breakFrequencyButton;
     LinearLayout weekDayTab;
     RelativeLayout workDurationTab, breakDurationTab, breakFrequencyTab;
-    Handler handler = new Handler( );
     TabState tabState;
     boolean weekBool, workBool, breakBool, breakFqBool = false;
-    boolean doubleBackToExitPressedOnce = false;
     NewReminderViewModel newReminderViewModel;
     ImageView nameView;
     //Name
@@ -144,8 +141,6 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
                 breakSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-             /*   breakTime =  breakSlider.getProgress();
-                configurationPanelViewModel.setBreakTime(breakTime*INTERVAL);*/
                         breakTimeText.setText(String.format(Locale.getDefault(),"%2d minutes",progress*INTERVAL));
                         breakDuration = progress * INTERVAL;
                     }
@@ -337,7 +332,6 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
                 now.get(Calendar.MINUTE),
                 true
         );
-        System.out.println (String.valueOf (now.get(Calendar.HOUR_OF_DAY))+ " Calendar now = Calendar.getInstance();" );
         timePickerDialog.setThemeDark(true);
         timePickerDialog.setTimeInterval(1, 5, 60);
         timePickerDialog.setAccentColor(Color.parseColor("#808080"));

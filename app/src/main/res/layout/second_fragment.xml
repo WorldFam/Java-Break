@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -25,7 +24,7 @@
             android:clickable="true"
             app:icon="@drawable/ic_baseline_add_24"
             app:borderWidth="0dp"
-            android:text="create"
+            android:text="@string/create"
             app:iconTint="@color/tabBackground"
             android:textStyle="bold"
             app:iconSize="30dp"

@@ -25,4 +25,50 @@
 
     <string name="configText"><font color="#FFFFFFFF">Session Counter</font> <font
         color="#ff7f27" size="11">(updated every 24 hours)</font></string>
+
+    <string name="general">General</string>
+    <string name="about">About</string>
+    <string name="daily_reminder">Daily reminder</string>
+    <string name="work_duration">Work Duration</string>
+    <string name="break_duration">Break Duration</string>
+    <string name="break_frequency_duration">Break Frequency/Duration</string>
+    <string name="mon">MON</string>
+    <string name="tue">TUE</string>
+    <string name="wed">WED</string>
+    <string name="thu">THU</string>
+    <string name="fri">FRI</string>
+    <string name="sat">SAT</string>
+    <string name="sun">SUN</string>
+    <string name="start_work">Start work</string>
+    <string name="take_a_break">Take a break</string>
+    <string name="snooze">Snooze</string>
+    <string name="continue_working">Continue Working</string>
+    <string name="cancel_timer">Cancel Timer</string>
+    <string name="auto_start_break">Auto start break</string>
+    <string name="auto_start_work">Auto start work</string>
+    <string name="snooze_duration">Snooze duration</string>
+    <string name="work">Work</string>
+    <string name="_0">0</string>
+    <string name="_break">Break</string>
+    <string name="configuration_panel">Configuration Panel</string>
+    <string name="interval_duration">Interval duration</string>
+    <string name="select_the_duration_for_break_and_snooze_sessions">Select the duration for break and snooze sessions</string>
+    <string name="auto_start">Auto-Start</string>
+    <string name="choose_to_start_break_and_or_work_automatically">Choose to start break and/or work automatically</string>
+    <string name="total_amount_of_completed_work_break_sessions">Total amount of completed work/break sessions</string>
+    <string name="select_work_time_and_press_start">Select Work Time and Press Start!</string>
+    <string name="name_tag">Name Tag</string>
+    <string name="repeat">Repeat</string>
+    <string name="work_time_frame">Work time-frame</string>
+    <string name="break_frequency">Break frequency</string>
+    <string name="create_reminder">Create Reminder</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="_09_00">09:00</string>
+    <string name="_15_00">15:00</string>
+    <string name="create">create</string>
+    <string name="press">Press</string>
+    <string name="to_add_reminder">to add Reminder!</string>
+    <string name="vibration">Vibration</string>
+    <string name="led_indicator">LED indicator</string>
 </resources>

@@ -6,7 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/third"
+    android:paddingVertical="25dp"
+    android:paddingHorizontal="15dp"
     android:background="@color/newBackground">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+
+        <include
+            android:id="@+id/third_fragment_tab_general"
+            layout="@layout/third_fragment_tab_general"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

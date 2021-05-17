@@ -2,7 +2,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="125dp"
     android:layout_margin="8dp"
@@ -29,8 +28,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="15dp"
-            android:text="Daily reminder"
+            android:layout_marginStart="15dp"
+            android:text="@string/daily_reminder"
             android:textColor="@color/white"
             android:textSize="35sp"
             android:textStyle="bold" />
@@ -40,9 +39,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/workDurationText"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="2dp"
-            android:text="Work Duration"
+            android:text="@string/work_duration"
             android:textAlignment="center"
             android:textColor="@color/lightGrey"
             android:textSize="15sp"
@@ -53,8 +52,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tagLayout"
-            android:layout_marginLeft="15dp"
-            android:text="Work Duration"
+            android:layout_marginStart="15dp"
+            android:text="@string/work_duration"
             android:textAlignment="center"
             android:textColor="@color/lightGrey"
             android:textSize="10sp" />
@@ -67,8 +66,7 @@
             android:layout_marginStart="35dp"
             android:layout_marginTop="2dp"
             android:layout_toEndOf="@+id/textView2"
-            android:layout_toRightOf="@+id/textView2"
-            android:text="Break Duration"
+            android:text="@string/break_duration"
             android:textAlignment="center"
             android:textColor="@color/lightGrey"
             android:textSize="15sp"
@@ -81,8 +79,7 @@
             android:layout_below="@+id/tagLayout"
             android:layout_marginStart="35dp"
             android:layout_toEndOf="@+id/textView2"
-            android:layout_toRightOf="@+id/textView2"
-            android:text="Break Frequency/Duration"
+            android:text="@string/break_frequency_duration"
             android:textAlignment="center"
             android:textColor="@color/lightGrey"
             android:textSize="10sp" />
@@ -117,7 +114,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="MON"
+                android:text="@string/mon"
                 android:layout_marginEnd="5dp"
                 android:textColor="#80BFB3B3"
                 android:textSize="18sp" />
@@ -127,7 +124,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TUE"
+                android:text="@string/tue"
                 android:textColor="#80BFB3B3"
                 android:textSize="18sp" />
 
@@ -136,7 +133,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="WED"
+                android:text="@string/wed"
                 android:textColor="#80BFB3B3"
                 android:textSize="18sp" />
 
@@ -145,7 +142,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="THU"
+                android:text="@string/thu"
                 android:textColor="#80BFB3B3"
                 android:textSize="18sp" />
 
@@ -155,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="-10dp"
-                android:text="FRI"
+                android:text="@string/fri"
                 android:textColor="#80BFB3B3"
                 android:textSize="18sp" />
 
@@ -164,7 +161,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SAT"
+                android:text="@string/sat"
                 android:layout_marginEnd="-5dp"
                 android:textColor="#80BFB3B3"
                 android:textSize="18sp" />
@@ -174,7 +171,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SUN"
+                android:text="@string/sun"
                 android:textColor="#80BFB3B3"
                 android:textSize="18sp" />
 
