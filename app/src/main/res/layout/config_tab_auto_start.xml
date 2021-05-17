@@ -13,7 +13,7 @@
         android:id="@+id/autoStartBreak"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Auto start break"
+        android:text="@string/auto_start_break"
         android:theme="@style/Switch"
         android:textColor="@color/white"
         android:textSize="15sp"
@@ -34,7 +34,7 @@
         android:id="@+id/autoStart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Auto start work"
+        android:text="@string/auto_start_work"
         android:theme="@style/Switch"
         android:textColor="@color/white"
         android:textSize="15sp"
@@ -43,7 +43,6 @@
         android:paddingEnd="10dp"
         android:switchMinWidth="50dp"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/autoStartBreak"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
 

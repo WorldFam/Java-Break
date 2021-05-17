@@ -59,4 +59,10 @@
         <item name="android:windowExitAnimation">@anim/slide_out_accelerate_interpolator</item>
     </style>
 
+
+    <style name="CustomRadio" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/orange</item>
+        <item name="android:colorControlNormal">@color/grey</item>
+        <item name="android:textColorPrimaryDisableOnly">#f44336</item>
+    </style>
 </resources>

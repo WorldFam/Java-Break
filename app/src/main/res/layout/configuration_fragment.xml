@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/configurations"
     android:layout_height="match_parent"
@@ -24,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:text="Interval duration"
+            android:text="@string/interval_duration"
             android:textAlignment="textStart"
             android:textColor="@color/white"
             android:textSize="15sp"
@@ -34,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:text="Select the duration for break and snooze sessions"
+            android:text="@string/select_the_duration_for_break_and_snooze_sessions"
             android:textAlignment="textStart"
             android:textColor="#80FFFFFF"
             android:textSize="12sp" />
@@ -45,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:text="Auto-Start"
+            android:text="@string/auto_start"
             android:textAlignment="textStart"
             android:textColor="@color/white"
             android:textSize="15sp"
@@ -55,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:text="Choose to start break and/or work automatically"
+            android:text="@string/choose_to_start_break_and_or_work_automatically"
             android:textAlignment="textStart"
             android:textColor="#80FFFFFF"
             android:textSize="12sp" />
@@ -76,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:text="Total amount of completed work/break sessions"
+            android:text="@string/total_amount_of_completed_work_break_sessions"
             android:textAlignment="textStart"
             android:textColor="#80FFFFFF"
             android:textSize="12sp" />
@@ -103,51 +102,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
-
-
-    <!--    <TextView-->
-<!--        android:id="@+id/workSessionCountText"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/snoozeSlider"-->
-<!--        android:layout_marginTop="42dp"-->
-<!--        android:text="Work duration control"-->
-<!--        android:paddingLeft="25dp"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="15dp"-->
-<!--        android:textStyle="bold"/>-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/workSessionCount"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/snoozeSlider"-->
-<!--        android:layout_marginLeft="88dp"-->
-
-<!--        android:layout_marginTop="40dp"-->
-<!--        android:layout_toRightOf="@+id/workSessionCountText"-->
-<!--        android:ems="2"-->
-<!--        android:inputType="number" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/plusButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/snoozeSlider"-->
-<!--        android:layout_marginLeft="7dp"-->
-<!--        android:layout_marginTop="40dp"-->
-<!--        android:layout_toRightOf="@+id/workSessionCount"-->
-<!--        android:text="+" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/minusButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/snoozeSlider"-->
-<!--        android:layout_marginTop="50dp"-->
-<!--        android:layout_marginRight="-3dp"-->
-<!--        android:layout_toLeftOf="@+id/workSessionCount"-->
-<!--        android:text="-" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

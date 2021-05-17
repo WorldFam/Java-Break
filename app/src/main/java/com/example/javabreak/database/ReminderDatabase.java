@@ -15,6 +15,7 @@ public abstract class ReminderDatabase extends RoomDatabase {
 
     public abstract ReminderDao reminderDao();
 
+    //Singleton for creating database instance
     public static synchronized ReminderDatabase getInstance(Context context){
         if(instance == null) {
             instance = Room.databaseBuilder(context,

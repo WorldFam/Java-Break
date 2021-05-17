@@ -23,10 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/autoStart"
         android:layout_marginTop="15dp"
-        android:paddingLeft="25dp"
-        android:text="Break frequency"
+        android:paddingStart="25dp"
+        android:text="@string/break_frequency"
         android:textColor="@color/white"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
 
@@ -36,10 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/autoStart"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="-15dp"
         android:layout_marginTop="14dp"
         android:layout_toEndOf="@+id/breakTimeTextView"
-        android:layout_toRightOf="@+id/snoozeTimeTextView"
         android:src="@drawable/ic_baseline_update_24" />
 
     <TextView
@@ -47,10 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/autoStart"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="13dp"
-        android:layout_toRightOf="@+id/breakTimeTextView"
-        android:paddingRight="25dp"
+        android:layout_toEndOf="@+id/breakTimeTextView"
+        android:paddingEnd="25dp"
         android:textAlignment="textEnd"
         android:textColor="@color/white"
         android:textSize="17sp"

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="330dp"
     android:layout_height="330dp"
     android:layout_marginTop="50dp"
@@ -38,7 +37,7 @@
         android:layout_height="59dp"
         android:text="@string/start"
         android:textColor="@color/newBackground"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:backgroundTint="@color/orange"
         app:layout_constraintBottom_toBottomOf="@+id/transparentBackground"
         app:layout_constraintEnd_toEndOf="@+id/simpleTimePicker"
