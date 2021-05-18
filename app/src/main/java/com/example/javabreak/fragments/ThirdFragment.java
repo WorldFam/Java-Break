@@ -37,7 +37,7 @@ public class ThirdFragment  extends Fragment {
     SwitchCompat switchCompatVibration,switchCompatLED;
     TextView sourceCode;
     Vibrator vibrator;
-    boolean vibration,LED;
+    boolean vibration, led;
 
 
     @Nullable
@@ -68,7 +68,7 @@ public class ThirdFragment  extends Fragment {
         radioGroup = view.findViewById(R.id.radioGroup);
 
         switchCompatVibration.setChecked(vibration);
-        switchCompatLED.setChecked(LED);
+        switchCompatLED.setChecked(led);
 
         sound1 = soundPool.load(getContext (), R.raw.sound1, 1);
         sound2 = soundPool.load(getContext (), R.raw.sound2, 1);
@@ -116,7 +116,8 @@ public class ThirdFragment  extends Fragment {
         switchCompatLED.setOnCheckedChangeListener (new CompoundButton.OnCheckedChangeListener ( ) {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                led = isChecked;
+                ((MainActivity)getActivity()).led (isChecked);
             }
         });
 
@@ -149,6 +150,7 @@ public class ThirdFragment  extends Fragment {
     private void loadData() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("settings", MODE_PRIVATE);
         vibration = sharedPreferences.getBoolean ("vibration",false);
+        led = sharedPreferences.getBoolean ("led",false);
 
     }
 
@@ -162,7 +164,8 @@ public class ThirdFragment  extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("settings", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         vibration = switchCompatVibration.isChecked ();
-
+        led = switchCompatLED.isChecked ();
+        editor.putBoolean ("led",led);
         editor.putBoolean ("vibration",vibration);
         editor.apply ();
     }

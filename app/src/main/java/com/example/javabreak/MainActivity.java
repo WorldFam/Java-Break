@@ -98,6 +98,11 @@ public class MainActivity extends AppCompatActivity  {
         intent.putExtra ("vibration", state);
     }
 
+    public void led(boolean state){
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra ("led", state);
+    }
+
 
 
     public void startAlarm(int dayOfWeek, int hour, int minute, int breakFrequency, int breakDuration) {
