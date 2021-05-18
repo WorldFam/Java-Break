@@ -26,7 +26,7 @@ public class NotificationHelper extends ContextWrapper {
     private void createChannel() {
         NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.enableLights (true);
-        channel.enableVibration (true);
+        channel.shouldVibrate ();
         getManager().createNotificationChannel(channel);
     }
     public NotificationManager getManager() {
@@ -48,7 +48,6 @@ public class NotificationHelper extends ContextWrapper {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setColor(Color.BLUE)
-                .setVibrate(new long[] { 1000, 1000 })
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true);
     }

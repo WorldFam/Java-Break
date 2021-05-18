@@ -32,7 +32,6 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setColor(Color.BLUE)
-                .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true);
 

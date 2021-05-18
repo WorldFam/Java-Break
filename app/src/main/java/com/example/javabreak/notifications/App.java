@@ -13,17 +13,18 @@ public class App extends Application {
         createNotificationChannels();
     }
     private void createNotificationChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             NotificationChannel channel1 = new NotificationChannel(
                     CHANNEL_1_ID,
                     "Notification Channel",
                     NotificationManager.IMPORTANCE_HIGH
             );
             channel1.enableLights (true);
-            channel1.enableVibration (true);
+//            channel1.enableVibration (true);
             channel1.setDescription("Notification Channel");
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel1);
         }
     }
+
 }
