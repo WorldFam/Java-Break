@@ -80,6 +80,8 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
     int minuteFrom,minuteTo = 0;
     int breakFrequency = 60;
     int breakDuration = 30;
+    //Toast
+    Toast toast;
 
     public enum TabState {
         REPEAT, WORK_DURATION, BREAK_DURATION, BREAK_FREQUENCY;
@@ -207,17 +209,32 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
             @Override
             public void onClick(View v) {
                 if (nameEditText.getText().toString().equals("")) {
-                    Toasty.error(getContext(), "Name tag cannot be empty", Toast.LENGTH_SHORT, true).show();
+                    if(toast != null) {
+                        toast.cancel();
+                    }
+                    toast = new Toast(getActivity());
+                    toast = Toasty.error(getContext(), "Name tag cannot be empty", Toast.LENGTH_SHORT, true);
+                    toast.show();
                     nameView.setImageDrawable(getResources().getDrawable(R.drawable.red_stroke_component));
                 }
                 else if(nameEditText.getText().toString().length() > 15)
                 {
-                    Toasty.error(getContext(), "Name tag contains more than 15 characters", Toast.LENGTH_SHORT, true).show();
+                    if(toast != null) {
+                        toast.cancel();
+                    }
+                    toast = new Toast(getActivity());
+                    toast = Toasty.error(getContext(), "Name tag contains more than 15 characters", Toast.LENGTH_SHORT, true);
+                    toast.show();
                     nameView.setImageDrawable(getResources().getDrawable(R.drawable.red_stroke_component));
                 }
                 else if(0 == listView.getCheckedItemCount())
                 {
-                    Toasty.warning(getContext(), "Select week day", Toast.LENGTH_SHORT, true).show();
+                    if(toast != null) {
+                        toast.cancel();
+                    }
+                    toast = new Toast(getActivity());
+                    toast = Toasty.warning(getContext(), "Select week day", Toast.LENGTH_SHORT, true);
+                    toast.show();
                     weekDayTab.setBackgroundResource(R.drawable.red_stroke_component);
                     nameView.setImageDrawable(getResources().getDrawable(R.drawable.component_rectangle));
                     if(tabState != TabState.REPEAT) {
@@ -226,6 +243,9 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
                     }
                 }
                 else {
+                    if(toast != null) {
+                        toast.cancel();
+                    }
                     newReminderViewModel.setName(nameEditText.getText( ).toString( ).trim ());
                     newReminderViewModel.setWorkFom(workFromText.getText( ).toString( ));
                     newReminderViewModel.setWorkTo(workToText.getText( ).toString( ));

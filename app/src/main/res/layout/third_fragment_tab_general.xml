@@ -22,7 +22,7 @@
 
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/autoStartBreak"
+            android:id="@+id/switchCompatVibration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/vibration"
@@ -44,7 +44,7 @@
             android:background="@color/grey"/>
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/autoStart"
+            android:id="@+id/switchCompatLED"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/led_indicator"

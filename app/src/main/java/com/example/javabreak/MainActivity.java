@@ -93,6 +93,15 @@ public class MainActivity extends AppCompatActivity  {
         openViewPager();
     }
 
+    public void vibration(boolean state){
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra ("vibration", state);
+    }
+
+    public void led(boolean state){
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra ("led", state);
+    }
 
 
 
