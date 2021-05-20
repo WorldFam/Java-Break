@@ -24,7 +24,7 @@ Java Break; application includes all useful features with a user-friendly interf
 ### Could have
 - [ ] As a user, I could receive a message with different stretch exercises or other useful information when receiving a break reminder.
 - [x] As a user, I could set snooze and break duration as an additional option in the break reminder.
-- [ ] As a user, I could customize notifications and select preferred sound.
+- [x] As a user, I could customize notifications and select preferred sound.
 ### Will not have
 - [ ] As a user, I will be able to receive notifications on my smartwatch. 
 
