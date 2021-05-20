@@ -24,12 +24,23 @@ Java Break; application includes all useful features with a user-friendly interf
 ### Could have
 - [ ] As a user, I could receive a message with different stretch exercises or other useful information when receiving a break reminder.
 - [x] As a user, I could set snooze and break duration as an additional option in the break reminder.
-- [x] As a user, I could customize notifications and select preferred sound.
+- [x] As a user, I could customize notifications and select preferred sounds.
 ### Will not have
 - [ ] As a user, I will be able to receive notifications on my smartwatch. 
 
-# Screenshots
 
+# Final thoughts
+Link to the video: https://youtu.be/U1V_FFunQUc 
+
+Approximate amount of hours spend on analysis, research, design, and coding: **350h**
+
+In general, the majority of requirements were completed, and fully functional, although not properly tested. App itself is built for Android API level 26+ and is a single activity, which in my case was unnecessary because it brought a lot of additional work and even made the project more complicated. 
+
+As for other technical aspects used SharedPreference to store the time when the application stops and retrieve it, same goes for the configurations page and settings, where I saved the state of switches, sliders and etc. SQLite with a Room framework that was utilized to keep up to date the recycler-view with scheduled reminders. Also, I used viewModel to communicate between the fragments and activity. 
+
+Probably the most time-consuming and complicated part was the notification. As I wanted to create an application for Android +26, it had a lot of restrictions and user-permission allowed features. For this reason, new notification channels were created each time user would change settings, and old ones would be deleted.
+
+##  Screenshots
 <table>
   <tr>
     <td><img src="https://user-images.githubusercontent.com/55923499/118409421-99fa6c80-b68a-11eb-9003-2949b570eed0.png" /></td>
@@ -42,5 +53,4 @@ Java Break; application includes all useful features with a user-friendly interf
     <td><img src="https://user-images.githubusercontent.com/55923499/118409934-31f95580-b68d-11eb-98d9-e0516ed2332f.png" /></td>
         <td><img src="https://user-images.githubusercontent.com/55923499/118944395-d103a300-b954-11eb-829a-f1da2f36d5b7.png" /></td>
   </tr>
-
 </table>
