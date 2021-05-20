@@ -45,16 +45,10 @@ public class ReminderRepository {
 
 
     public void insert(ScheduledReminder scheduledReminder) {
-/*
-        new InsertAsyncTask(reminderDao).execute(scheduledBreak);
-*/
         executorService.execute(() -> reminderDao.insert(scheduledReminder));
     }
 
     public void delete(ScheduledReminder scheduledReminder) {
-/*
-        new InsertAsyncTask(reminderDao).execute(scheduledBreak);
-*/
         executorService.execute(() -> reminderDao.delete(scheduledReminder));
     }
 }

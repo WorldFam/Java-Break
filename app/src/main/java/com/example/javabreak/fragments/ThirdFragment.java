@@ -22,9 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.javabreak.MainActivity;
 import com.example.javabreak.R;
+import com.example.javabreak.viewmodels.SettingsFragmentViewModel;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -34,10 +35,14 @@ public class ThirdFragment  extends Fragment {
     private int sound1, sound2, sound3, sound4, sound5;
     RadioGroup radioGroup;
     RadioButton radioButton;
-    SwitchCompat switchCompatVibration,switchCompatLED;
+    SwitchCompat switchCompatVibration,switchCompatLED,switchCompatSound;
     TextView sourceCode;
     Vibrator vibrator;
-    boolean vibration, led;
+    boolean vibration, led,sound;
+    ConstraintLayout constraintLayout;
+    SettingsFragmentViewModel settingsFragmentViewModel;
+    public static final int NO_SOUND = -1;
+    int soundIndex;
 
 
     @Nullable
@@ -45,12 +50,11 @@ public class ThirdFragment  extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.third_fragment, container, false);
         loadData ();
-        SwitchCompat soundSwitch = view.findViewById (R.id.sound);
-        ConstraintLayout constraintLayout;
-        constraintLayout = view.findViewById (R.id.third_fragment_component);
 
+        constraintLayout = view.findViewById (R.id.third_fragment_component);
         vibrator = (Vibrator) getActivity ().getSystemService(VIBRATOR_SERVICE);
 
+        settingsFragmentViewModel = new ViewModelProvider (requireActivity() ).get(SettingsFragmentViewModel.class);
 
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
@@ -65,25 +69,29 @@ public class ThirdFragment  extends Fragment {
         sourceCode = view.findViewById (R.id.sourceCode);
         switchCompatLED = view.findViewById (R.id.switchCompatLED);
         switchCompatVibration = view.findViewById (R.id.switchCompatVibration);
+        switchCompatSound = view.findViewById (R.id.switchCompatSound);
         radioGroup = view.findViewById(R.id.radioGroup);
 
         switchCompatVibration.setChecked(vibration);
         switchCompatLED.setChecked(led);
+        switchCompatSound.setChecked (sound);
 
+        soundPoolVisibility ();
         sound1 = soundPool.load(getContext (), R.raw.sound1, 1);
         sound2 = soundPool.load(getContext (), R.raw.sound2, 1);
         sound3 = soundPool.load(getContext (), R.raw.sound3, 1);
         sound4 = soundPool.load(getContext (), R.raw.sound4, 1);
         sound5 = soundPool.load(getContext (), R.raw.sound5, 1);
 
-        soundSwitch.setOnCheckedChangeListener (new CompoundButton.OnCheckedChangeListener ( ) {
+        switchCompatSound.setOnCheckedChangeListener (new CompoundButton.OnCheckedChangeListener ( ) {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     constraintLayout.setVisibility (View.VISIBLE);
                 }
                 else {constraintLayout.setVisibility (View.GONE);
-         }
+                    settingsFragmentViewModel.setSoundValue (NO_SOUND);
+                 }
             }
         });
 
@@ -91,9 +99,9 @@ public class ThirdFragment  extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 radioButton = radioGroup.findViewById(checkedId);
-                int index = radioGroup.indexOfChild(radioButton);
-                Log.d ("index",String.valueOf (index) );
-                switch (index){
+                soundIndex = radioGroup.indexOfChild(radioButton);
+                Log.d ("index",String.valueOf (soundIndex) );
+                switch (soundIndex){
                     case 0:
                         soundPool.play (sound1,1,1,0,0,1);
                         break;
@@ -110,27 +118,30 @@ public class ThirdFragment  extends Fragment {
                         soundPool.play (sound5,1,1,0,0,1);
                         break;
                 }
+                settingsFragmentViewModel.setSoundValue (soundIndex);
             }
         });
 
         switchCompatLED.setOnCheckedChangeListener (new CompoundButton.OnCheckedChangeListener ( ) {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                settingsFragmentViewModel.setLedValue (isChecked);
                 led = isChecked;
-                ((MainActivity)getActivity()).led (isChecked);
             }
         });
 
         switchCompatVibration.setOnCheckedChangeListener (new CompoundButton.OnCheckedChangeListener ( ) {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                settingsFragmentViewModel.setVibrationValue (isChecked);
                 if(isChecked){
                 vibration = isChecked;
                 vibrator.vibrate(VibrationEffect.createOneShot(250, VibrationEffect.EFFECT_DOUBLE_CLICK));
-                ((MainActivity)getActivity()).vibration (isChecked);}
+                }
                 else vibrator.cancel ();
             }
         });
+
 
         sourceCode.setOnClickListener (new View.OnClickListener ( ) {
             @Override
@@ -146,12 +157,27 @@ public class ThirdFragment  extends Fragment {
         return view;
     }
 
+    private void soundPoolVisibility() {
+        if(sound){
+            constraintLayout.setVisibility (View.VISIBLE);
+            radioGroup.check (soundIndex);
+            settingsFragmentViewModel.setSoundValue (soundIndex);
+        }
+        else {
+            constraintLayout.setVisibility (View.GONE);
+            settingsFragmentViewModel.setSoundValue (NO_SOUND);
+        }
+    }
+
+
+
 
     private void loadData() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("settings", MODE_PRIVATE);
         vibration = sharedPreferences.getBoolean ("vibration",false);
         led = sharedPreferences.getBoolean ("led",false);
-
+        sound = sharedPreferences.getBoolean ("sound",false);
+        soundIndex = sharedPreferences.getInt ("soundIndex",NO_SOUND);
     }
 
     @Override
@@ -165,8 +191,11 @@ public class ThirdFragment  extends Fragment {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         vibration = switchCompatVibration.isChecked ();
         led = switchCompatLED.isChecked ();
+        sound = switchCompatSound.isChecked ();
         editor.putBoolean ("led",led);
         editor.putBoolean ("vibration",vibration);
+        editor.putBoolean ("sound",sound);
+        editor.putInt ("soundIndex", soundIndex);
         editor.apply ();
     }
 

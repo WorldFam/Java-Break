@@ -24,7 +24,7 @@ import com.example.javabreak.adapters.ScheduledBreakAdapter;
 import com.example.javabreak.models.DayOfTheWeek;
 import com.example.javabreak.models.ScheduledReminder;
 import com.example.javabreak.viewmodels.SecondFragmentViewModel;
-import com.example.javabreak.viewmodels.NewReminderViewModel;
+import com.example.javabreak.viewmodels.NewReminderFragmentViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -34,7 +34,7 @@ public class SecondFragment extends Fragment{
 
     private ScheduledBreakAdapter scheduledBreakAdapter;
     private ExtendedFloatingActionButton fab;
-    NewReminderViewModel newReminderViewModel;
+    NewReminderFragmentViewModel newReminderFragmentViewModel;
     TabLayout tabLayout;
     ScheduledReminder scheduledReminder = new ScheduledReminder ();
     SecondFragmentViewModel secondFragmentViewModel;
@@ -129,43 +129,43 @@ public class SecondFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        newReminderViewModel =  new ViewModelProvider(requireActivity()).get(NewReminderViewModel.class);
+        newReminderFragmentViewModel =  new ViewModelProvider(requireActivity()).get(NewReminderFragmentViewModel.class);
 
-        newReminderViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
+        newReminderFragmentViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String name) {
                 scheduledReminder.setName(name);
             }
         });
-        newReminderViewModel.getWeekDay().observe(getViewLifecycleOwner( ), new Observer<List<DayOfTheWeek>>( ) {
+        newReminderFragmentViewModel.getWeekDay().observe(getViewLifecycleOwner( ), new Observer<List<DayOfTheWeek>>( ) {
             @Override
             public void onChanged(List<DayOfTheWeek> dayOfTheWeeks) {
                 scheduledReminder.setDayOfTheWeeks(dayOfTheWeeks);
                 insertItem(scheduledReminder);
             }
         });
-        newReminderViewModel.getWorkFrom().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
+        newReminderFragmentViewModel.getWorkFrom().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
             @Override
             public void onChanged(String workFrom)
             {
                scheduledReminder.setWorkFromText(workFrom);
             }
         });
-        newReminderViewModel.getWorkTo().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
+        newReminderFragmentViewModel.getWorkTo().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
             @Override
             public void onChanged(String workTo)
             {
                 scheduledReminder.setWorkToText(workTo);
             }
         });
-        newReminderViewModel.getBreakDuration().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
+        newReminderFragmentViewModel.getBreakDuration().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
             @Override
             public void onChanged(String breakDuration)
             {
                 scheduledReminder.setBreakDurationText(breakDuration);
             }
         });
-        newReminderViewModel.getBreakFrequency().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
+        newReminderFragmentViewModel.getBreakFrequency().observe(getViewLifecycleOwner( ), new Observer<String>( ) {
             @Override
             public void onChanged(String breakFrequency)
             {

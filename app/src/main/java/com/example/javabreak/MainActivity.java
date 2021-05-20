@@ -12,13 +12,15 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javabreak.adapters.SectionPageAdapter;
 import com.example.javabreak.notifications.AlertReceiver;
 import com.example.javabreak.notifications.NotificationReceiver;
 import com.example.javabreak.other.NonSwappableViewPager;
-import com.example.javabreak.viewmodels.NewReminderViewModel;
+import com.example.javabreak.viewmodels.NewReminderFragmentViewModel;
+import com.example.javabreak.viewmodels.SettingsFragmentViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
@@ -34,14 +36,15 @@ public class MainActivity extends AppCompatActivity  {
 
     TabLayout tabLayout;
     NonSwappableViewPager viewPager;
-    public NewReminderViewModel newReminderViewModel;
-
+    NewReminderFragmentViewModel newReminderFragmentViewModel;
+    SettingsFragmentViewModel settingsFragmentViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        newReminderViewModel =  new ViewModelProvider (this).get(NewReminderViewModel.class);
+        newReminderFragmentViewModel =  new ViewModelProvider (this).get(NewReminderFragmentViewModel.class);
+        settingsFragmentViewModel =  new ViewModelProvider (this).get(SettingsFragmentViewModel.class);
 
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(new SectionPageAdapter(getSupportFragmentManager()));
@@ -75,6 +78,28 @@ public class MainActivity extends AppCompatActivity  {
 
         });
 
+        settingsFragmentViewModel.getLedValue ().observe (this, new Observer<Boolean> ( ) {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                led (aBoolean);
+            }
+        });
+
+        settingsFragmentViewModel.getVibrationValue ().observe (this, new Observer<Boolean> ( ) {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                vibration (aBoolean);
+            }
+        });
+
+        settingsFragmentViewModel.getSoundValue ().observe (this, new Observer<Integer> ( ) {
+            @Override
+            public void onChanged(Integer integer) {
+                sound (integer);
+            }
+        });
+
+
     }
 
     public void lockViewPager() {
@@ -103,6 +128,13 @@ public class MainActivity extends AppCompatActivity  {
         intent.putExtra ("led", state);
     }
 
+    public void sound(int index){
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra ("sound", index);
+    }
+
+
+
 
 
     public void startAlarm(int dayOfWeek, int hour, int minute, int breakFrequency, int breakDuration) {
@@ -122,7 +154,7 @@ public class MainActivity extends AppCompatActivity  {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        intent.putExtra ("name", newReminderViewModel.getName ().getValue ());
+        intent.putExtra ("name", newReminderFragmentViewModel.getName ().getValue ());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, dayOfWeek, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Check if it not set in the past which would fire instantly
@@ -139,7 +171,7 @@ public class MainActivity extends AppCompatActivity  {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        intent.putExtra ("name", newReminderViewModel.getName ().getValue ());
+        intent.putExtra ("name", newReminderFragmentViewModel.getName ().getValue ());
         intent.putExtra ("text","Time to take a break!");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,0);
 
