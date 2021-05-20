@@ -35,13 +35,12 @@ Java Break; application includes all useful features with a user-friendly interf
     <td><img src="https://user-images.githubusercontent.com/55923499/118409421-99fa6c80-b68a-11eb-9003-2949b570eed0.png" /></td>
     <td><img src="https://user-images.githubusercontent.com/55923499/118409434-aed70000-b68a-11eb-92ee-7e8bc8ad0a00.png" /></td>
     <td><img src="https://user-images.githubusercontent.com/55923499/118409443-c2826680-b68a-11eb-8301-89be378ed827.png" /></td>
+    <td><img src="https://user-images.githubusercontent.com/55923499/118409453-ce6e2880-b68a-11eb-9e89-a5c7429d1044.png" /></td>
   </tr>  
   <tr>
-    <td><img src="https://user-images.githubusercontent.com/55923499/118409453-ce6e2880-b68a-11eb-9e89-a5c7429d1044.png" /></td>
     <td><img src="https://user-images.githubusercontent.com/55923499/118409459-d8902700-b68a-11eb-91a0-5475e6b9ccdc.png" /></td>
     <td><img src="https://user-images.githubusercontent.com/55923499/118409934-31f95580-b68d-11eb-98d9-e0516ed2332f.png" /></td>
+        <td><img src="https://user-images.githubusercontent.com/55923499/118944395-d103a300-b954-11eb-829a-f1da2f36d5b7.png" /></td>
   </tr>
-  <tr>
-    <td><img src="https://user-images.githubusercontent.com/55923499/118944395-d103a300-b954-11eb-829a-f1da2f36d5b7.png" /></td>
-  </tr>
+
 </table>
