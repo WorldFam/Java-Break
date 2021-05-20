@@ -215,7 +215,7 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
                     toast = new Toast(getActivity());
                     toast = Toasty.error(getContext(), "Name tag cannot be empty", Toast.LENGTH_SHORT, true);
                     toast.show();
-                    nameView.setImageDrawable(getResources().getDrawable(R.drawable.red_stroke_component));
+                    nameView.setImageDrawable(getResources().getDrawable(R.drawable.red_stroke_component,null));
                 }
                 else if(nameEditText.getText().toString().length() > 15)
                 {
@@ -225,7 +225,7 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
                     toast = new Toast(getActivity());
                     toast = Toasty.error(getContext(), "Name tag contains more than 15 characters", Toast.LENGTH_SHORT, true);
                     toast.show();
-                    nameView.setImageDrawable(getResources().getDrawable(R.drawable.red_stroke_component));
+                    nameView.setImageDrawable(getResources().getDrawable(R.drawable.red_stroke_component,null));
                 }
                 else if(0 == listView.getCheckedItemCount())
                 {
@@ -236,7 +236,7 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
                     toast = Toasty.warning(getContext(), "Select week day", Toast.LENGTH_SHORT, true);
                     toast.show();
                     weekDayTab.setBackgroundResource(R.drawable.red_stroke_component);
-                    nameView.setImageDrawable(getResources().getDrawable(R.drawable.component_rectangle));
+                    nameView.setImageDrawable(getResources().getDrawable(R.drawable.component_rectangle,null));
                     if(tabState != TabState.REPEAT) {
                         tabState = TabState.REPEAT;
                         tabManager( );
@@ -281,31 +281,31 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
 
     private void getWeekDay(DayOfTheWeek dayOfTheWeek) {
         if (dayOfTheWeek.getWeekDay().equals("Monday")) {
-            ((MainActivity) getActivity( )).startAlarm (Calendar.MONDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+            ((MainActivity) getActivity( )).startAlarm (Calendar.MONDAY,hourOfDayFrom,minuteFrom, breakFrequency);
         }
 
         if (dayOfTheWeek.getWeekDay().equals("Tuesday")) {
-            ((MainActivity) getActivity( )).startAlarm (Calendar.TUESDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+            ((MainActivity) getActivity( )).startAlarm (Calendar.TUESDAY,hourOfDayFrom,minuteFrom, breakFrequency);
 
         }
         if (dayOfTheWeek.getWeekDay().equals("Wednesday")) {
-            ((MainActivity) getActivity( )).startAlarm (Calendar.WEDNESDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+            ((MainActivity) getActivity( )).startAlarm (Calendar.WEDNESDAY,hourOfDayFrom,minuteFrom, breakFrequency);
 
         }
         if (dayOfTheWeek.getWeekDay().equals("Thursday")) {
-            ((MainActivity) getActivity( )).startAlarm (Calendar.THURSDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+            ((MainActivity) getActivity( )).startAlarm (Calendar.THURSDAY,hourOfDayFrom,minuteFrom, breakFrequency);
 
         }
         if (dayOfTheWeek.getWeekDay().equals("Friday")) {
-            ((MainActivity) getActivity( )).startAlarm (Calendar.FRIDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+            ((MainActivity) getActivity( )).startAlarm (Calendar.FRIDAY,hourOfDayFrom,minuteFrom, breakFrequency);
 
         }
         if (dayOfTheWeek.getWeekDay().equals("Saturday")) {
-            ((MainActivity) getActivity( )).startAlarm (Calendar.SATURDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+            ((MainActivity) getActivity( )).startAlarm (Calendar.SATURDAY,hourOfDayFrom,minuteFrom, breakFrequency);
 
         }
         if (dayOfTheWeek.getWeekDay().equals("Sunday")) {
-            ((MainActivity) getActivity( )).startAlarm (Calendar.SUNDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
+            ((MainActivity) getActivity( )).startAlarm (Calendar.SUNDAY,hourOfDayFrom,minuteFrom, breakFrequency);
 
         }
     }
@@ -425,9 +425,7 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
         breakFrequencyTimeText.setText(String.format(Locale.getDefault(),"%2d minutes",breakSlider.getProgress()*10));
 
         createReminderButton = view.findViewById(R.id.createReminderButton);
-
         listView = view.findViewById(R.id.list);
-
         nameView = view.findViewById(R.id.imageView3);
 
     }
@@ -504,7 +502,6 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
 
         }
     }
-
 
     private void shrinkWeekDayTab() {
         weekDayTab.startAnimation(slideUp);

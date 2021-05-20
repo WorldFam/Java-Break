@@ -20,5 +20,7 @@
     <color name="unselected">#a8a8a8</color>
 
     <color name="unmarked">#80BFB3B3</color>
+    <color name="ic_launcher_icon_background">#31394C</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
 
 </resources>

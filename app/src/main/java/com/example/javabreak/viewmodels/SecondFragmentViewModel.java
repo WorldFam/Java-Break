@@ -23,10 +23,6 @@ public class SecondFragmentViewModel extends AndroidViewModel {
         return allNotes;
     }
 
-    public void getReminder(int scheduledBreak) {
-        repository.getReminder (scheduledBreak);
-    }
-
     public void insert(ScheduledReminder scheduledReminder) {
         repository.insert(scheduledReminder);
     }

@@ -719,8 +719,8 @@ public class NotificationReceiver extends BroadcastReceiver {
             if (key.equals ("SNOOZE")) {
                 manager.notify (2, notification3.build ( ));
             }
-        }
-        else if(vibration && !led){
+            }
+         if(vibration && !led){
             NotificationCompat.Builder notification1 = new NotificationCompat.Builder (context, CHANNEL_3_ID)
                     .setSmallIcon (R.drawable.ic_baseline_add_alarm_24)
                     .setContentTitle ("Work session is done!")
@@ -757,8 +757,8 @@ public class NotificationReceiver extends BroadcastReceiver {
             if (key.equals ("SNOOZE")) {
                 manager.notify (3, notification3.build ( ));
             }
-        }
-        else if(vibration && led){
+            }
+             if(vibration && !led){
             NotificationCompat.Builder notification1 = new NotificationCompat.Builder (context, CHANNEL_4_ID)
                     .setSmallIcon (R.drawable.ic_baseline_add_alarm_24)
                     .setContentTitle ("Work session is done!")
@@ -796,7 +796,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                 manager.notify (4, notification3.build ( ));
             }
         }
-        else{
+        if(!vibration && !led){
             NotificationCompat.Builder notification1 = new NotificationCompat.Builder (context, CHANNEL_1_ID)
                     .setSmallIcon (R.drawable.ic_baseline_add_alarm_24)
                     .setContentTitle ("Work session is done!")

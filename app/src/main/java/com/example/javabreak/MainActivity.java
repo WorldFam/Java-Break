@@ -4,24 +4,23 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+import androidx.core.graphics.BlendModeColorFilterCompat;
+import androidx.core.graphics.BlendModeCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javabreak.adapters.SectionPageAdapter;
 import com.example.javabreak.notifications.AlertReceiver;
+import com.example.javabreak.notifications.NotificationHelper;
 import com.example.javabreak.notifications.NotificationReceiver;
-import com.example.javabreak.notifications.NotificationService;
-import com.example.javabreak.other.NonSwappableViewPager;
 import com.example.javabreak.viewmodels.NewReminderFragmentViewModel;
 import com.example.javabreak.viewmodels.SettingsFragmentViewModel;
+import com.example.javabreak.viewpager.NonSwappableViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
@@ -58,19 +57,19 @@ public class MainActivity extends AppCompatActivity  {
         tabLayout.getTabAt(1).setText(R.string.scheduled).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setText(R.string.settings).setIcon(tabIcons[2]);
 
-        tabLayout.getTabAt(0).getIcon().setColorFilter(Color.parseColor("#FF9800"), PorterDuff.Mode.SRC_IN);
-        tabLayout.getTabAt(1).getIcon().setColorFilter(Color.parseColor("#a8a8a8"), PorterDuff.Mode.SRC_IN);
-        tabLayout.getTabAt(2).getIcon().setColorFilter(Color.parseColor("#a8a8a8"), PorterDuff.Mode.SRC_IN);
+        tabLayout.getTabAt(0).getIcon().setColorFilter ( BlendModeColorFilterCompat.createBlendModeColorFilterCompat(R.color.selected, BlendModeCompat.SRC_ATOP));
+        tabLayout.getTabAt(1).getIcon().setColorFilter ( BlendModeColorFilterCompat.createBlendModeColorFilterCompat(R.color.unselected, BlendModeCompat.SRC_ATOP));
+        tabLayout.getTabAt(2).getIcon().setColorFilter ( BlendModeColorFilterCompat.createBlendModeColorFilterCompat(R.color.unselected, BlendModeCompat.SRC_ATOP));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                tab.getIcon().setColorFilter(Color.parseColor("#FF9800"), PorterDuff.Mode.SRC_IN);
+                tab.getIcon().setColorFilter ( BlendModeColorFilterCompat.createBlendModeColorFilterCompat(R.color.selected, BlendModeCompat.SRC_ATOP));
             }
 
                 @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                tab.getIcon().setColorFilter (Color.parseColor("#a8a8a8"), PorterDuff.Mode.SRC_IN);
+                tab.getIcon().setColorFilter ( BlendModeColorFilterCompat.createBlendModeColorFilterCompat(R.color.unselected, BlendModeCompat.SRC_ATOP));
             }
 
             @Override
@@ -136,10 +135,29 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    public void cancelAlarm() {
+        Intent myIntent = new Intent(getApplicationContext (), NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext (), 0, myIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        if(alarmManager != null) {
+            alarmManager.cancel (pendingIntent);
+        }
+    }
 
+    public void notify(long time,String timerState) {
+        long when = System.currentTimeMillis() + time;
+        Intent myIntent = new Intent(getApplicationContext (), NotificationReceiver.class);
+        myIntent.putExtra ("timerState",timerState);
 
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext (), 0, myIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExact (AlarmManager.RTC, when, pendingIntent);
+    }
 
-    public void startAlarm(int dayOfWeek, int hour, int minute, int breakFrequency, int breakDuration) {
+    public void startAlarm(int dayOfWeek, int hour, int minute, int breakFrequency) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
 
@@ -149,10 +167,6 @@ public class MainActivity extends AppCompatActivity  {
 
         long breakFrequencyMillis = TimeUnit.MINUTES.toMillis (breakFrequency);
         breakFrequencyAlarm(calendar,breakFrequencyMillis);
-
-        //TODO BREAK DURATION
-//        long breakDurationMillis = TimeUnit.SECONDS.toMillis (breakDuration);
-//        breakDurationAlarm (calendar,breakDurationMillis);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
@@ -181,11 +195,21 @@ public class MainActivity extends AppCompatActivity  {
         if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 7);
         }
-//        alarmManager.setExact (AlarmManager.RTC_WAKEUP,breakFrequencyStart,pendingIntent);
         alarmManager.setRepeating (AlarmManager.RTC_WAKEUP, breakFrequencyStart ,breakFrequency, pendingIntent);
     }
 
+    public void cancelAlarmReminder() {
+        Intent myIntent = new Intent(getApplicationContext (), NotificationHelper.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext (), 0, myIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        if(alarmManager != null) {
+            alarmManager.cancel (pendingIntent);
+        }
+    }
 
+
+    //not implemented
     public void breakDurationAlarm(Calendar calendar, long breakDuration) {
         long breakDurationStart = System.currentTimeMillis () + breakDuration;
 
@@ -204,43 +228,5 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    public void cancelAlarm() {
-        Intent myIntent = new Intent(getApplicationContext (), NotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                getApplicationContext (), 0, myIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        if(alarmManager != null) {
-            alarmManager.cancel (pendingIntent);
-        }
-    }
 
-    public void notify(long time,String timerState) {
-        long when = System.currentTimeMillis() + time;
-        Intent myIntent = new Intent(getApplicationContext (), NotificationReceiver.class);
-        myIntent.putExtra ("timerState",timerState);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                getApplicationContext (), 0, myIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, when, pendingIntent);
-    }
-
-
-//    public void cancelAlarm()
-//    {
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        Intent myIntent = new Intent(getApplicationContext(), NotificationReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-//                this, 1, myIntent,
-//                PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        alarmManager.cancel(pendingIntent);
-//    }
-
-
-    public void notifyService() {
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        ContextCompat.startForegroundService(this,serviceIntent);
-    }
 }

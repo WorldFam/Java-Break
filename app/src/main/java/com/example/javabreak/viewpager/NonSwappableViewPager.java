@@ -1,4 +1,4 @@
-package com.example.javabreak.other;
+package com.example.javabreak.viewpager;
 
 import android.content.Context;
 import android.util.AttributeSet;

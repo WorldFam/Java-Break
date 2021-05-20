@@ -29,8 +29,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.javabreak.R;
 import com.example.javabreak.MainActivity;
+import com.example.javabreak.R;
 import com.example.javabreak.viewmodels.ConfigurationFragmentViewModel;
 import com.google.android.material.tabs.TabLayout;
 
@@ -77,7 +77,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onChanged(Integer integer) {
-                setBreakTime = TimeUnit.SECONDS.toMillis(5);
+                setBreakTime = TimeUnit.MINUTES.toMillis(integer);
                 breakTime = setBreakTime;
             }
         });
@@ -87,7 +87,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
 
-                setSnoozeTime = TimeUnit.SECONDS.toMillis(5);
+                setSnoozeTime = TimeUnit.MINUTES.toMillis(integer);
                 snoozeTime = setSnoozeTime;
 
             }
@@ -115,7 +115,7 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.first_fragment, container, false);
-        tabLayout = getActivity().findViewById(R.id.tabLayout);
+        tabLayout = getActivity ( ).findViewById(R.id.tabLayout);
         defineWidgets(view);
 
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -224,18 +224,21 @@ public class FirstFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume ( );
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("timePicker", MODE_PRIVATE);
+        int hour = sharedPreferences.getInt ("hour",0);
+        int minute = sharedPreferences.getInt ("minute",15);
+        timePicker.setHour (hour);
+        timePicker.setMinute (minute);
     }
 
     @Override
     public void onPause() {
         super.onPause ( );
-        saveTime();
-    }
-
-
-
-    private void saveTime() {
-
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("timePicker", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt ("hour",timePicker.getHour ());
+        editor.putInt("minute",timePicker.getMinute ());
+        editor.apply ();
     }
 
     //Reset counter if day changed
@@ -493,8 +496,6 @@ public class FirstFragment extends Fragment {
         timePicker.setIs24HourView(true);
         pauseResume.setEnabled(false);
         reset.setEnabled(false);
-        timePicker.setHour(0);
-        timePicker.setMinute(15);
         configuration.setBackgroundColor(Color.TRANSPARENT);
     }
 
@@ -734,7 +735,6 @@ public class FirstFragment extends Fragment {
         progressBar.setMax((int) time / 1000);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void timeConversion()
     {
         int hour = timePicker.getHour();
@@ -914,7 +914,9 @@ public class FirstFragment extends Fragment {
                 pauseResume.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 snoozeIcon.setVisibility(View.INVISIBLE);
                 breakIcon.setVisibility(View.INVISIBLE);
-                time.setText(R.string.resetTimeFormatted);
+                String text = String.format(Locale.getDefault(), "%02d:%02d:00",
+                       timePicker.getHour (),timePicker.getMinute () );
+                time.setText(text);
                 break;
         }
 

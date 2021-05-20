@@ -74,7 +74,6 @@ public class SecondFragment extends Fragment{
         });
 
 
-
         //Shrinks or extends FAB depending if RecyclerView is in scrolling STATE
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -98,7 +97,7 @@ public class SecondFragment extends Fragment{
             @Override
             public void onDelete(int position) {
                 removeItem(position);
-                ((MainActivity)getActivity()).cancelAlarm ();
+                ((MainActivity)getActivity()).cancelAlarmReminder ();
 
             }
         });
