@@ -8,7 +8,7 @@ import com.example.javabreak.models.DayOfTheWeek;
 
 import java.util.List;
 
-public class NewReminderViewModel extends ViewModel {
+public class NewReminderFragmentViewModel extends ViewModel {
     MutableLiveData<String> name;
     MutableLiveData<List<DayOfTheWeek>> weekDay;
     MutableLiveData<String> workFrom;
@@ -16,7 +16,7 @@ public class NewReminderViewModel extends ViewModel {
     MutableLiveData<String> breakFrequency;
     MutableLiveData<String> breakDuration;
 
-    public NewReminderViewModel(){
+    public NewReminderFragmentViewModel(){
         name = new MutableLiveData<>();
         weekDay = new MutableLiveData<>();
         workFrom = new MutableLiveData<>();

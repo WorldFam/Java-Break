@@ -33,7 +33,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.javabreak.MainActivity;
 import com.example.javabreak.R;
 import com.example.javabreak.models.DayOfTheWeek;
-import com.example.javabreak.viewmodels.NewReminderViewModel;
+import com.example.javabreak.viewmodels.NewReminderFragmentViewModel;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
     RelativeLayout workDurationTab, breakDurationTab, breakFrequencyTab;
     TabState tabState;
     boolean weekBool, workBool, breakBool, breakFqBool = false;
-    NewReminderViewModel newReminderViewModel;
+    NewReminderFragmentViewModel newReminderFragmentViewModel;
     ImageView nameView;
     //Name
     EditText nameEditText;
@@ -92,7 +92,7 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
         View view = inflater.inflate(R.layout.new_reminder_fragment, container, false);
         OnCreateParameters(view);
 
-        newReminderViewModel =  new ViewModelProvider(requireActivity()).get(NewReminderViewModel.class);
+        newReminderFragmentViewModel =  new ViewModelProvider(requireActivity()).get(NewReminderFragmentViewModel.class);
 
         nameEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,15 +246,15 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
                     if(toast != null) {
                         toast.cancel();
                     }
-                    newReminderViewModel.setName(nameEditText.getText( ).toString( ).trim ());
-                    newReminderViewModel.setWorkFom(workFromText.getText( ).toString( ));
-                    newReminderViewModel.setWorkTo(workToText.getText( ).toString( ));
+                    newReminderFragmentViewModel.setName(nameEditText.getText( ).toString( ).trim ());
+                    newReminderFragmentViewModel.setWorkFom(workFromText.getText( ).toString( ));
+                    newReminderFragmentViewModel.setWorkTo(workToText.getText( ).toString( ));
                     String removeFrequency = breakFrequencyTimeText.getText( ).toString( );
                     String removeBreak = breakTimeText.getText( ).toString( );
                     removeFrequency = removeFrequency.replace("utes", "");
                     removeBreak = removeBreak.replace("utes", "");
-                    newReminderViewModel.setBreakFrequency(removeFrequency);
-                    newReminderViewModel.setBreakDuration(removeBreak);
+                    newReminderFragmentViewModel.setBreakFrequency(removeFrequency);
+                    newReminderFragmentViewModel.setBreakDuration(removeBreak);
 
                     ((MainActivity) getActivity( )).openViewPager( );
 
@@ -266,7 +266,7 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
                             list.add(dayOfTheWeek);
                         }
                     }
-                    newReminderViewModel.setWeekDay(list);
+                    newReminderFragmentViewModel.setWeekDay(list);
 
                     for(DayOfTheWeek weekDay : list) {
                         getWeekDay (weekDay);
@@ -308,7 +308,6 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
             ((MainActivity) getActivity( )).startAlarm (Calendar.SUNDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
 
         }
-//        Log.d ("Dayzzz",String.valueOf (calendar.get (Calendar.DAY_OF_WEEK)));
     }
 
     @Override

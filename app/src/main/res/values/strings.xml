@@ -70,5 +70,5 @@
     <string name="press">Press</string>
     <string name="to_add_reminder">to add Reminder!</string>
     <string name="vibration">Vibration</string>
-    <string name="led_indicator">LED indicator</string>
+    <string name="led_indicator">LED Indicator</string>
 </resources>

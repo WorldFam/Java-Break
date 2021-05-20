@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/workDurationTab"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    android:layout_margin="10dp"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/component_rectangle"
+    android:gravity="center">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:orientation="vertical"
     android:background="@drawable/component_rectangle"
     android:animateLayoutChanges="true"
-    android:layout_margin="10dp">
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/autoStartBreak"
@@ -21,8 +32,7 @@
         android:paddingStart="25dp"
         android:paddingEnd="10dp"
         android:switchMinWidth="50dp"
-        android:layout_marginTop="20dp"
-        tools:ignore="UnknownIdInLayout,UseSwitchCompatOrMaterialXml" />
+        android:layout_marginTop="20dp" />
 
     <View
         android:layout_marginTop="10dp"
@@ -42,9 +52,9 @@
         android:paddingStart="25dp"
         android:paddingEnd="10dp"
         android:switchMinWidth="50dp"
-        android:layout_marginTop="10dp"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        android:layout_marginTop="10dp" />
 
 
 
 </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

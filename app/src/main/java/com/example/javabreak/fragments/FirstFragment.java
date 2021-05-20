@@ -77,7 +77,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onChanged(Integer integer) {
-                setBreakTime = TimeUnit.MINUTES.toMillis(integer);
+                setBreakTime = TimeUnit.SECONDS.toMillis(5);
                 breakTime = setBreakTime;
             }
         });
@@ -87,7 +87,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
 
-                setSnoozeTime = TimeUnit.MINUTES.toMillis(integer);
+                setSnoozeTime = TimeUnit.SECONDS.toMillis(5);
                 snoozeTime = setSnoozeTime;
 
             }
@@ -135,12 +135,10 @@ public class FirstFragment extends Fragment {
                                                        toast.cancel();
                                                    }
                                                    timeConversion();
-                                                   leftTime =
-                                                           3000;
                                                    setTime = leftTime;
                                                    continueWorkTime = setTime ;
                                                    startTime = setTime ;
-//                                                   ((MainActivity)getActivity()).notifyAlarm(leftTime,String.valueOf (TimerState.WORK));
+                                                   ((MainActivity)getActivity()).notify (leftTime,String.valueOf (TimerState.WORK));
                                                    setProgressBarValues(leftTime);
                                                    timerState = TimerState.START;
                                                    updateViews();
@@ -215,12 +213,31 @@ public class FirstFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onStart() {
         super.onStart( );
         loadData();
         sessionCountReset ();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume ( );
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause ( );
+        saveTime();
+    }
+
+
+
+    private void saveTime() {
+
+    }
+
     //Reset counter if day changed
     private void sessionCountReset()
     {
@@ -236,20 +253,6 @@ public class FirstFragment extends Fragment {
         }
     }
     private void loadData() {
-//        SharedPreferences preferences = getActivity().getSharedPreferences("workTime", MODE_PRIVATE);
-//            preferences.edit().remove("timerState").apply();
-//            preferences.edit().remove("endTime").apply();
-//            preferences.edit().remove("endBreakTime").apply();
-//            preferences.edit().remove("endSnoozeTime").apply();
-//            preferences.edit().remove("endContinueWorkTime").apply();
-//            preferences.edit().remove("leftTime").apply();
-//            preferences.edit().remove("setTime").apply();
-//            preferences.edit().remove("setBreakTime").apply();
-//            preferences.edit().remove("breakTime").apply();
-//            preferences.edit().remove("snoozeTime").apply();
-//            preferences.edit().remove("setSnoozeTime").apply();
-//            preferences.edit().remove("continueWorkTime").apply();
-
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("workTime", MODE_PRIVATE);
         String timerStateCheck = sharedPreferences.getString("timerState","");
 
@@ -514,7 +517,6 @@ public class FirstFragment extends Fragment {
             public void onFinish() {
                 //Check state to see which dialog should be launched
                 if (finishedBreak) {
-                    ((MainActivity)getActivity()).notify (leftTime,String.valueOf (timerState));
                     if (autoStartWorkValue) {
                         workTimer ();
                         setProgressBarValues(leftTime);
@@ -525,7 +527,6 @@ public class FirstFragment extends Fragment {
                     }
                 }
                 else {
-                    ((MainActivity) getActivity ( )).notify (leftTime,String.valueOf (timerState));
                     if (autoStartBreakValue) {
                         breakTimer ();
                         setProgressBarValues(breakTime);
@@ -629,12 +630,14 @@ public class FirstFragment extends Fragment {
         timerState = TimerState.PAUSE;
         countDownTimer.cancel();
         updateViews();
+        ((MainActivity)getActivity()).cancelAlarm ();
     }
 
     private void resumeTimer()
     {
         timerState = TimerState.WORK;
         updateViews();
+        ((MainActivity) getActivity ( )).notify (leftTime,String.valueOf (timerState));
         startTimer();
     }
 
@@ -653,6 +656,7 @@ public class FirstFragment extends Fragment {
         else {
             leftTime = startTime;
         }
+        ((MainActivity) getActivity ( )).notify (leftTime,String.valueOf (timerState));
         startTimer();
     }
 
@@ -672,6 +676,7 @@ public class FirstFragment extends Fragment {
         else {
             leftTime = breakTime;
         }
+        ((MainActivity) getActivity ( )).notify (leftTime,String.valueOf (timerState));
         startTimer( );
     }
 
@@ -686,6 +691,7 @@ public class FirstFragment extends Fragment {
         } else {
             leftTime = snoozeTime;
         }
+        ((MainActivity) getActivity ( )).notify (leftTime,String.valueOf (timerState));
         startTimer();
     }
     private void continueWorkTime()
@@ -699,6 +705,7 @@ public class FirstFragment extends Fragment {
         } else {
             leftTime = continueWorkTime;
         }
+        ((MainActivity) getActivity ( )).notify (leftTime,String.valueOf (timerState));
         startTimer();
     }
 
@@ -708,7 +715,7 @@ public class FirstFragment extends Fragment {
         breakTime = setBreakTime;
         finishedBreak = false;
         finishedWork = false;
-//        ((MainActivity)getActivity()).cancelAlarm ();
+        ((MainActivity)getActivity()).cancelAlarm ();
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }

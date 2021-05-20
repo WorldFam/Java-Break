@@ -2,7 +2,6 @@ package com.example.javabreak;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,14 +10,18 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javabreak.adapters.SectionPageAdapter;
 import com.example.javabreak.notifications.AlertReceiver;
 import com.example.javabreak.notifications.NotificationReceiver;
+import com.example.javabreak.notifications.NotificationService;
 import com.example.javabreak.other.NonSwappableViewPager;
-import com.example.javabreak.viewmodels.NewReminderViewModel;
+import com.example.javabreak.viewmodels.NewReminderFragmentViewModel;
+import com.example.javabreak.viewmodels.SettingsFragmentViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
@@ -34,14 +37,16 @@ public class MainActivity extends AppCompatActivity  {
 
     TabLayout tabLayout;
     NonSwappableViewPager viewPager;
-    public NewReminderViewModel newReminderViewModel;
-
+    NewReminderFragmentViewModel newReminderFragmentViewModel;
+    SettingsFragmentViewModel settingsFragmentViewModel;
+    AlarmManager alarmManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        newReminderViewModel =  new ViewModelProvider (this).get(NewReminderViewModel.class);
+        newReminderFragmentViewModel =  new ViewModelProvider (this).get(NewReminderFragmentViewModel.class);
+        settingsFragmentViewModel =  new ViewModelProvider (this).get(SettingsFragmentViewModel.class);
 
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(new SectionPageAdapter(getSupportFragmentManager()));
@@ -75,6 +80,28 @@ public class MainActivity extends AppCompatActivity  {
 
         });
 
+        settingsFragmentViewModel.getLedValue ().observe (this, new Observer<Boolean> ( ) {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                led (aBoolean);
+            }
+        });
+
+        settingsFragmentViewModel.getVibrationValue ().observe (this, new Observer<Boolean> ( ) {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                vibration (aBoolean);
+            }
+        });
+
+        settingsFragmentViewModel.getSoundValue ().observe (this, new Observer<Integer> ( ) {
+            @Override
+            public void onChanged(Integer integer) {
+                sound (integer);
+            }
+        });
+
+
     }
 
     public void lockViewPager() {
@@ -103,6 +130,13 @@ public class MainActivity extends AppCompatActivity  {
         intent.putExtra ("led", state);
     }
 
+    public void sound(int index){
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra ("sound", index);
+    }
+
+
+
 
 
     public void startAlarm(int dayOfWeek, int hour, int minute, int breakFrequency, int breakDuration) {
@@ -122,7 +156,7 @@ public class MainActivity extends AppCompatActivity  {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        intent.putExtra ("name", newReminderViewModel.getName ().getValue ());
+        intent.putExtra ("name", newReminderFragmentViewModel.getName ().getValue ());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, dayOfWeek, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Check if it not set in the past which would fire instantly
@@ -139,7 +173,7 @@ public class MainActivity extends AppCompatActivity  {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        intent.putExtra ("name", newReminderViewModel.getName ().getValue ());
+        intent.putExtra ("name", newReminderFragmentViewModel.getName ().getValue ());
         intent.putExtra ("text","Time to take a break!");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,0);
 
@@ -170,80 +204,28 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-
-
-//    public void endAlarm(int dayOfWeek, int hour, int minute) {
-//        Calendar calendar = Calendar.getInstance();
-//
-//        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-//        calendar.set(Calendar.HOUR_OF_DAY, hour);
-//        calendar.set(Calendar.MINUTE, minute);
-//        calendar.set(Calendar.SECOND, 0);
-//
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        Intent intent = new Intent(this, AlertReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, dayOfWeek, intent, 0);
-//
-//        if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
-//            calendar.add(Calendar.DAY_OF_YEAR, 7);
-//        }
-//        alarmManager.setRepeating (AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis (),AlarmManager.INTERVAL_DAY * 7, pendingIntent);
-//
-//    }
-
-//    public void startAlarmTuesday(Calendar calendar) {
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        Intent intent = new Intent(this, AlertReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext (), 2, intent, 0);
-//        if (calendar.before(Calendar.getInstance())) {
-//            calendar.add(Calendar.DATE, 1);
-//        }
-//        alarmManager.setRepeating (AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 168*60 * 60 * 1000, pendingIntent);
-//
-//    }
-//
-//    public void startAlarmWednesday(Calendar calendar) {
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        Intent intent = new Intent(this, AlertReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext (), 3, intent, 0);
-//        if (calendar.before(Calendar.getInstance())) {
-//            calendar.add(Calendar.DATE, 1);
-//        }
-//        alarmManager.setRepeating (AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 168*60 * 60 * 1000, pendingIntent);
-//
-//    }
-
-    public void cancelAlarm(int requestCode) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, 0);
-        alarmManager.cancel(pendingIntent);
+    public void cancelAlarm() {
+        Intent myIntent = new Intent(getApplicationContext (), NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext (), 0, myIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        if(alarmManager != null) {
+            alarmManager.cancel (pendingIntent);
+        }
     }
 
     public void notify(long time,String timerState) {
-
         long when = System.currentTimeMillis() + time;
         Intent myIntent = new Intent(getApplicationContext (), NotificationReceiver.class);
         myIntent.putExtra ("timerState",timerState);
-        sendBroadcast(myIntent);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 getApplicationContext (), 0, myIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC, when, pendingIntent);
-//        Intent myIntent = new Intent(getApplicationContext (), NotificationReceiver.class);
-//        myIntent.putExtra ("timerState",timerState);
-//        sendBroadcast(myIntent);
     }
 
-
-    public void notifyAlarm(long time, String timerState) {
-        Intent myIntent = new Intent(getApplicationContext (), NotificationReceiver.class);
-        myIntent.putExtra ("timerState",timerState);
-        myIntent.putExtra ("time",time);
-        sendBroadcast(myIntent);
-    }
 
 //    public void cancelAlarm()
 //    {
@@ -256,17 +238,9 @@ public class MainActivity extends AppCompatActivity  {
 //        alarmManager.cancel(pendingIntent);
 //    }
 
-    private final BroadcastReceiver m_timeChangedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
 
-            if (action.equals(Intent.ACTION_TIME_CHANGED) ||
-                    action.equals(Intent.ACTION_TIMEZONE_CHANGED) || action.equals(Intent.ACTION_DATE_CHANGED))  {
-//               cancelAlarm (1);
-//               startAlarm(1, 9, 0, 15 , 5 );
-            }
-        }
-    };
-
+    public void notifyService() {
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        ContextCompat.startForegroundService(this,serviceIntent);
+    }
 }
