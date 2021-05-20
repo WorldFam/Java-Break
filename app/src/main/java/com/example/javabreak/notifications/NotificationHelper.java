@@ -14,19 +14,20 @@ import com.example.javabreak.R;
 import com.example.javabreak.MainActivity;
 
 public class NotificationHelper extends ContextWrapper {
-    public static final String channelID = "channelID";
-    public static final String channelName = "Channel";
+    public static final String CHANNEL_0_ID = "Notification Channel";
     private NotificationManager mManager;
     public NotificationHelper(Context base) {
         super(base);
         createChannel();
 
     }
-
     private void createChannel() {
-        NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
-        channel.enableLights (true);
-        channel.shouldVibrate ();
+        NotificationChannel channel = new NotificationChannel(
+                CHANNEL_0_ID,
+                "Notification Channel",
+                NotificationManager.IMPORTANCE_HIGH
+        );
+        channel.setDescription("Notification Channel");
         getManager().createNotificationChannel(channel);
     }
     public NotificationManager getManager() {
@@ -41,7 +42,7 @@ public class NotificationHelper extends ContextWrapper {
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext () ,
                 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return new NotificationCompat.Builder(getApplicationContext(), channelID)
+        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_0_ID)
                 .setSmallIcon(R.drawable.ic_baseline_add_alarm_24)
                 .setContentTitle(name)
                 .setContentText("Work session session has started!")

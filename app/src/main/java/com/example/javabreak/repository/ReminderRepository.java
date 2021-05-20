@@ -36,14 +36,6 @@ public class ReminderRepository {
         return reminderList;
     }
 
-    public void getReminder(int scheduledBreak) {
-/*
-        new InsertAsyncTask(reminderDao).execute(scheduledBreak);
-*/
-//        executorService.execute(() -> reminderDao.getReminder(scheduledBreak));
-    }
-
-
     public void insert(ScheduledReminder scheduledReminder) {
         executorService.execute(() -> reminderDao.insert(scheduledReminder));
     }
