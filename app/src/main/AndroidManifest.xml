@@ -23,5 +23,6 @@
         <receiver android:enabled="true" android:name=".notifications.AlertReceiver" />
         <receiver android:name=".notifications.ScheduledNotificationReceiver" />
         <receiver android:exported="false" android:name=".notifications.NotificationReceiver" />
+        <service android:name=".notifications.NotificationService" />
     </application>
 </manifest>

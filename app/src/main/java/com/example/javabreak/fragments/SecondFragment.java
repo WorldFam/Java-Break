@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,13 +18,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.javabreak.R;
 import com.example.javabreak.MainActivity;
+import com.example.javabreak.R;
 import com.example.javabreak.adapters.ScheduledBreakAdapter;
 import com.example.javabreak.models.DayOfTheWeek;
 import com.example.javabreak.models.ScheduledReminder;
-import com.example.javabreak.viewmodels.SecondFragmentViewModel;
 import com.example.javabreak.viewmodels.NewReminderFragmentViewModel;
+import com.example.javabreak.viewmodels.SecondFragmentViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -39,7 +39,7 @@ public class SecondFragment extends Fragment{
     ScheduledReminder scheduledReminder = new ScheduledReminder ();
     SecondFragmentViewModel secondFragmentViewModel;
     Animation slideDown;
-    RelativeLayout createNewInfo;
+    ConstraintLayout createNewInfo;
     RecyclerView recyclerView;
 
     @Override
@@ -64,7 +64,7 @@ public class SecondFragment extends Fragment{
             }
 
             private void createNewInfoCheck(List<ScheduledReminder> scheduledReminders) {
-                if(scheduledReminders.isEmpty()) {
+                if(scheduledReminders.size () == 0)  {
                     createNewInfo.setVisibility(View.VISIBLE);
                 } else
                 {
@@ -72,6 +72,8 @@ public class SecondFragment extends Fragment{
                 }
             }
         });
+
+
 
         //Shrinks or extends FAB depending if RecyclerView is in scrolling STATE
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -96,7 +98,7 @@ public class SecondFragment extends Fragment{
             @Override
             public void onDelete(int position) {
                 removeItem(position);
-                ((MainActivity)getActivity()).cancelAlarm (position);
+                ((MainActivity)getActivity()).cancelAlarm ();
 
             }
         });
@@ -115,6 +117,7 @@ public class SecondFragment extends Fragment{
 
                 slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down_fragment);
                 recyclerView.startAnimation(slideDown);
+
                 if(tabLayout != null) {
                     createNewInfo.setVisibility(View.GONE);
                     tabLayout.setVisibility(View.GONE);

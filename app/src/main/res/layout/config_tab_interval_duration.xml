@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/workDurationTab"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:layout_margin="10dp"
+    android:layout_alignBottom="@+id/workSessionCountText"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/component_rectangle"
+    android:gravity="center">
+
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="160dp"
     android:animateLayoutChanges="true"
     android:background="@drawable/component_rectangle"
     android:gravity="center"
-    android:layout_margin="10dp"
     android:layout_below="@+id/autoStart"
-    android:layout_alignBottom="@+id/workSessionCountText">
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <TextView
         android:id="@+id/breakTimeTextView"
@@ -20,18 +32,9 @@
         android:text="@string/break_duration"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:textStyle="bold" />
-
-
-    <ImageView
-        android:id="@+id/breakIconConfigurations"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/autoStart"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="14dp"
-        android:layout_toEndOf="@+id/breakTimeTextView"
-        android:background="@drawable/ic_baseline_free_breakfast_configurations"/>
+        android:textStyle="bold"
+        android:drawablePadding="10dp"
+        app:drawableRightCompat="@drawable/ic_baseline_free_breakfast_configurations" />
 
     <TextView
         android:id="@+id/breakTimeText"
@@ -75,17 +78,9 @@
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:paddingStart="25dp"/>
-
-    <ImageView
-        android:id="@+id/SnoozeIconConfigurations"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/breakSlider"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="14dp"
-        android:layout_toEndOf="@+id/snoozeTimeTextView"
-        android:background="@drawable/ic_baseline_snooze_configurations" />
+        android:paddingStart="25dp"
+        android:drawablePadding="5dp"
+        android:drawableEnd="@drawable/ic_baseline_snooze_configurations"/>
 
     <TextView
         android:id="@+id/snoozeTimeText"
@@ -119,3 +114,4 @@
         android:layout_marginBottom="10dp" />
 
 </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

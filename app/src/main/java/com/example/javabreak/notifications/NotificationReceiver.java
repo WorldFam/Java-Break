@@ -145,7 +145,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (20, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -183,7 +183,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (21, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -220,7 +220,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (22, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -257,7 +257,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (23, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -294,7 +294,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (24, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -334,7 +334,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (15, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -371,7 +371,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (16, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -408,7 +408,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (17, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -445,7 +445,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (18, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -482,7 +482,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (19, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -522,7 +522,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (10, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -559,7 +559,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (11, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -596,7 +596,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (12, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -633,7 +633,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (13, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -670,7 +670,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (14, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -710,7 +710,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (2, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -748,7 +748,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (3, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -786,7 +786,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (4, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -824,7 +824,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (1, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -865,7 +865,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                 .setContentIntent (contentIntent)
                 .setAutoCancel (true);
 
-        if (key.equals ("WORK")) {
+        if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
             manager.notify (5, notification1.build ( ));
         }
         if (key.equals ("BREAK")) {
@@ -902,7 +902,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (6, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -939,7 +939,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (7, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -976,7 +976,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE")  ) {
                 manager.notify (8, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {
@@ -1013,7 +1013,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent (contentIntent)
                     .setAutoCancel (true);
 
-            if (key.equals ("WORK")) {
+            if (key.equals ("WORK") || key.equals ("CONTINUE") ) {
                 manager.notify (9, notification1.build ( ));
             }
             if (key.equals ("BREAK")) {

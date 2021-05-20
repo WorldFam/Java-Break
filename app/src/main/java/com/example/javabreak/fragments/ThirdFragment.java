@@ -34,7 +34,6 @@ public class ThirdFragment  extends Fragment {
     private SoundPool soundPool;
     private int sound1, sound2, sound3, sound4, sound5;
     RadioGroup radioGroup;
-    RadioButton radioButton;
     SwitchCompat switchCompatVibration,switchCompatLED,switchCompatSound;
     TextView sourceCode;
     Vibrator vibrator;
@@ -42,7 +41,7 @@ public class ThirdFragment  extends Fragment {
     ConstraintLayout constraintLayout;
     SettingsFragmentViewModel settingsFragmentViewModel;
     public static final int NO_SOUND = -1;
-    int soundIndex;
+    int soundIndex, checkedRadioButton;
 
 
     @Nullable
@@ -76,7 +75,12 @@ public class ThirdFragment  extends Fragment {
         switchCompatLED.setChecked(led);
         switchCompatSound.setChecked (sound);
 
+        if(sound) {
+            radioGroup.check (checkedRadioButton);
+        }
+
         soundPoolVisibility ();
+
         sound1 = soundPool.load(getContext (), R.raw.sound1, 1);
         sound2 = soundPool.load(getContext (), R.raw.sound2, 1);
         sound3 = soundPool.load(getContext (), R.raw.sound3, 1);
@@ -88,6 +92,7 @@ public class ThirdFragment  extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     constraintLayout.setVisibility (View.VISIBLE);
+                    settingsFragmentViewModel.setSoundValue (soundIndex);
                 }
                 else {constraintLayout.setVisibility (View.GONE);
                     settingsFragmentViewModel.setSoundValue (NO_SOUND);
@@ -98,7 +103,7 @@ public class ThirdFragment  extends Fragment {
         radioGroup.setOnCheckedChangeListener (new RadioGroup.OnCheckedChangeListener ( ) {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                radioButton = radioGroup.findViewById(checkedId);
+                RadioButton radioButton = radioGroup.findViewById(checkedId);
                 soundIndex = radioGroup.indexOfChild(radioButton);
                 Log.d ("index",String.valueOf (soundIndex) );
                 switch (soundIndex){
@@ -160,7 +165,6 @@ public class ThirdFragment  extends Fragment {
     private void soundPoolVisibility() {
         if(sound){
             constraintLayout.setVisibility (View.VISIBLE);
-            radioGroup.check (soundIndex);
             settingsFragmentViewModel.setSoundValue (soundIndex);
         }
         else {
@@ -178,6 +182,8 @@ public class ThirdFragment  extends Fragment {
         led = sharedPreferences.getBoolean ("led",false);
         sound = sharedPreferences.getBoolean ("sound",false);
         soundIndex = sharedPreferences.getInt ("soundIndex",NO_SOUND);
+        checkedRadioButton = sharedPreferences.getInt ("checkedRadioButton",0);
+
     }
 
     @Override
@@ -192,6 +198,9 @@ public class ThirdFragment  extends Fragment {
         vibration = switchCompatVibration.isChecked ();
         led = switchCompatLED.isChecked ();
         sound = switchCompatSound.isChecked ();
+        checkedRadioButton = radioGroup.getCheckedRadioButtonId ();
+
+        editor.putInt ("checkedRadioButton",checkedRadioButton);
         editor.putBoolean ("led",led);
         editor.putBoolean ("vibration",vibration);
         editor.putBoolean ("sound",sound);

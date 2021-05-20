@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/workDurationTab"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:layout_margin="10dp"
+    android:layout_alignBottom="@+id/workSessionCountText"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/component_rectangle"
+    android:gravity="center">
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:background="@drawable/component_rectangle"
     android:animateLayoutChanges="true"
-    android:layout_margin="10dp"
     android:paddingStart="25dp"
-    android:paddingEnd="25dp">
+    android:paddingEnd="25dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <TextView
         android:paddingTop="15dp"
@@ -31,9 +43,6 @@
         android:text="@string/_0"
         android:layout_marginEnd="15dp"
         android:textColor="@color/orange"/>
-
-
-
 
     <TextView
         android:paddingTop="15dp"
@@ -68,3 +77,4 @@
 
 
 </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

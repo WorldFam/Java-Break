@@ -27,18 +27,9 @@
         android:text="@string/break_frequency"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:textStyle="bold" />
-
-
-    <ImageView
-        android:id="@+id/breakIconConfigurations"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/autoStart"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="14dp"
-        android:layout_toEndOf="@+id/breakTimeTextView"
-        android:src="@drawable/ic_baseline_update_24" />
+        android:textStyle="bold"
+        android:drawablePadding="10dp"
+        android:drawableRight="@drawable/ic_baseline_update_24"/>
 
     <TextView
         android:id="@+id/breakFrequencyTimeText"
@@ -46,12 +37,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/autoStart"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="15dp"
         android:layout_toEndOf="@+id/breakTimeTextView"
         android:paddingEnd="25dp"
         android:textAlignment="textEnd"
         android:textColor="@color/white"
-        android:textSize="17sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <SeekBar

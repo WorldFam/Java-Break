@@ -308,7 +308,6 @@ public class NewReminderFragment extends Fragment implements com.wdullaer.materi
             ((MainActivity) getActivity( )).startAlarm (Calendar.SUNDAY,hourOfDayFrom,minuteFrom, breakFrequency,breakDuration);
 
         }
-//        Log.d ("Dayzzz",String.valueOf (calendar.get (Calendar.DAY_OF_WEEK)));
     }
 
     @Override
